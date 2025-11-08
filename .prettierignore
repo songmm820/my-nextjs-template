@@ -1,0 +1,5 @@
+# 忽略文件
+tsconfig.json
+package-lock.json
+package.json
+

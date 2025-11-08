@@ -6,6 +6,7 @@
  */
 
 // Initialize analytics before the app starts
+// eslint-disable-next-line no-console
 console.log('Analytics initialized')
  
 // Set up global error tracking

@@ -1,12 +1,10 @@
-"use client";
-
-import { signIn } from "next-auth/react";
-
+import { SessionProvider } from 'next-auth/react'
+import Client from './Client'
 
 export default function HomePage() {
-  return (
-    <div className="w-full h-full flex justify-center p-20">
-      <button onClick={() => signIn("github")}>登录</button>
-    </div>
-  );
+    return (
+        <SessionProvider>
+            <Client />
+        </SessionProvider>
+    )
 }
