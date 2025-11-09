@@ -5,10 +5,7 @@ import { AnimatePresence, motion } from 'motion/react'
 
 interface ContextMenuProps {
     children: ReactNode
-    options?: {
-        label: string
-        onClick?: () => void
-    }[]
+    options?: ReactNode[]
 }
 
 export default function ContextMenu({ children, options = [] }: ContextMenuProps) {
@@ -52,19 +49,22 @@ export default function ContextMenu({ children, options = [] }: ContextMenuProps
                         style={{ left: pos.x, top: pos.y }}
                         onClick={(e) => e.stopPropagation()}
                         initial={{ scale: 0.8, opacity: 0, backdropFilter: 'blur(0px)' }}
-                        animate={{ scale: 1, opacity: 1, backdropFilter: 'blur(16px)' }}
+                        animate={{ scale: 1, opacity: 1, backdropFilter: 'blur(10px)' }}
                         exit={{ scale: 0.8, opacity: 0, backdropFilter: 'blur(0px)' }}
                         transition={{ type: 'spring', stiffness: 300, damping: 20, duration: 0.15 }}
                     >
                         {options.length > 0 && (
-                            <div className="flex flex-col px-2 pt-2 pb-3 min-w-30">
+                            <div className="flex flex-col px-1 pt-2 pb-3 min-w-36">
                                 {options.map((option, index) => (
-                                    <div
+                                    <motion.div
                                         key={index}
-                                        className="px-1 h-8 cursor-pointer text-sm text-white flex items-center"
+                                        className={`px-2 h-8 cursor-pointer rounded-md
+                                            text-sm text-white flex items-center`}
+                                        whileHover={{ backgroundColor: '#ffffff1a' }}
+                                        transition={{ duration: 0.3 }}
                                     >
-                                        {option.label}
-                                    </div>
+                                        {option}
+                                    </motion.div>
                                 ))}
                             </div>
                         )}

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { AntdRegistry } from '@ant-design/nextjs-registry'
-import AntdConfigProvider from '@/components/context/AntdConfigProvider'
 import { AppConfigProvider } from '@/components/context/AppConfigProvider'
 import './globals.css'
+import { ComponentProvider } from '@/components/context/ComponentProvider'
 
 export const metadata: Metadata = {
     title: 'Create Next App',
@@ -17,13 +17,13 @@ const RootLayout = async ({
 }>) => {
     return (
         <html lang="en">
-            <body className={'antialiased'}>
+            <body>
                 <AntdRegistry>
-                    <NextIntlClientProvider>
-                        <AppConfigProvider>
-                            <AntdConfigProvider>{children}</AntdConfigProvider>
-                        </AppConfigProvider>
-                    </NextIntlClientProvider>
+                    <ComponentProvider>
+                        <NextIntlClientProvider>
+                            <AppConfigProvider>{children}</AppConfigProvider>
+                        </NextIntlClientProvider>
+                    </ComponentProvider>
                 </AntdRegistry>
             </body>
         </html>
