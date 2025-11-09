@@ -11,7 +11,7 @@ const ComponentContext = React.createContext<ComponentContext | null>(null)
 
 const defaultConfig: ComponentContext = {
     zIndex: 1000,
-    setZIndex: () => {}
+    setZIndex: () => {},
 }
 
 export const ComponentProvider = ({ children }: { children: React.ReactNode }) => {
@@ -37,13 +37,5 @@ export const ComponentProvider = ({ children }: { children: React.ReactNode }) =
 export const useZIndex = () => {
     const ctx = useContext(ComponentContext)
     if (!ctx) throw new Error('useZIndex must be used within ComponentProvider')
-
-    // 获取下一个 z-index（自动 +1）
-    const nextZ = useCallback(() => {
-        const newZ = ctx.zIndex + 1
-        ctx?.setZIndex(newZ)
-        return newZ
-    }, [ctx])
-
-    return { zIndex: ctx.zIndex, nextZ }
+    return ctx.zIndex
 }

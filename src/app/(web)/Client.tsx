@@ -4,15 +4,25 @@ import { useAppConfig } from '@/components/context/AppConfigProvider'
 import BackgroundContainer from '@/components/layout/BackgroundContainer'
 import ContextMenu from '@/components/ui/ContextMenu'
 import Modal from '@/components/ui/Modal'
+import { useState } from 'react'
 
 const Client = () => {
     const { backgroundColor, backgroundImage } = useAppConfig()
+
+    const [open1, setOpen1] = useState(false)
+    const [open2, setOpen2] = useState(false)
 
     return (
         <ContextMenu options={['设置', '退出', '关于', '帮助', '退出全屏']}>
             <BackgroundContainer backgroundColor={backgroundColor} backgroundImage={backgroundImage}>
                 在页面任意位置右键试试！
-                <Modal open={true}>123</Modal>
+                <br />
+                <button onClick={() => setOpen1(true)}>打开1{open1}</button>
+                <br />
+                <Modal open={open1}>
+                    <button onClick={() => setOpen2(true)}>打开2{open2}</button>
+                    <Modal open={open2}>456</Modal>
+                </Modal>
             </BackgroundContainer>
         </ContextMenu>
     )
