@@ -1,5 +1,8 @@
+'use client'
+
 import { SessionProvider } from 'next-auth/react'
-import Client from './Client'
+import Client from './client'
+
 
 export default function HomePage() {
     return (

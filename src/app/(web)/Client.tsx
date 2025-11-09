@@ -1,15 +1,33 @@
 'use client'
 
-import { signIn, useSession } from 'next-auth/react'
+import { useAppConfig } from '@/components/context/AppConfigProvider'
+import BackgroundContainer from '@/components/layout/BackgroundContainer'
+import ContextMenu from '@/components/ui/ContextMenu'
 
 const Client = () => {
-    const { data: session } = useSession()
-    return (
-        <div className="w-full h-full flex justify-center p-20">
-            {session && <img src={session?.user?.image} width={300} height={300} />}
+    const { backgroundColor, backgroundImage } = useAppConfig()
 
-            <button onClick={() => signIn('github')}>登录</button>
-        </div>
+    return (
+        <ContextMenu
+            options={[
+                {
+                    label: '设置',
+                },
+                {
+                    label: '设置',
+                },
+                {
+                    label: '设置',
+                },
+                {
+                    label: '设置',
+                },
+            ]}
+        >
+            <BackgroundContainer backgroundColor={backgroundColor} backgroundImage={backgroundImage}>
+                在页面任意位置右键试试！
+            </BackgroundContainer>
+        </ContextMenu>
     )
 }
 
