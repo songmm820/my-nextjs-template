@@ -16,7 +16,6 @@ export default function ContextMenu({ children, options = [] }: ContextMenuProps
     const handleContextMenu = async (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
         e.stopPropagation()
-        console.log('context menu')
         if (show) {
             setShow(false)
             await new Promise((resolve) => requestAnimationFrame(resolve))
