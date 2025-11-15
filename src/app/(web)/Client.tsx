@@ -1,10 +1,10 @@
 'use client'
 
+import { useState } from 'react'
 import { useAppConfig } from '@/components/context/AppConfigProvider'
 import BackgroundContainer from '@/components/layout/BackgroundContainer'
 import ContextMenu from '@/components/ui/ContextMenu'
 import Modal from '@/components/ui/Modal'
-import { useState } from 'react'
 
 const Client = () => {
     const { backgroundColor, backgroundImage } = useAppConfig()
