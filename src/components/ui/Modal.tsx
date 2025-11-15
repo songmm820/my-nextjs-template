@@ -3,20 +3,21 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useZIndex } from '@/components/context/ComponentProvider'
+import clsx from 'clsx'
 
 interface ModalProps {
     children: React.ReactNode
-    open?: boolean
+    show?: boolean
     width?: string | number
     height?: string | number
     onClose?: () => void
 }
 
-const Modal = ({ children, open = false, width = '600px', height = '600px', onClose }: ModalProps) => {
+const Modal = ({ children, show = false, width = '600px', height = '600px', onClose }: ModalProps) => {
     const zIndex = useZIndex()
 
     useEffect(() => {
-        if (!open) return
+        if (!show) return
         const handleEsc = (e: KeyboardEvent) => {
             if (e.key === 'Escape') onClose?.()
         }
@@ -26,20 +27,16 @@ const Modal = ({ children, open = false, width = '600px', height = '600px', onCl
             document.body.style.overflow = ''
             document.removeEventListener('keydown', handleEsc)
         }
-    }, [open, onClose])
+    }, [show, onClose])
 
     return (
         <AnimatePresence>
-            {open && (
+            {show && (
                 <>
                     {/* 遮罩层：只它负责半透明+模糊 */}
                     <motion.div
                         key="mask"
-                        className="fixed inset-0 backdrop-blur-lg"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0"
                         style={{ zIndex }}
                         onClick={(e) => {
                             e.stopPropagation()
@@ -50,28 +47,23 @@ const Modal = ({ children, open = false, width = '600px', height = '600px', onCl
                     >
                         <motion.div
                             key="content"
-                            className={`fixed inset-0 
-                                flex items-center justify-center backdrop-blur-lg
-                                shadow-[#00000080_0_10px_30px]`}
-                            initial={{ scale: 0.9 }}
-                            animate={{ scale: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                            style={{ zIndex: zIndex + 1 }} // 保证内容比遮罩高一层
+                            className={clsx('fixed inset-0 flex items-center justify-center')}
+                            style={{ zIndex: zIndex + 1 }}
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <div
-                                className={`rounded-2xl bg-light-glass 
-                                    shadow-[#00000080_0_10px_30px] 
-                                    text-gray-50 p-4 
-                                    border-2 border-[rgba(255,255,255,0.26)]`}
+                            <motion.div
+                                className={clsx('rounded-2xl p-4 text-gray-50 glass-bg')}
                                 style={{
                                     width: typeof width === 'number' ? `${width}px` : width,
                                     height: typeof height === 'number' ? `${height}px` : height,
                                 }}
+                                initial={{ scale: 0.5, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.5 }}
+                                transition={{ type: 'spring', duration: 0.55 }}
                             >
                                 {children}
-                            </div>
+                            </motion.div>
                         </motion.div>
                     </motion.div>
                 </>

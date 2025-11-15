@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
+import clsx from 'clsx'
 
 interface ContextMenuProps {
     children: ReactNode
@@ -41,16 +42,14 @@ export default function ContextMenu({ children, options = [] }: ContextMenuProps
                 {show && (
                     <motion.div
                         key={`${pos.x}-${pos.y}`}
-                        className={`fixed z-50 
-                        border border-[rgba(255,255,255,0.26)] 
-                        shadow-[#00000080_0_10px_30px]
-                        bg-light-glass rounded-2xl 
-                     `}
+                        className={clsx(
+                            'fixed z-50 rounded-2xl glass-bg'
+                        )}
                         style={{ left: pos.x, top: pos.y }}
                         onClick={(e) => e.stopPropagation()}
-                        initial={{ scale: 0.8, opacity: 0, backdropFilter: 'blur(0px)' }}
-                        animate={{ scale: 1, opacity: 1, backdropFilter: 'blur(10px)' }}
-                        exit={{ scale: 0.8, opacity: 0, backdropFilter: 'blur(0px)' }}
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.8, opacity: 0 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 20, duration: 0.15 }}
                     >
                         {options.length > 0 && (
@@ -58,8 +57,10 @@ export default function ContextMenu({ children, options = [] }: ContextMenuProps
                                 {options.map((option, index) => (
                                     <motion.div
                                         key={index}
-                                        className={`px-2 h-8 cursor-pointer rounded-md
-                                            text-sm text-gray-50 flex items-center`}
+                                        className={clsx(
+                                            'px-2 h-8 cursor-pointer rounded-md',
+                                            'text-sm text-gray-50 flex items-center'
+                                        )}
                                         whileHover={{ backgroundColor: '#ffffff1a' }}
                                         transition={{ duration: 0.3 }}
                                     >
