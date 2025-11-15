@@ -17,6 +17,7 @@ function Digit({ digit }: DigitProps) {
                     'flex items-center justify-center',
                     'text-5xl font-bold text-gray-50'
                 )}
+                // onContextMenu={(e) => e.stopPropagation()}
             >
                 {digit}
             </motion.div>

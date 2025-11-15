@@ -6,7 +6,9 @@ import Header from '@/components/layout/Header'
 const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
     // 屏蔽全局右键
     useEffect(() => {
-        const block = (e: MouseEvent) => e.preventDefault()
+        const block = (e: MouseEvent) => {
+            e.preventDefault()
+        }
         document.addEventListener('contextmenu', block, { capture: true })
         return () => document.removeEventListener('contextmenu', block, { capture: true })
     }, [])

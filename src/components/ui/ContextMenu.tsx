@@ -15,6 +15,8 @@ export default function ContextMenu({ children, options = [] }: ContextMenuProps
 
     const handleContextMenu = async (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
+        e.stopPropagation()
+        console.log('context menu')
         if (show) {
             setShow(false)
             await new Promise((resolve) => requestAnimationFrame(resolve))
@@ -42,9 +44,7 @@ export default function ContextMenu({ children, options = [] }: ContextMenuProps
                 {show && (
                     <motion.div
                         key={`${pos.x}-${pos.y}`}
-                        className={clsx(
-                            'fixed z-50 rounded-2xl glass-bg'
-                        )}
+                        className={clsx('fixed z-50 rounded-2xl glass-bg')}
                         style={{ left: pos.x, top: pos.y }}
                         onClick={(e) => e.stopPropagation()}
                         initial={{ scale: 0.8, opacity: 0 }}

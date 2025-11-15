@@ -59,7 +59,7 @@ const Modal = ({ children, show = false, width = '600px', height = '600px', onCl
                                 }}
                                 initial={{ scale: 0.5, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0.5 }}
+                                exit={{ scale: 0.5, opacity: 0 }}
                                 transition={{ type: 'spring', duration: 0.55 }}
                             >
                                 {children}
