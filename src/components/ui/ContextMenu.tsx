@@ -41,10 +41,10 @@ export default function ContextMenu({ children, options = [] }: ContextMenuProps
                 {show && (
                     <motion.div
                         key={`${pos.x}-${pos.y}`}
-                        className={`fixed z-50 border 
-                        border-[rgba(255,255,255,0.26)] 
+                        className={`fixed z-50 
+                        border border-[rgba(255,255,255,0.26)] 
                         shadow-[#00000080_0_10px_30px]
-                        bg-[#0b0b0bb3] rounded-2xl
+                        bg-light-glass rounded-2xl 
                      `}
                         style={{ left: pos.x, top: pos.y }}
                         onClick={(e) => e.stopPropagation()}
@@ -59,7 +59,7 @@ export default function ContextMenu({ children, options = [] }: ContextMenuProps
                                     <motion.div
                                         key={index}
                                         className={`px-2 h-8 cursor-pointer rounded-md
-                                            text-sm text-white flex items-center`}
+                                            text-sm text-gray-50 flex items-center`}
                                         whileHover={{ backgroundColor: '#ffffff1a' }}
                                         transition={{ duration: 0.3 }}
                                     >

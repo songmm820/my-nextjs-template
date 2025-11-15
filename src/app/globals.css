@@ -22,6 +22,11 @@
     --text-lg: 16px;
     --text-xl: 18px;
     --text-2xl: 20px;
+
+    /* 亮色玻璃 */
+    --color-light-glass: oklab(0.984998 -0.000764072 -0.00182921 / 0.2);
+    /* 暗色玻璃 */
+    --color-dark-glass: oklab(0.0118661 0.00397282 0.0115258 / 0.1);
 }
 
 html,
