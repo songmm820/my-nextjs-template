@@ -16,13 +16,17 @@ const Modal = ({ children, open = false, width = '600px', height = '600px', onCl
     const zIndex = useZIndex()
 
     useEffect(() => {
-        if (open) {
-            document.body.style.overflow = 'hidden'
+        if (!open) return
+        const handleEsc = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose?.()
         }
+        document.body.style.overflow = 'hidden'
+        document.addEventListener('keydown', handleEsc)
         return () => {
             document.body.style.overflow = ''
+            document.removeEventListener('keydown', handleEsc)
         }
-    }, [open])
+    }, [open, onClose])
 
     return (
         <AnimatePresence>
@@ -57,12 +61,10 @@ const Modal = ({ children, open = false, width = '600px', height = '600px', onCl
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div
-                                className={
-                                    `rounded-2xl bg-light-glass 
+                                className={`rounded-2xl bg-light-glass 
                                     shadow-[#00000080_0_10px_30px] 
                                     text-gray-50 p-4 
-                                    border-2 border-[rgba(255,255,255,0.26)]`
-                                }
+                                    border-2 border-[rgba(255,255,255,0.26)]`}
                                 style={{
                                     width: typeof width === 'number' ? `${width}px` : width,
                                     height: typeof height === 'number' ? `${height}px` : height,

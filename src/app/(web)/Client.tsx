@@ -18,7 +18,9 @@ const Client = () => {
                 <br />
                 <button onClick={() => setOpen1(true)}>打开1{open1}</button>
                 <br />
-                <Modal open={open1}>123123</Modal>
+                <Modal open={open1} onClose={() => setOpen1(false)}>
+                    123123
+                </Modal>
             </BackgroundContainer>
         </ContextMenu>
     )
