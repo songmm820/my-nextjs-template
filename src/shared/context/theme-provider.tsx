@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { createContext, useCallback, useContext, useLayoutEffect, useState } from 'react'
-import { PRIMARY_COLORS } from '~/lib/color'
+import { PRIMARY_COLORS } from '~/shared/lib/color'
 
 type ThemeColorType = (typeof PRIMARY_COLORS)[number]
 
@@ -33,13 +34,9 @@ export const ThemeProvider = ({ children, storageKey = 'vite-ui-theme', ...props
         root.style.setProperty('--primary', themeColor)
     }, [themeColor])
 
-    const onSetThemeColor = useCallback(
-        (color: ThemeColorType) => {
-            setThemeColor(color)
-            localStorage.setItem(storageKey, color)
-        },
-        [storageKey]
-    )
+    const onSetThemeColor = useCallback((color: ThemeColorType) => {
+        setThemeColor(color)
+    }, [])
 
     const value = {
         themeColor,

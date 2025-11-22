@@ -1,7 +1,7 @@
 'use client'
 
-import { PRIMARY_COLORS } from '~/lib/color'
-import { useTheme } from '~/provider/theme-provider'
+import { PRIMARY_COLORS } from '~/shared/lib/color'
+import { useTheme } from '~/shared/context/theme-provider'
 
 const Client = () => {
     const { themeColor, setThemeColor } = useTheme()

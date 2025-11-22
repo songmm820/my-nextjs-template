@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { AntdRegistry } from '@ant-design/nextjs-registry'
 import './globals.css'
-import { ThemeProvider } from '~/provider/theme-provider'
+import { ThemeProvider } from '~/shared/context/theme-provider'
 
 export const metadata: Metadata = {
     title: 'Create Next App',
