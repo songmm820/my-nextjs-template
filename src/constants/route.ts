@@ -1,6 +1,6 @@
 /**
  * Next.js可以静态键入链接，以防止使用时出现拼写错误和其他错误，从而提高页面之间导航时的类型安全性。
- * 
+ *
  * @see https://nextjs.org/docs/app/api-reference/config/typescript#statically-typed-links
  */
 
@@ -11,7 +11,7 @@ type NavItem<T extends string = string> = {
     label: string
 }
 
-export const navItems: NavItem<Route>[] = [
+export const navItems: Array<NavItem<Route>> = [
     { href: '/', label: 'Home' },
-    { href: '/about', label: 'About' },
+    { href: '/about', label: 'About' }
 ]

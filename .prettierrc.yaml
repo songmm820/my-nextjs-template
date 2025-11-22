@@ -1,6 +1,26 @@
-# .prettierrc or .prettierrc.yaml
-trailingComma: "es5"
-printWidth: 120
+# Prettier配置文件，用于定义代码格式化规则
+
+# 制表符缩进距离
 tabWidth: 4
+# 是否使用制表符缩进
+useTabs: false
+# 空格，可选值是true（使用制表符）或false（使用空格）
 semi: false
+# 使用单引号
 singleQuote: true
+# 单行代码宽度
+printWidth: 120
+#  在JSX中是否使用单引号，可选值是true（使用单引号）或false（使用双引号）
+jsxSingleQuote: false
+# 在对象或数组最后一个元素后面是否加逗号（在ES5中加尾逗号）
+trailingComma: none
+# 在对象字面量声明所使用的的花括号后（Object Literal）加空格
+bracketSpacing: true
+# 在函数名和开括号之间是否加空格 可选值是"avoid"（只在需要时添加括号）
+arrowParens: always
+# 在对象字面量声明所使用的的花括号后（Object Literal）加空格
+quoteProps: 'as-needed'
+# 多属性html标签的‘>’折行放置
+jsxBracketSameLine: false
+# 为了确保每个 HTML、Vue 和 JSX 元素的属性始终单独占据一行
+singleAttributePerLine: false

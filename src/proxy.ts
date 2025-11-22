@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function proxy(request: NextRequest) {}
 
 export const config = {
@@ -10,6 +11,6 @@ export const config = {
          * - _next/image (image optimization files)
          * - favicon.ico, sitemap.xml, robots.txt (metadata files)
          */
-        '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
-    ],
+        '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)'
+    ]
 }

@@ -3,8 +3,4 @@
     .animate-300ms {
         transition: all 300ms ease-in-out;
     }
-    
-    .glass-bg {
-        @apply border border-white/25 shadow-[#00000080_0_10px_30px] bg-light-glass backdrop-blur-sm;
-    }
 }

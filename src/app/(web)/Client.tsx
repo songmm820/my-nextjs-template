@@ -1,21 +1,24 @@
 'use client'
 
-import { useAppConfig } from '@/components/context/AppConfigProvider'
-import BackgroundContainer from '@/components/layout/BackgroundContainer'
-import ContextMenu from '@/components/ui/ContextMenu'
-import Clock from '@/components/widget/Clock'
+import { PRIMARY_COLORS } from '~/lib/color'
+import { useTheme } from '~/provider/theme-provider'
 
 const Client = () => {
-    const { backgroundColor, backgroundImage } = useAppConfig()
-
+    const { themeColor, setThemeColor } = useTheme()
     return (
-        <ContextMenu options={['设置', '退出', '关于', '帮助', '退出全屏']}>
-            <BackgroundContainer backgroundColor={backgroundColor} backgroundImage={backgroundImage}>
-                <div onContextMenu={(e) => e.stopPropagation()} className="flex flex-col justify-center items-center p-6">
-                    <Clock />
-                </div>
-            </BackgroundContainer>
-        </ContextMenu>
+        <div className='flex flex-wrap gap-2'>
+            {themeColor}
+            {PRIMARY_COLORS.map((color, index) => (
+                <div
+                    key={index}
+                    className="w-9 h-9 rounded-full"
+                    style={{
+                        backgroundColor: color
+                    }}
+                    onClick={() => setThemeColor(color)}
+                />
+            ))}
+        </div>
     )
 }
 

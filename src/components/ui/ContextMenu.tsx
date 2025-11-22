@@ -6,7 +6,7 @@ import clsx from 'clsx'
 
 interface ContextMenuProps {
     children: ReactNode
-    options?: ReactNode[]
+    options?: Array<ReactNode>
 }
 
 export default function ContextMenu({ children, options = [] }: ContextMenuProps) {

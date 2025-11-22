@@ -17,12 +17,12 @@ const nextConfig: NextConfig = {
     generateEtags: true,
     /** 配置屏幕上的指示器 */
     devIndicators: {
-        position: 'bottom-left',
+        position: 'bottom-left'
     },
     /* 配置压缩 */
     compress: true,
     /* 要在域的子路径下部署Next.js应用程序 */
-    basePath: '',
+    basePath: ''
 }
 
 /* This is the default configuration for the plugin. You can customize it as needed. */
