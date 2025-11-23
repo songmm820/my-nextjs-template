@@ -14,8 +14,6 @@ const eslintConfig = defineConfig([
             'react/react-in-jsx-scope': 'off',
             // 警告：禁止使用 debugger
             'no-debugger': 'warn',
-            // 错误：禁止使用 var
-            'no-var': 'error',
             // 使用单引号,除了属性值
             quotes: ['error', 'single', { avoidEscape: true }],
             // console 警告
@@ -27,7 +25,7 @@ const eslintConfig = defineConfig([
             // 禁止尾随逗号
             'comma-dangle': ['error', 'never'],
             // 警告未使用的变量
-            '@typescript-eslint/no-unused-vars': 'warn',
+            '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
             // 数组声明的方式 Array<T>
             '@typescript-eslint/array-type': ['error', { default: 'generic' }],
             // 禁止 for in 数组

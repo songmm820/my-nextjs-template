@@ -1,13 +1,18 @@
-'use client'
+'use server'
 
 import { SessionProvider } from 'next-auth/react'
-import Client from './Client'
+import Client from './client'
+import { prisma } from '../../../prisma/prisma'
 
+export default async function HomePage() {
+    const resp = await prisma.sysUser.findMany()
 
-export default function HomePage() {
+    console.log(resp)
+
     return (
         <SessionProvider>
             <Client />
+            {JSON.stringify(resp)}
         </SessionProvider>
     )
 }

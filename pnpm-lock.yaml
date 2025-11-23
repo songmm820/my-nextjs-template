@@ -14,6 +14,12 @@ importers:
       '@ant-design/v5-patch-for-react-19':
         specifier: ^1.0.3
         version: 1.0.3(antd@5.28.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@prisma/adapter-mariadb':
+        specifier: ^7.0.0
+        version: 7.0.0
+      '@prisma/client':
+        specifier: ^7.0.0
+        version: 7.0.0(prisma@7.0.0(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3))(typescript@5.9.3)
       antd:
         specifier: ^5.28.0
         version: 5.28.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -23,6 +29,9 @@ importers:
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       motion:
         specifier: ^12.23.24
         version: 12.23.24(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -41,6 +50,9 @@ importers:
       react-dom:
         specifier: 19.2.0
         version: 19.2.0(react@19.2.0)
+      swr:
+        specifier: ^2.3.6
+        version: 2.3.6(react@19.2.0)
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.3.1
@@ -590,6 +602,24 @@ packages:
   '@panva/hkdf@1.2.1':
     resolution: {integrity: sha512-6oclG6Y3PiDFcoyk8srjLfVKyMfVCKJ27JwNPViuXziFpmdz+MZnZN/aKY0JGXgYuO/VghU0jcOAZgWXZ1Dmrw==}
 
+  '@prisma/adapter-mariadb@7.0.0':
+    resolution: {integrity: sha512-aYwIPjdqFVPQpFZHioQ2Z/PsNSlf49La/d+5YAT/KJoaqdsd9rSq/ut/lwIy5oKp2lTd/uRJnqOI49Bvlwo+Kw==}
+
+  '@prisma/client-runtime-utils@7.0.0':
+    resolution: {integrity: sha512-PAiFgMBPrLSaakBwUpML5NevipuKSL3rtNr8pZ8CZ3OBXo0BFcdeGcBIKw/CxJP6H4GNa4+l5bzJPrk8Iq6tDw==}
+
+  '@prisma/client@7.0.0':
+    resolution: {integrity: sha512-FM1NtJezl0zH3CybLxcbJwShJt7xFGSRg+1tGhy3sCB8goUDnxnBR+RC/P35EAW8gjkzx7kgz7bvb0MerY2VSw==}
+    engines: {node: ^20.19 || ^22.12 || ^24.0}
+    peerDependencies:
+      prisma: '*'
+      typescript: '>=5.4.0'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+      typescript:
+        optional: true
+
   '@prisma/config@7.0.0':
     resolution: {integrity: sha512-TDASB57hyGUwHB0IPCSkoJcXFrJOKA1+R/1o4np4PbS+E0F5MiY5aAyUttO0mSuNQaX7t8VH/GkDemffF1mQzg==}
 
@@ -601,6 +631,9 @@ packages:
 
   '@prisma/dev@0.13.0':
     resolution: {integrity: sha512-QMmF6zFeUF78yv1HYbHvod83AQnl7u6NtKyDhTRZOJup3h1icWs8R7RUVxBJZvM2tBXNAMpLQYYM/8kPlOPegA==}
+
+  '@prisma/driver-adapter-utils@7.0.0':
+    resolution: {integrity: sha512-ZEvzFaIapnfNKFPgZu/Zy4g6jfO5C0ZmMp+IjO9hNKNDwVKrDlBKw7F3Y9oRK0U0kfb9lKWP4Dz7DgtKs4TTbA==}
 
   '@prisma/engines-version@6.20.0-16.next-0c19ccc313cf9911a90d99d2ac2eb0280c76c513':
     resolution: {integrity: sha512-7bzyN8Gp9GbDFbTDzVUH9nFcgRWvsWmjrGgBJvIC/zEoAuv/lx62gZXgAKfjn/HoPkxz/dS+TtsnduFx8WA+cw==}
@@ -871,6 +904,9 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
+  '@types/geojson@7946.0.16':
+    resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
+
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
@@ -879,6 +915,9 @@ packages:
 
   '@types/node@20.19.24':
     resolution: {integrity: sha512-FE5u0ezmi6y9OZEzlJfg37mqqf6ZDSF2V/NLjUyGrR9uTZ7Sb9F7bLNZ03S4XVUNRWGA7Ck4c1kK+YnuWjl+DA==}
+
+  '@types/node@24.10.1':
+    resolution: {integrity: sha512-GNWcUTRBgIRJD5zj+Tq0fKOJ5XZajIiBroOF0yvj2bSU1WvNdYS/dn9UxwsujGW4JX06dnHyjV2y9rRaybH0iQ==}
 
   '@types/react-dom@19.2.2':
     resolution: {integrity: sha512-9KQPoO6mZCi7jcIStSnlOWn2nEF3mNmyr3rIAsGnAbQKYbRLyqmeSc39EVgtxXVia+LMT8j3knZLAZAh+xLmrw==}
@@ -1301,6 +1340,10 @@ packages:
     resolution: {integrity: sha512-HVQE3AAb/pxF8fQAoiqpvg9i3evqug3hoiwakOyZAwJm+6vZehbkYXZ0l4JxS+I3QxM97v5aaRNhj8v5oBhekw==}
     engines: {node: '>=0.10'}
 
+  dequal@2.0.3:
+    resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
+    engines: {node: '>=6'}
+
   destr@2.0.5:
     resolution: {integrity: sha512-ugFTXCtDZunbzasqBxrK93Ik/DRYsO6S/fedkWEMKqt04xZ4csmnmwGDBAb07QWNaGMAmnTIemsYZCksjATwsA==}
 
@@ -1314,6 +1357,10 @@ packages:
 
   dotenv@16.6.1:
     resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+    engines: {node: '>=12'}
+
+  dotenv@17.2.3:
+    resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
     engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
@@ -1692,6 +1739,10 @@ packages:
   http-status-codes@2.3.0:
     resolution: {integrity: sha512-RJ8XvFvpPM/Dmc5SV+dC4y5PCeOhT3x1Hq0NU3rjGeg5a/CqlhZ7uudknPwZFz4aeAXDcbAyaeP7GAo9lvngtA==}
 
+  iconv-lite@0.6.3:
+    resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
+    engines: {node: '>=0.10.0'}
+
   iconv-lite@0.7.0:
     resolution: {integrity: sha512-cf6L2Ds3h57VVmkZe+Pn+5APsT7FpqJtEhhieDCvrE2MK5Qk9MyffgQyuxQTm6BChfeZNtcOLHp9IcWRVcIcBQ==}
     engines: {node: '>=0.10.0'}
@@ -1988,6 +2039,9 @@ packages:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
 
+  lru-cache@10.4.3:
+    resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
+
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
@@ -2001,6 +2055,10 @@ packages:
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
+
+  mariadb@3.4.5:
+    resolution: {integrity: sha512-gThTYkhIS5rRqkVr+Y0cIdzr+GRqJ9sA2Q34e0yzmyhMCwyApf3OKAC1jnF23aSlIOqJuyaUFUcj7O1qZslmmQ==}
+    engines: {node: '>= 14'}
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -2726,6 +2784,11 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
+  swr@2.3.6:
+    resolution: {integrity: sha512-wfHRmHWk/isGNMwlLGlZX5Gzz/uTgo0o2IRuTMcf4CPuPFJZlq0rDaKUx+ozB5nBOReNV1kiOyzMfj+MBMikLw==}
+    peerDependencies:
+      react: ^16.11.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   tailwind-merge@3.3.1:
     resolution: {integrity: sha512-gBXpgUm/3rp1lMZZrM/w7D8GKqshif0zAymAhbCyIt8KMe+0v9DQ7cdYLR4FHH/cKpdTXb+A/tKKU3eolfsI+g==}
 
@@ -2810,6 +2873,9 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
+  undici-types@7.16.0:
+    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
+
   unrs-resolver@1.11.1:
     resolution: {integrity: sha512-bSjt9pjaEBnNiGgc9rUiHGKv5l4/TGzDmYw3RhnkJGtLhbnnA/5qJj7x3dNDCRx/PJxu774LlH8lCOlB4hEfKg==}
 
@@ -2826,6 +2892,11 @@ packages:
     resolution: {integrity: sha512-H0w/sWilzbd1y0+fve2o6EnJ8B7bDwpI+pd1o/zjO717FVSi1clYe6dCmIyPc8NEKOS9BGm1IK9ipSY7OZAqZg==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0 || ^19.0.0
+
+  use-sync-external-store@1.6.0:
+    resolution: {integrity: sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   valibot@1.1.0:
     resolution: {integrity: sha512-Nk8lX30Qhu+9txPYTwM0cFlWLdPFsFr6LblzqIySfbZph9+BFsAHsNvHOymEviUepeIW6KFHzpX8TKhbptBXXw==}
@@ -3366,6 +3437,20 @@ snapshots:
 
   '@panva/hkdf@1.2.1': {}
 
+  '@prisma/adapter-mariadb@7.0.0':
+    dependencies:
+      '@prisma/driver-adapter-utils': 7.0.0
+      mariadb: 3.4.5
+
+  '@prisma/client-runtime-utils@7.0.0': {}
+
+  '@prisma/client@7.0.0(prisma@7.0.0(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3))(typescript@5.9.3)':
+    dependencies:
+      '@prisma/client-runtime-utils': 7.0.0
+    optionalDependencies:
+      prisma: 7.0.0(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
+      typescript: 5.9.3
+
   '@prisma/config@7.0.0':
     dependencies:
       c12: 3.1.0
@@ -3400,6 +3485,10 @@ snapshots:
       zeptomatch: 2.0.2
     transitivePeerDependencies:
       - typescript
+
+  '@prisma/driver-adapter-utils@7.0.0':
+    dependencies:
+      '@prisma/debug': 7.0.0
 
   '@prisma/engines-version@6.20.0-16.next-0c19ccc313cf9911a90d99d2ac2eb0280c76c513': {}
 
@@ -3638,6 +3727,8 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
+  '@types/geojson@7946.0.16': {}
+
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
@@ -3645,6 +3736,10 @@ snapshots:
   '@types/node@20.19.24':
     dependencies:
       undici-types: 6.21.0
+
+  '@types/node@24.10.1':
+    dependencies:
+      undici-types: 7.16.0
 
   '@types/react-dom@19.2.2(@types/react@19.2.2)':
     dependencies:
@@ -4135,6 +4230,8 @@ snapshots:
 
   denque@2.1.0: {}
 
+  dequal@2.0.3: {}
+
   destr@2.0.5: {}
 
   detect-libc@2.1.2: {}
@@ -4144,6 +4241,8 @@ snapshots:
       esutils: 2.0.3
 
   dotenv@16.6.1: {}
+
+  dotenv@17.2.3: {}
 
   dunder-proto@1.0.1:
     dependencies:
@@ -4670,6 +4769,10 @@ snapshots:
 
   http-status-codes@2.3.0: {}
 
+  iconv-lite@0.6.3:
+    dependencies:
+      safer-buffer: 2.1.2
+
   iconv-lite@0.7.0:
     dependencies:
       safer-buffer: 2.1.2
@@ -4940,6 +5043,8 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
+  lru-cache@10.4.3: {}
+
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
@@ -4951,6 +5056,14 @@ snapshots:
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  mariadb@3.4.5:
+    dependencies:
+      '@types/geojson': 7946.0.16
+      '@types/node': 24.10.1
+      denque: 2.1.0
+      iconv-lite: 0.6.3
+      lru-cache: 10.4.3
 
   math-intrinsics@1.1.0: {}
 
@@ -5816,6 +5929,12 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
+  swr@2.3.6(react@19.2.0):
+    dependencies:
+      dequal: 2.0.3
+      react: 19.2.0
+      use-sync-external-store: 1.6.0(react@19.2.0)
+
   tailwind-merge@3.3.1: {}
 
   tailwindcss@4.1.17: {}
@@ -5911,6 +6030,8 @@ snapshots:
 
   undici-types@6.21.0: {}
 
+  undici-types@7.16.0: {}
+
   unrs-resolver@1.11.1:
     dependencies:
       napi-postinstall: 0.3.4
@@ -5950,6 +6071,10 @@ snapshots:
       '@formatjs/fast-memoize': 2.2.7
       '@schummar/icu-type-parser': 1.21.5
       intl-messageformat: 10.7.18
+      react: 19.2.0
+
+  use-sync-external-store@1.6.0(react@19.2.0):
+    dependencies:
       react: 19.2.0
 
   valibot@1.1.0(typescript@5.9.3):

@@ -1,25 +1,18 @@
 'use client'
 
-import { PRIMARY_COLORS } from '~/shared/lib/color'
-import { useTheme } from '~/shared/context/theme-provider'
+import useSWR from 'swr'
+
+const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 const Client = () => {
-    const { themeColor, setThemeColor } = useTheme()
-    return (
-        <div className='flex flex-wrap gap-2'>
-            {themeColor}
-            {PRIMARY_COLORS.map((color, index) => (
-                <div
-                    key={index}
-                    className="w-9 h-9 rounded-full"
-                    style={{
-                        backgroundColor: color
-                    }}
-                    onClick={() => setThemeColor(color)}
-                />
-            ))}
-        </div>
-    )
+    const { data, error, isLoading } = useSWR('/api/user/count', fetcher)
+
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>Error: {error.message}</div>
+
+    return <div className="flex flex-wrap gap-2">
+        {JSON.stringify(data)}
+    </div>
 }
 
 export default Client
