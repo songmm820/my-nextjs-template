@@ -18,14 +18,15 @@ enum AuthProvider {
   GITHUB
 }
 
-model SysAccount {
-  id            String       @id @default(cuid())
-  name          String
-  email         String       @unique
-  avatarUrl     String?
-  auth_provider AuthProvider
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+model SysUser {
+  id           String       @id @default(cuid())
+  userId       String       @unique @map("user_id")
+  name         String
+  email        String       @unique
+  avatar       String?
+  authProvider AuthProvider @map("auth_provider")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
 
-  @@map("sys_account")
+  @@map("sys_user")
 }

@@ -1,9 +1,6 @@
 'use client'
 
 import { createContext, useContext, useLayoutEffect, useState } from 'react'
-import { createAuthClient } from 'better-auth/client'
-
-const authClient = createAuthClient()
 
 type AuthContextType = {
     userName?: string
@@ -23,30 +20,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }>({})
 
     // 获取用户信息
-    const getUserInfo = () => {
-        authClient.getSession().then((session) => {
-            if (session) {
-                setSysUserInfo({
-                    userName: session.data?.user.name,
-                    email: session.data?.user.email,
-                    avatar: session.data?.user.image
-                })
-            }
-        })
-    }
+    const getUserInfo = () => {}
 
     // 授权登录
-    const onAuthLogin = async () => {
-        await authClient.signIn.social({
-            provider: 'github'
-        })
-    }
+    const onAuthLogin = async () => {}
 
     // 退出登录
-    const onAuthLogout = async () => {
-        await authClient.signOut()
-        setSysUserInfo({})
-    }
+    const onAuthLogout = async () => {}
 
     useLayoutEffect(() => {
         getUserInfo()
