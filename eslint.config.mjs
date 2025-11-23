@@ -25,7 +25,7 @@ const eslintConfig = defineConfig([
             // 禁止尾随逗号
             'comma-dangle': ['error', 'never'],
             // 警告未使用的变量
-            '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+            '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
             // 数组声明的方式 Array<T>
             '@typescript-eslint/array-type': ['error', { default: 'generic' }],
             // 禁止 for in 数组

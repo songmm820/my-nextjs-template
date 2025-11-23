@@ -22,7 +22,15 @@ const nextConfig: NextConfig = {
     /* 配置压缩 */
     compress: true,
     /* 要在域的子路径下部署Next.js应用程序 */
-    basePath: ''
+    basePath: '',
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'avatars.githubusercontent.com'
+            }
+        ]
+    }
 }
 
 /* This is the default configuration for the plugin. You can customize it as needed. */

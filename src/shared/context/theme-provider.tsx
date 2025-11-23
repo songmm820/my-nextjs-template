@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { createContext, useCallback, useContext, useLayoutEffect, useState } from 'react'

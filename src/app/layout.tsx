@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
-import { AntdRegistry } from '@ant-design/nextjs-registry'
-import './globals.css'
 import { ThemeProvider } from '~/shared/context/theme-provider'
+import './globals.css'
+import { AuthProvider } from '~/shared/context/auth-provider'
 
 export const metadata: Metadata = {
     title: 'Create Next App',
@@ -18,9 +18,11 @@ const RootLayout = async ({
         <html lang="en">
             <body>
                 <ThemeProvider>
-                    <AntdRegistry>
-                        <NextIntlClientProvider>{children}</NextIntlClientProvider>
-                    </AntdRegistry>
+                    <NextIntlClientProvider>
+                        <AuthProvider>
+                            {children} {/* Will render your page */}
+                        </AuthProvider>
+                    </NextIntlClientProvider>
                 </ThemeProvider>
             </body>
         </html>
