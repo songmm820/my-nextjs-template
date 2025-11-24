@@ -1,4 +1,4 @@
-class HttpResponse {
+export class HttpResponse {
   static success<R>(data: R) {
     return {
       dt: data || {},
@@ -14,4 +14,3 @@ class HttpResponse {
   }
 }
 
-export default HttpResponse

@@ -7,8 +7,8 @@ const JWT_EXPIRES_IN: number = 30 * 24 * 60 * 60
 
 // Token 载荷类型
 export type JwtPayload = {
-    userId: string
-    email: string
+  userId: string
+  email: string
 }
 
 /**
@@ -24,7 +24,7 @@ export function generateJwtToken(payload: JwtPayload): string {
 
 /**
  * 验证 JWT 令牌
- * 
+ *
  * @params token 令牌
  */
 export function verifyJwtToken(token: string): JwtPayload | null {
@@ -32,7 +32,7 @@ export function verifyJwtToken(token: string): JwtPayload | null {
     return jwt.verify(token, JWT_SECRET) as JwtPayload
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(error)
+    console.error('verify jwt token error:', error)
     return null
   }
 }
