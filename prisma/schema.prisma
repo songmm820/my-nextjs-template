@@ -13,20 +13,28 @@ datasource db {
   provider = "mysql"
 }
 
-// 认证服务商
-enum AuthProvider {
-  GITHUB
-}
-
-model SysUser {
+// 用户表
+model fUser {
   id           String       @id @default(cuid())
   userId       String       @unique @map("user_id")
   name         String
   email        String       @unique
   avatar       String?
-  authProvider AuthProvider @map("auth_provider")
+  password     String?      @map("password")
   createdAt    DateTime     @default(now()) @map("created_at")
   updatedAt    DateTime     @updatedAt @map("updated_at")
 
-  @@map("sys_user")
+  @@map("f_user")
 }
+
+// 用户与等级关联表
+model fUserLevel {
+  id           String       @id @default(cuid())
+  userId       String       @unique @map("user_id")
+  level        Int          @map("level")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  @@map("f_user_level")
+}
+
