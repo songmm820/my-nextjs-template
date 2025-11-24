@@ -23,7 +23,7 @@ export const gradientColorList = [
 ]
 
 // 主色
-export const PRIMARY_COLORS = [
+export const primaryColorList = [
     '#EF4444',
     '#F43F5E',
     '#FB7185',
@@ -59,7 +59,7 @@ export const PRIMARY_COLORS = [
 ] as const
 
 // 副色
-export const SECONDARY_COLORS = [
+export const secondaryColorList = [
     '#FECACA',
     '#FFDDDF',
     '#FFE9EA',

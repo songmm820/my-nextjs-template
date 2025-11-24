@@ -33,7 +33,19 @@ const eslintConfig = defineConfig([
             // 禁止空对象类型
             '@typescript-eslint/no-empty-object-type': 'warn',
             // tab 键使用 4 个空格
-            indent: ['error', 4, { SwitchCase: 1 }]
+            indent: ['error', 4, { SwitchCase: 1 }],
+            // 禁止相对路径引入
+            'no-restricted-imports': [
+                'error',
+                {
+                    patterns: [
+                        {
+                            group: ['*/../*', '../*/*'],
+                            message: 'Prohibit the use of relative paths.'
+                        }
+                    ]
+                }
+            ]
         }
     },
     globalIgnores([

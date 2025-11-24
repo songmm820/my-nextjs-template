@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import Header from '~/shared/layout/Header'
+import Header from '~/shared/components/Header'
 import { SWRConfig } from 'swr'
 
 const ConfigLayout = ({ children }: { children: React.ReactNode }) => {

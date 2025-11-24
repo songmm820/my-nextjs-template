@@ -1,7 +1,48 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
-import { requestInterceptorsConfig, requestInterceptorsError } from './request-interceptors'
-import { responseInterceptorsConfig, responseInterceptorsError } from './response-interceptors'
-import { HttpResponse } from '../http-response'
+import { HttpResponse } from '~/utils/internal/http-response'
+
+import type { InternalAxiosRequestConfig } from 'axios'
+
+/**
+ * 请求拦截器配置
+ *
+ * 可以在这里统一设置请求头，token 等信息
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const requestInterceptorsConfig = (config: InternalAxiosRequestConfig<any>) => {
+    return config
+}
+
+/**
+ * 请求拦截器错误处理
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const requestInterceptorsError = (error: any) => {
+    return Promise.reject(error)
+}
+
+export { requestInterceptorsConfig, requestInterceptorsError }
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { AxiosResponse } from 'axios'
+
+/**
+ * 响应拦截器配置
+ *
+ * 可以对响应数据进行处理
+ */
+const responseInterceptorsConfig = (response: AxiosResponse<any>) => {
+    return response.data
+}
+
+/**
+ * 响应拦截器错误处理
+ *
+ * 可以对响应错误进行处理
+ */
+const responseInterceptorsError = (error: any) => {
+    return Promise.reject(error)
+}
 
 /**
  * axios 实例

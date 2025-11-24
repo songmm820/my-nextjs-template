@@ -1,9 +1,9 @@
 'use client'
 
 import { createContext, useCallback, useContext, useLayoutEffect, useState } from 'react'
-import { PRIMARY_COLORS } from '~/shared/lib/color'
+import { primaryColorList } from '~/utils'
 
-type ThemeColorType = (typeof PRIMARY_COLORS)[number]
+type ThemeColorType = (typeof primaryColorList)[number]
 
 type ThemeProviderProps = {
     children: React.ReactNode
@@ -16,7 +16,7 @@ type ThemeProviderState = {
     setThemeColor: (themeColor: ThemeColorType) => void
 }
 
-const [defaultPrimaryColor] = PRIMARY_COLORS
+const [defaultPrimaryColor] = primaryColorList
 
 const initialState: ThemeProviderState = {
     themeColor: defaultPrimaryColor,
