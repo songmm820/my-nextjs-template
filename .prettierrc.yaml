@@ -1,7 +1,7 @@
 # Prettier配置文件，用于定义代码格式化规则
 
 # 制表符缩进距离
-tabWidth: 4
+tabWidth: 2
 # 是否使用制表符缩进
 useTabs: false
 # 空格，可选值是true（使用制表符）或false（使用空格）

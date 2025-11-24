@@ -12,6 +12,6 @@ type NavItem<T extends string = string> = {
 }
 
 export const navItems: Array<NavItem<Route>> = [
-    { href: '/', label: 'Home' },
-    { href: '/about', label: 'About' }
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' }
 ]

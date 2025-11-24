@@ -10,7 +10,7 @@ import type { InternalAxiosRequestConfig } from 'axios'
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const requestInterceptorsConfig = (config: InternalAxiosRequestConfig<any>) => {
-    return config
+  return config
 }
 
 /**
@@ -18,7 +18,7 @@ const requestInterceptorsConfig = (config: InternalAxiosRequestConfig<any>) => {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const requestInterceptorsError = (error: any) => {
-    return Promise.reject(error)
+  return Promise.reject(error)
 }
 
 export { requestInterceptorsConfig, requestInterceptorsError }
@@ -32,7 +32,7 @@ import type { AxiosResponse } from 'axios'
  * 可以对响应数据进行处理
  */
 const responseInterceptorsConfig = (response: AxiosResponse<any>) => {
-    return response.data
+  return response.data
 }
 
 /**
@@ -41,7 +41,7 @@ const responseInterceptorsConfig = (response: AxiosResponse<any>) => {
  * 可以对响应错误进行处理
  */
 const responseInterceptorsError = (error: any) => {
-    return Promise.reject(error)
+  return Promise.reject(error)
 }
 
 /**
@@ -50,46 +50,46 @@ const responseInterceptorsError = (error: any) => {
  * 泛型：P：请求参数类型，R：响应数据类型
  */
 export class AxiosClientClass {
-    readonly instance: AxiosInstance
-    private config: AxiosRequestConfig
+  readonly instance: AxiosInstance
+  private config: AxiosRequestConfig
 
-    constructor(config: AxiosRequestConfig) {
-        this.config = config
-        this.instance = axios.create(config)
-        this.instance.interceptors.request.use(requestInterceptorsConfig, requestInterceptorsError)
-        this.instance.interceptors.response.use(responseInterceptorsConfig, responseInterceptorsError)
-    }
+  constructor(config: AxiosRequestConfig) {
+    this.config = config
+    this.instance = axios.create(config)
+    this.instance.interceptors.request.use(requestInterceptorsConfig, requestInterceptorsError)
+    this.instance.interceptors.response.use(responseInterceptorsConfig, responseInterceptorsError)
+  }
 
-    getConfig(): AxiosRequestConfig {
-        return this.config
-    }
+  getConfig(): AxiosRequestConfig {
+    return this.config
+  }
 
-    // 封装get请求
-    get<P, R>(url: string, params?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
-        return this.instance.get(url, { params, ...config })
-    }
+  // 封装get请求
+  get<P, R>(url: string, params?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
+    return this.instance.get(url, { params, ...config })
+  }
 
-    // 封装post请求
-    post<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
-        return this.instance.post(url, data, config)
-    }
+  // 封装post请求
+  post<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
+    return this.instance.post(url, data, config)
+  }
 
-    // 封装put请求
-    put<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
-        return this.instance.put(url, data, config)
-    }
+  // 封装put请求
+  put<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
+    return this.instance.put(url, data, config)
+  }
 
-    // 封装delete请求
-    delete<P, R>(url: string, params?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
-        return this.instance.delete(url, { params, ...config })
-    }
+  // 封装delete请求
+  delete<P, R>(url: string, params?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
+    return this.instance.delete(url, { params, ...config })
+  }
 }
 
 export const axiosInstance = new AxiosClientClass({
-    // baseURL: "http://localhost:8080",
-    timeout: 6000,
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    withCredentials: true
+  // baseURL: "http://localhost:8080",
+  timeout: 6000,
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  withCredentials: true
 })

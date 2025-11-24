@@ -13,8 +13,9 @@ datasource db {
   provider = "mysql"
 }
 
+
 // 用户表
-model fUser {
+model FUser {
   id           String       @id @default(cuid())
   userId       String       @unique @map("user_id")
   name         String
@@ -27,8 +28,21 @@ model fUser {
   @@map("f_user")
 }
 
+// 刷新token表
+model RefreshToken {
+   id        String   @id @default(cuid())
+   token     String   @unique
+   userId    String
+   fUser      FUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
+   expiresAt DateTime
+   createdAt DateTime @default(now())
+
+   @@map("refresh_token")
+}
+
+
 // 用户与等级关联表
-model fUserLevel {
+model FUserLevel {
   id           String       @id @default(cuid())
   userId       String       @unique @map("user_id")
   level        Int          @map("level")

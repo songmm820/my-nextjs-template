@@ -1,7 +1,7 @@
 'use client'
 
 const GlobalError = () => {
-    return 'Global Error'
+  return 'Global Error'
 }
 
 export default GlobalError

@@ -11,6 +11,6 @@ console.log('Analytics initialized')
 
 // Set up global error tracking
 window.addEventListener('error', (event) => {
-    // Send to your error tracking service
-    reportError(event.error)
+  // Send to your error tracking service
+  reportError(event.error)
 })

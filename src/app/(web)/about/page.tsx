@@ -1,5 +1,5 @@
 const AboutPage = async () => {
-    return 'About Page'
+  return 'About Page'
 }
 
 export default AboutPage
