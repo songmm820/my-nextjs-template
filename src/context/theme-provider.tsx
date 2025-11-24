@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useCallback, useContext, useLayoutEffect, useState } from 'react'
-import { primaryColorList } from '~/utils'
+import { primaryColorList } from '~/shared/utils'
 
 type ThemeColorType = (typeof primaryColorList)[number]
 

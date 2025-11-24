@@ -1,7 +1,3 @@
-
-
-import Client from './client'
-
 export default function HomePage() {
-    return <Client />
+    return <div>123123</div>
 }

@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
-import { ThemeProvider } from '~/shared/context/theme-provider'
 import './globals.css'
-import { AuthProvider } from '~/shared/context/auth-provider'
+import { ThemeProvider } from '~/context/theme-provider'
 
 export const metadata: Metadata = {
     title: 'Create Next App',
@@ -19,9 +18,7 @@ const RootLayout = async ({
             <body>
                 <ThemeProvider>
                     <NextIntlClientProvider>
-                        <AuthProvider>
-                            {children} {/* Will render your page */}
-                        </AuthProvider>
+                        {children} {/* Will render your page */}
                     </NextIntlClientProvider>
                 </ThemeProvider>
             </body>
