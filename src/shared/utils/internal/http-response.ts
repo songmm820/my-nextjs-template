@@ -1,16 +1,16 @@
 export class HttpResponse {
   static success<R>(data: R) {
+    if (data === null || data === undefined) {
+      return {} as R
+    }
     return {
-      dt: data || {},
-      at: Date.now()
+      data: data
     }
   }
 
   static error(error: string) {
     return {
-      er: error,
-      at: Date.now()
+      error: error
     }
   }
 }
-

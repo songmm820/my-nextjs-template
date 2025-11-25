@@ -1,31 +1,31 @@
 /**
  * The file is used to write Proxy and run code on the server before a request is completed. Then, based on the
  * incoming request, you can modify the response by rewriting, redirecting, modifying the request or response headers or responding directly.
- * 
+ *
  * @see https://nextjs.org/docs/app/api-reference/file-conventions/proxy
  */
-
+import type { Route } from 'next'
 import { NextResponse, type NextRequest } from 'next/server'
-import { getCookieSafe, HttpResponse, verifyJwtToken } from '~/shared/utils'
+import { HttpResponse, verifyJwtToken } from '~/shared/utils'
+import { AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
 
-const PUBLIC_API_PATHS = ['/api/auth/sign-in']
+// 公开路由
+const PUBLIC_ROUTES: Array<NavRouteHrefType> = ['/sign-in']
+// 公开api
+const PUBLIC_API_PATHS: Array<NavRouteHrefType> = ['/api/auth/sign-in']
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname
 
-  if (PUBLIC_API_PATHS.includes(path)) {
+  if (PUBLIC_API_PATHS.includes(path as Route) || PUBLIC_ROUTES.includes(path as Route)) {
     return NextResponse.next()
   }
-
   // 验证 jwt 令牌
-  const jwtToken = await getCookieSafe('token')
-
+  const jwtToken = request.cookies.get(AUTHORIZATION)?.value
   if (!jwtToken) {
-    return NextResponse.json(HttpResponse.error('Please sign in first before accessing.'), {
-      status: 401
-    })
+    return NextResponse.redirect(new URL('/sign-in', request.url))
   }
-  const payload = verifyJwtToken(jwtToken)
+  const payload = await verifyJwtToken(jwtToken)
 
   if (!payload) {
     return NextResponse.json(HttpResponse.error('The token is error or expired, please sign in again.'), {
@@ -33,7 +33,7 @@ export async function proxy(request: NextRequest) {
     })
   }
 
-  // return NextResponse.next()
+  return NextResponse.next()
 }
 
 export const config = {

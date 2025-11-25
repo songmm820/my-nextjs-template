@@ -7,11 +7,14 @@
 import type { Route } from 'next'
 
 type NavItem<T extends string = string> = {
-    href: T
-    label: string
+  href: T
+  label: string
 }
 
 export const navItems: Array<NavItem<Route>> = [
   { href: '/', label: 'Home' },
+  { href: '/sign-in', label: 'Sign In' },
   { href: '/about', label: 'About' }
 ]
+
+export type NavRouteHrefType = (typeof navItems)[number]['href']

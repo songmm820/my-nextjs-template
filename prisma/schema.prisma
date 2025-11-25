@@ -28,17 +28,6 @@ model FUser {
   @@map("f_user")
 }
 
-// 刷新token表
-model RefreshToken {
-   id        String   @id @default(cuid())
-   token     String   @unique
-   userId    String
-   fUser      FUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
-   expiresAt DateTime
-   createdAt DateTime @default(now())
-
-   @@map("refresh_token")
-}
 
 
 // 用户与等级关联表

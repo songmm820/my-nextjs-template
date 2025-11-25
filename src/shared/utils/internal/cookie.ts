@@ -1,3 +1,5 @@
+'use server'
+
 import { cookies } from 'next/headers'
 
 /**
@@ -6,9 +8,13 @@ import { cookies } from 'next/headers'
  * @param key 键
  * @param value 值
  */
+
 export async function setCookieSafe(key: string, value: string): Promise<void> {
   const cookieStore = await cookies()
-  cookieStore.set(key, value)
+  cookieStore.set(key, value, {
+    // 7天过期
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  })
 }
 
 /**

@@ -1,3 +1,5 @@
+'use server'
+
 import jwt from 'jsonwebtoken'
 
 // JWT 密钥
@@ -16,10 +18,11 @@ export type JwtPayload = {
  *
  * @params payload 载荷
  */
-export function generateJwtToken(payload: JwtPayload): string {
-  return jwt.sign(payload, JWT_SECRET, {
+export async function generateJwtToken(payload: JwtPayload): Promise<string> {
+  const jwtToken = jwt.sign(payload, JWT_SECRET, {
     expiresIn: JWT_EXPIRES_IN
   })
+  return jwtToken
 }
 
 /**
@@ -27,7 +30,7 @@ export function generateJwtToken(payload: JwtPayload): string {
  *
  * @params token 令牌
  */
-export function verifyJwtToken(token: string): JwtPayload | null {
+export async function verifyJwtToken(token: string): Promise<JwtPayload | null> {
   try {
     return jwt.verify(token, JWT_SECRET) as JwtPayload
   } catch (error) {
