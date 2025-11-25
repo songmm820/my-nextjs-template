@@ -6,14 +6,14 @@ import { primaryColorList } from '~/shared/utils'
 type ThemeColorType = (typeof primaryColorList)[number]
 
 type ThemeProviderProps = {
-    children: React.ReactNode
-    themeColor?: ThemeColorType
-    storageKey?: string
+  children: React.ReactNode
+  themeColor?: ThemeColorType
+  storageKey?: string
 }
 
 type ThemeProviderState = {
-    themeColor: ThemeColorType
-    setThemeColor: (themeColor: ThemeColorType) => void
+  themeColor: ThemeColorType
+  setThemeColor: (themeColor: ThemeColorType) => void
 }
 
 const [defaultPrimaryColor] = primaryColorList
@@ -25,7 +25,7 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
-export const ThemeProvider = ({ children, storageKey = 'vite-ui-theme', ...props }: ThemeProviderProps) => {
+export const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => {
   const [themeColor, setThemeColor] = useState<ThemeColorType>(defaultPrimaryColor)
 
   useLayoutEffect(() => {

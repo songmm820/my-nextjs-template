@@ -1,7 +1,5 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
-import { HttpResponse } from '~/utils/internal/http-response'
-
-import type { InternalAxiosRequestConfig } from 'axios'
+import type { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 
 /**
  * 请求拦截器配置
@@ -21,10 +19,7 @@ const requestInterceptorsError = (error: any) => {
   return Promise.reject(error)
 }
 
-export { requestInterceptorsConfig, requestInterceptorsError }
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { AxiosResponse } from 'axios'
 
 /**
  * 响应拦截器配置
@@ -65,22 +60,22 @@ export class AxiosClientClass {
   }
 
   // 封装get请求
-  get<P, R>(url: string, params?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
+  get<P, R>(url: string, params?: P, config?: AxiosRequestConfig): Promise<R> {
     return this.instance.get(url, { params, ...config })
   }
 
   // 封装post请求
-  post<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
+  post<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<R> {
     return this.instance.post(url, data, config)
   }
 
   // 封装put请求
-  put<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
+  put<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<R> {
     return this.instance.put(url, data, config)
   }
 
   // 封装delete请求
-  delete<P, R>(url: string, params?: P, config?: AxiosRequestConfig): Promise<HttpResponse<R>> {
+  delete<P, R>(url: string, params?: P, config?: AxiosRequestConfig): Promise<R> {
     return this.instance.delete(url, { params, ...config })
   }
 }

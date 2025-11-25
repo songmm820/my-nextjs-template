@@ -1,12 +1,13 @@
 'use client'
 
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import clsx from 'clsx'
 
 interface ContextMenuProps {
-    children: ReactNode
-    options?: Array<ReactNode>
+  children: ReactNode
+  options?: Array<ReactNode>
 }
 
 export default function ContextMenu({ children, options = [] }: ContextMenuProps) {
@@ -56,10 +57,7 @@ export default function ContextMenu({ children, options = [] }: ContextMenuProps
                 {options.map((option, index) => (
                   <motion.div
                     key={index}
-                    className={clsx(
-                      'px-2 h-8 cursor-pointer rounded-md',
-                      'text-sm text-gray-50 flex items-center'
-                    )}
+                    className={clsx('px-2 h-8 cursor-pointer rounded-md', 'text-sm text-gray-50 flex items-center')}
                     whileHover={{ backgroundColor: '#ffffff1a' }}
                     transition={{ duration: 0.3 }}
                   >

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * 该文件创建 Prisma 客户端并将其附加到全局对象上，使你的应用中只创建一个客户端实例。
  * 这有助于解决在开发模式下使用 Prisma ORM 配合 Next.js 时可能出现的热重载问题
