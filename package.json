@@ -4,7 +4,7 @@
   "private": true,
   "author": "songmm",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack -p 5678",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",

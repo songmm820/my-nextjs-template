@@ -1,26 +1,50 @@
+import React, { useId } from 'react'
 import clsx from 'clsx'
-import React from 'react'
+import {
+  FormContext,
+  FormFieldContext,
+  useFormContext
+} from '~/shared/features/context/form-context'
 
-export type FormProps = {} & React.FormHTMLAttributes<HTMLFormElement>
+export type FormProps<T> = {
+  className?: string
+  defaultValues?: Partial<T>
+} & Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'>
 
-export const Form = (props: FormProps) => {
-  const { children, ...rest } = props
+export function Form<T>(props: FormProps<T>) {
+  const { className, defaultValues, children, ...rest } = props
+  // form unique id
+  const prefix = useId()
+
   return (
-    <form {...rest}>
-      <div className="flex flex-col gap-3">{children}</div>
-    </form>
+    <FormContext.Provider value={{ defaultValues, prefix }}>
+      <form data-prefix={prefix} className={clsx(className)} {...rest}>
+        <div className="flex flex-col gap-3">{children}</div>
+      </form>
+    </FormContext.Provider>
   )
 }
 
-export type FormFieldProps = {
-  name: string
+export type FormFieldProps<T> = {
+  name: keyof T
   label: React.ReactNode
   children?: React.ReactNode
+  showErrorMessage?: boolean
+  errorMessage?: string
   labelPosition?: 'left' | 'right' | 'top'
 }
 
-export const FormField = (props: FormFieldProps) => {
-  const { name, label, children, labelPosition = 'top' } = props
+export function FormField<T>(props: FormFieldProps<T>) {
+  const {
+    name,
+    label,
+    children,
+    showErrorMessage = false,
+    errorMessage,
+    labelPosition = 'top'
+  } = props
+  const { prefix } = useFormContext()
+  const fieldId = `${prefix}-${String(name)}`
 
   const labelPositionClass: Record<typeof labelPosition, string> = {
     top: 'inline-flex flex-col gap-1.5',
@@ -29,11 +53,19 @@ export const FormField = (props: FormFieldProps) => {
   }
 
   return (
-    <div className={clsx('w-fit', labelPositionClass[labelPosition])}>
-      <label htmlFor={name} className="py-1.5">
-        {label}
-      </label>
-      {children}
-    </div>
+    <FormFieldContext.Provider
+      value={{
+        name: name as string,
+        fieldId: fieldId
+      }}
+    >
+      <div className={clsx('w-full', labelPositionClass[labelPosition])}>
+        <label htmlFor={fieldId} className="py-1.5">
+          {label}
+        </label>
+        {children}
+        {showErrorMessage && <div>{errorMessage}</div>}
+      </div>
+    </FormFieldContext.Provider>
   )
 }

@@ -18,38 +18,34 @@ const SignInPage = () => {
   const onSubmit = (data: AuthSignSchemaType) => console.log(data)
 
   return (
-    <div className="mt-20 w-100 mx-auto">
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormField name="email" label="Please input your email">
-          <Input
-            type="text"
-            id="email"
-            placeholder="Email"
-            {...register('email')}
-            autoComplete="on"
-          />
+    <div className="mt-20 w-100 mx-auto" onSubmit={handleSubmit(onSubmit)}>
+      <Form<AuthSignSchemaType>
+        defaultValues={{
+          email: 'test',
+          password: '123123'
+        }}
+      >
+        <FormField<AuthSignSchemaType>
+          name="email"
+          label="Please input your email"
+          showErrorMessage={Boolean(errors.email)}
+          errorMessage={errors.email?.message}
+        >
+          <Input type="text" placeholder="Email" {...register('email')} autoComplete="on" />
         </FormField>
 
-        {/* {errors.email && <span className="error">{errors.email.message}</span>} */}
-        <FormField name="email" label="Please input your email">
+        <FormField<AuthSignSchemaType> name="password" label="Please input your password">
           <Input
             type="password"
             placeholder="Password"
             autoComplete="on"
             {...register('password')}
           />
-          {errors.password && <span className="error">{errors.password.message}</span>}
         </FormField>
 
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Logging in...' : 'Login'}
+        <Button className="mt-6" type="submit" variant="primary" block disabled={isSubmitting}>
+          {isSubmitting ? 'Logging in...' : 'Sign In'}
         </Button>
-
-        <div className="mt-4 flex gap-3">
-          <Button>BT0</Button>
-          <Button variant="primary">BT1</Button>
-          <Button variant='outline'>BT1</Button>
-        </div>
       </Form>
     </div>
   )
