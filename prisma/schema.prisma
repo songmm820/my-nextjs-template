@@ -14,14 +14,13 @@ datasource db {
 }
 
 // 验证码类型
-enum CaptchaType {
+enum CaptchaTypeEnum {
   IMAGE @map("image") // 图形验证码
   EMAIL @map("email") // 邮箱验证码
 }
 
 // 验证码用途  获取邮箱验证码 | 其他
-enum CaptchaUse {
-  GET_EMAIL_CODE @map("get_email_code") // 去请求邮箱验证码
+enum CaptchaUseEnum {
   SIGN_IN        @map("sign_in") // 登录
   OTHER          @map("other") // 其他
 }
@@ -31,8 +30,8 @@ model Captcha {
   id        String      @id @default(cuid())
   link      String      @map("link")
   code      String      @map("code")
-  type      CaptchaType @map("type")
-  use       CaptchaUse  @map("use")
+  type      CaptchaTypeEnum @map("type")
+  use       CaptchaUseEnum  @map("use")
   expiresAt DateTime    @map("expires_at")
   createdAt DateTime    @default(now()) @map("created_at")
 
