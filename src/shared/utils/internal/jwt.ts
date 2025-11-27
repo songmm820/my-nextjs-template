@@ -1,11 +1,13 @@
 'use server'
 
-import jwt from 'jsonwebtoken'
+import { SignJWT, jwtVerify } from 'jose'
 
 // JWT 密钥
 const JWT_SECRET: string = 'secret'
 // JWT 过期时间 30d
 const JWT_EXPIRES_IN: number = 30 * 24 * 60 * 60
+// JWT 签名算法
+const encodedKey = new TextEncoder().encode(JWT_SECRET)
 
 // Token 载荷类型
 export type JwtPayload = {
@@ -19,10 +21,11 @@ export type JwtPayload = {
  * @params payload 载荷
  */
 export async function generateJwtToken(payload: JwtPayload): Promise<string> {
-  const jwtToken = jwt.sign(payload, JWT_SECRET, {
-    expiresIn: JWT_EXPIRES_IN
-  })
-  return jwtToken
+  return new SignJWT(payload)
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime(JWT_EXPIRES_IN)
+    .sign(encodedKey)
 }
 
 /**
@@ -32,7 +35,8 @@ export async function generateJwtToken(payload: JwtPayload): Promise<string> {
  */
 export async function verifyJwtToken(token: string): Promise<JwtPayload | null> {
   try {
-    return jwt.verify(token, JWT_SECRET) as JwtPayload
+    const { payload } = await jwtVerify(token, encodedKey)
+    return payload as JwtPayload
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('verify jwt token error:', error)

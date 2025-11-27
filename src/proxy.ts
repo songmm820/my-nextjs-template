@@ -12,7 +12,7 @@ import { AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
 // 公开路由
 const PUBLIC_ROUTES: Array<NavRouteHrefType> = ['/sign-in']
 // 公开api
-const PUBLIC_API_PATHS: Array<NavRouteHrefType> = ['/api/auth/sign-in']
+const PUBLIC_API_PATHS: Array<NavRouteHrefType> = ['/api/auth/sign-in', '/api/auth/captcha']
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname
@@ -28,9 +28,12 @@ export async function proxy(request: NextRequest) {
   const payload = await verifyJwtToken(jwtToken)
 
   if (!payload) {
-    return NextResponse.json(HttpResponse.error('The token is error or expired, please sign in again.'), {
-      status: 401
-    })
+    return NextResponse.json(
+      HttpResponse.error('The token is error or expired, please sign in again.'),
+      {
+        status: 401
+      }
+    )
   }
 
   return NextResponse.next()
