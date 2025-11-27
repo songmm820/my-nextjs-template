@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     if (captcha.code !== imageCaptcha) {
       return NextResponse.json(HttpResponse.error('The captcha is incorrect'))
     }
-    // 生成邮件验证码
+    // // 生成邮件验证码
     const emailCaptchaCode = await generateCaptchaCode(6)
     // 发送邮件验证码
     await sendEmail({
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         link: email,
         type: CaptchaType.EMAIL,
         use: CaptchaUse.SIGN_IN,
-        expiresAt: new Date(Date.now() + EXPIRE_TIME) // 10 分钟后过期
+        expiresAt: new Date(Date.now() + EXPIRE_TIME)
       }
     })
     return NextResponse.json(HttpResponse.success('The captcha is verified successfully'))
