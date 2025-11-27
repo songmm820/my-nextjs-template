@@ -1,7 +1,6 @@
 import Input, { type InputProps } from './internal/Input'
-
-import { Form, FormField, type FormProps, type FormFieldProps } from './internal/Form'
-
+import Form, { type FormProps } from './internal/Form'
+import { FormField, type FormFieldProps } from './internal/FormField'
 import Button, { type ButtonProps } from './internal/Button'
 
 export {

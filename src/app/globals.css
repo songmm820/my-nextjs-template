@@ -19,11 +19,17 @@
 
   --text-sm: 12px;
   --text-md: 14px;
-  --text-lg: 16px;
+  --text-base: 16px;
   --text-xl: 18px;
   --text-2xl: 20px;
 
   --color-primary: #0062ff;
+  --color-danger: #ff3b30;
+
+  /* 文本色 */
+  --color-333: #333;
+  --color-666: #666;
+  --color-999: #999;
 }
 
 html,

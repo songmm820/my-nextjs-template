@@ -1,52 +1,35 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { AuthSignSchema, type AuthSignSchemaType } from '~/shared/zod-schemas/auth.schema'
+import { useRef } from 'react'
 import { Button, Form, FormField, Input } from '~/shared/features'
+import { type FormRef } from '~/shared/features/internal/Form'
+import { authSignSchema, type AuthSignSchemaInput } from '~/shared/zod-schemas/auth.schema'
 
 const SignInPage = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting }
-  } = useForm<AuthSignSchemaType>({
-    resolver: zodResolver(AuthSignSchema),
-    mode: 'onBlur'
-  })
+  const formRef = useRef<FormRef<AuthSignSchemaInput>>(null)
 
-  const onSubmit = (data: AuthSignSchemaType) => console.log(data)
+  const onSubmit = async () => {
+    const isV = await formRef.current?.validate()
+    if (!isV) return
+    const values = formRef.current?.getFormValues()
+    alert(JSON.stringify(values))
+  }
 
   return (
-    <div className="mt-20 w-100 mx-auto" onSubmit={handleSubmit(onSubmit)}>
-      <Form<AuthSignSchemaType>
-        defaultValues={{
-          email: 'test',
-          password: '123123'
-        }}
-      >
-        <FormField<AuthSignSchemaType>
-          name="email"
-          label="Please input your email"
-          showErrorMessage={Boolean(errors.email)}
-          errorMessage={errors.email?.message}
-        >
-          <Input type="text" placeholder="Email" {...register('email')} autoComplete="on" />
+    <div className="mt-20 w-100 mx-auto">
+      <Form<AuthSignSchemaInput> ref={formRef} schema={authSignSchema}>
+        <FormField<AuthSignSchemaInput> name="email" label="Please input your email">
+          <Input type="text" placeholder="Email" autoComplete="on" />
         </FormField>
 
-        <FormField<AuthSignSchemaType> name="password" label="Please input your password">
-          <Input
-            type="password"
-            placeholder="Password"
-            autoComplete="on"
-            {...register('password')}
-          />
+        <FormField<AuthSignSchemaInput> name="password" label="Please input your password">
+          <Input type="password" placeholder="Password" autoComplete="on" />
         </FormField>
-
-        <Button className="mt-6" type="submit" variant="primary" block disabled={isSubmitting}>
-          {isSubmitting ? 'Logging in...' : 'Sign In'}
-        </Button>
       </Form>
+
+      <Button className="mt-6" variant="primary" block onClick={onSubmit}>
+        Sign In
+      </Button>
     </div>
   )
 }

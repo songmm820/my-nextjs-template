@@ -35,7 +35,13 @@ const eslintConfig = defineConfig([
       // tab 键使用 4 个空格
       indent: ['error', 2, { SwitchCase: 1 }],
       // 类型导入方式
-      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports', // 使用 import type 语法
+          fixStyle: 'inline-type-imports' // 强制合并为单条导入（禁止分离）
+        }
+      ],
       // 禁止相对路径引入
       'no-restricted-imports': [
         'error',

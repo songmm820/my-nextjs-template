@@ -3,12 +3,12 @@ import type { NextRequest} from 'next/server';
 import { NextResponse } from 'next/server'
 import { AUTHORIZATION } from '~/shared/constants'
 import { generateJwtToken, HttpResponse, setCookieSafe } from '~/shared/utils'
-import { AuthSignSchema } from '~/shared/zod-schemas/auth.schema'
+import { authSignSchema } from '~/shared/zod-schemas/auth.schema'
 
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json()
-    const vr = AuthSignSchema.safeParse({ email, password })
+    const vr = authSignSchema.safeParse({ email, password })
     if (!vr.success) {
       const [er] = vr.error.issues
       return NextResponse.json(HttpResponse.error(er.message))
