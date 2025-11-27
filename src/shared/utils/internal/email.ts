@@ -14,8 +14,8 @@ type SendEmailType = {} & Omit<CreateEmailOptions, 'react'>
  * @param options 发送配置
  */
 export async function sendEmail(options: SendEmailType) {
-  const { from, to, subject } = options
-  if (!from || !to || !subject) throw new Error('Invalid email options')
+  const { from, to, subject, text } = options
+  if (!from || !to || !subject || !text) throw new Error('Invalid email options')
   await resend.emails.send({
     from: from,
     to: to,
