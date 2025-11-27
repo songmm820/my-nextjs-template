@@ -21,7 +21,8 @@ enum CaptchaType {
 
 // 验证码用途  获取邮箱验证码 | 其他
 enum CaptchaUse {
-  GET_EMAIL_CODE @map("get_email_code") // 获取邮箱验证码
+  GET_EMAIL_CODE @map("get_email_code") // 去请求邮箱验证码
+  SIGN_IN        @map("sign_in") // 登录
   OTHER          @map("other") // 其他
 }
 

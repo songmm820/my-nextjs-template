@@ -12,7 +12,11 @@ import { AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
 // 公开路由
 const PUBLIC_ROUTES: Array<NavRouteHrefType> = ['/sign-in']
 // 公开api
-const PUBLIC_API_PATHS: Array<NavRouteHrefType> = ['/api/auth/sign-in', '/api/auth/captcha']
+const PUBLIC_API_PATHS: Array<NavRouteHrefType> = [
+  '/api/auth/sign-in',
+  '/api/auth/image-captcha/send',
+  '/api/auth/image-captcha/verify'
+]
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname
