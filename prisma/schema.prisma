@@ -13,50 +13,50 @@ datasource db {
   provider = "mysql"
 }
 
-// 验证码类型
+/// 验证码类型
 enum CaptchaTypeEnum {
-  IMAGE @map("image") // 图形验证码
-  EMAIL @map("email") // 邮箱验证码
+  image /// 图形验证码
+  email /// 邮箱验证码
 }
 
-// 验证码用途  获取邮箱验证码 | 其他
+/// 验证码用途  获取邮箱验证码 | 其他
 enum CaptchaUseEnum {
-  SIGN_IN        @map("sign_in") // 登录
-  OTHER          @map("other") // 其他
+  sign_in        /// 登录
+  other        /// 其他
 }
 
-// 验证码表
+/// 验证码表
 model Captcha {
   id        String      @id @default(cuid())
-  link      String      @map("link")
-  code      String      @map("code")
-  type      CaptchaTypeEnum @map("type")
-  use       CaptchaUseEnum  @map("use")
+  link      String      @map("link") /// 关联邮箱
+  code      String      @map("code") /// 验证码
+  type      CaptchaTypeEnum @map("type") /// 验证码类型
+  use       CaptchaUseEnum  @map("use") /// 验证码用途
   expiresAt DateTime    @map("expires_at")
   createdAt DateTime    @default(now()) @map("created_at")
 
   @@map("captcha")
 }
 
-// 用户表
+/// 用户表
 model SystemUser {
   id        String   @id @default(cuid())
-  userId    String   @unique @map("user_id")
-  name      String
-  email     String   @unique
-  avatar    String?
-  password  String?  @map("password")
+  userId    String   @unique @map("user_id") /// 用户ID
+  name      String    /// 用户名
+  email     String   @unique /// 邮箱
+  avatar    String? /// 头像
+  password  String?  @map("password") /// 密码(hashed)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("system_user")
 }
 
-// 用户与等级关联表
+/// 用户与等级关联表
 model SystemUserLevel {
   id        String   @id @default(cuid())
-  userId    String   @unique @map("user_id")
-  level     Int      @map("level")
+  userId    String   @unique @map("user_id") /// 用户ID
+  level     Int      @map("level") /// 等级
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
