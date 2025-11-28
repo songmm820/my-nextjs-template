@@ -15,7 +15,8 @@ datasource db {
 
 /// 验证码类型
 enum CaptchaTypeEnum {
-  image /// 图形验证码
+  /// 图形验证码
+  image
   email /// 邮箱验证码
 }
 
@@ -28,7 +29,8 @@ enum CaptchaUseEnum {
 /// 验证码表
 model Captcha {
   id        String      @id @default(cuid())
-  link      String      @map("link") /// 关联邮箱
+  /// 关联邮箱
+  link      String      @map("link")  @db.Comm
   code      String      @map("code") /// 验证码
   type      CaptchaTypeEnum @map("type") /// 验证码类型
   use       CaptchaUseEnum  @map("use") /// 验证码用途
