@@ -20,7 +20,7 @@ const SignInPage = () => {
   }
 
   return (
-    <div className="max-w-300 h-full overflow-hidden">
+    <div className="max-full h-full overflow-hidden">
       <div className="mt-26 w-100 mx-auto">
         <Form<AuthSignSchemaInput> ref={formRef} schema={authSignSchema}>
           <FormField<AuthSignSchemaInput> name="email" label="Please input your email">
