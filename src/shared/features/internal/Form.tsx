@@ -70,7 +70,7 @@ const Form = forwardRef(<T extends FieldValues>(props: FormProps<T>, ref: Ref<Fo
   }))
 
   return (
-    <FormContext.Provider value={{ initialValues , prefix, formInstance }}>
+    <FormContext.Provider value={{ initialValues, prefix, formInstance }}>
       <form
         data-prefix={prefix}
         className={clsx(className)}

@@ -36,7 +36,11 @@ export default function ContextMenu({ children, options = [] }: ContextMenuProps
 
   return (
     <>
-      <div onContextMenu={handleContextMenu} className="w-full h-full" style={{ left: pos.x, top: pos.y }}>
+      <div
+        onContextMenu={handleContextMenu}
+        className="w-full h-full"
+        style={{ left: pos.x, top: pos.y }}
+      >
         {children}
       </div>
 
@@ -57,7 +61,10 @@ export default function ContextMenu({ children, options = [] }: ContextMenuProps
                 {options.map((option, index) => (
                   <motion.div
                     key={index}
-                    className={clsx('px-2 h-8 cursor-pointer rounded-md', 'text-sm text-gray-50 flex items-center')}
+                    className={clsx(
+                      'px-2 h-8 cursor-pointer rounded-md',
+                      'text-sm text-gray-50 flex items-center'
+                    )}
                     whileHover={{ backgroundColor: '#ffffff1a' }}
                     transition={{ duration: 0.3 }}
                   >

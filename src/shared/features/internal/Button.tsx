@@ -14,7 +14,7 @@ const Button = (props: ButtonProps) => {
     <button
       className={twMerge(
         clsx(
-          'h-11 cursor-pointer rounded-lg',
+          'h-11 cursor-pointer rounded-lg hover:brightness-90 transition-all duration-300',
           block ? 'w-full' : 'w-31',
           variant === 'default' && 'bg-[#f0f0f0]',
           variant === 'primary' && 'bg-primary text-white ',

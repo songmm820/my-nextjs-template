@@ -24,3 +24,5 @@ quoteProps: 'as-needed'
 jsxBracketSameLine: false
 # 为了确保每个 HTML、Vue 和 JSX 元素的属性始终单独占据一行
 singleAttributePerLine: false
+# 换行符 crlf
+endOfLine: 'crlf'

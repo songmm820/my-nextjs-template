@@ -2,9 +2,18 @@
 
 import { useEffect } from 'react'
 import Header from '~/shared/components/Header'
-import { SWRConfig } from 'swr'
+import Footer from '~/shared/components/Footer'
+import type { NavRouteHrefType } from '~/shared/constants'
+import { usePathname } from 'next/navigation'
 
 const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
+  // 不显示 Header 的 routes
+  const hideHeaderRoutes: Array<NavRouteHrefType> = ['/sign-in']
+  // 不显示 Footer 的 routes
+  const hideFooterRoutes: Array<NavRouteHrefType> = ['/sign-in']
+
+  const pathname = usePathname()
+
   // 屏蔽全局右键
   useEffect(() => {
     if (process.env.NODE_ENV !== 'production') return
@@ -16,18 +25,20 @@ const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   return (
-    <SWRConfig
-      value={{
-        fetcher: (resource, init) => fetch(resource, init).then((res) => res.json())
-      }}
-    >
-      <div className="w-full h-full flex flex-col">
-        <div className="fixed top-0 left-0 w-full z-2">
-          <Header />
-        </div>
-        <div className="flex-1">{children}</div>
-      </div>
-    </SWRConfig>
+    <div className="w-full h-full">
+      {!hideHeaderRoutes.includes(pathname as NavRouteHrefType) && (
+        <>
+          <div className="h-[64px] flex-shrink-0" />
+          <div className="fixed top-0 left-0 w-full z-99">
+            <Header />
+          </div>
+        </>
+      )}
+
+      <main className="h-[calc(100%-64px)]">{children}</main>
+
+      {!hideFooterRoutes.includes(pathname as NavRouteHrefType) && <Footer />}
+    </div>
   )
 }
 

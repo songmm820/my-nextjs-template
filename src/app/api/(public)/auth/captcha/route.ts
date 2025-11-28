@@ -1,15 +1,15 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { generateCaptchaCode, generateCaptchaImage, HttpResponse } from '~/shared/utils'
 import { prisma } from '~prisma/prisma'
-import {captchaGetSchema} from '~/shared/zod-schemas/captcha.schema';
+import { captchaGetSchema } from '~/shared/zod-schemas/captcha.schema'
 
 // 失效时间
 const EXPIRE_TIME = 5 * 60 * 1000 // 5分钟
 
 export async function POST(request: NextRequest) {
   try {
-    const { email,type,use } = await request.json()
-    const vr = captchaGetSchema.safeParse({ email, type,use })
+    const { email, type, use } = await request.json()
+    const vr = captchaGetSchema.safeParse({ email, type, use })
     if (!vr.success) {
       const [er] = vr.error.issues
       return NextResponse.json(HttpResponse.error(er.message))
@@ -18,8 +18,8 @@ export async function POST(request: NextRequest) {
     const captcha = await prisma.captcha.findFirst({
       where: {
         link: email,
-        type:type,
-        use:use,
+        type: type,
+        use: use,
         expiresAt: {
           gt: new Date()
         }

@@ -1,6 +1,6 @@
 @layer components {
-    /* 动画300ms */
-    .animate-300ms {
-        transition: all 300ms ease-in-out;
-    }
+  /* 动画300ms */
+  .animate-300ms {
+    transition: all 300ms ease-in-out;
+  }
 }

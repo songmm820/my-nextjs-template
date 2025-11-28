@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const RootLayout = async ({
   children
 }: Readonly<{
-    children: React.ReactNode
+  children: React.ReactNode
 }>) => {
   return (
     <html lang="en">

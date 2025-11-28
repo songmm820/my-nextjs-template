@@ -1,6 +1,3 @@
-
-
-
 const NotFound = () => {
   return 404
 }

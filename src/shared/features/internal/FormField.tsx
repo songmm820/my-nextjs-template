@@ -31,7 +31,7 @@ export function FormField<T>(props: FormFieldProps<T>) {
     >
       <div className={clsx('w-full', labelPositionClass[labelPosition])}>
         {label && (
-          <label htmlFor={fieldId} className="py-1.5 text-base text-666">
+          <label htmlFor={fieldId} className="py-1.5 text-base text-666 tracking-widest">
             {label}
           </label>
         )}

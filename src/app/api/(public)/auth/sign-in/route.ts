@@ -1,5 +1,5 @@
 import { hash } from 'bcryptjs'
-import type { NextRequest} from 'next/server';
+import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { AUTHORIZATION } from '~/shared/constants'
 import { generateJwtToken, HttpResponse, setCookieSafe } from '~/shared/utils'

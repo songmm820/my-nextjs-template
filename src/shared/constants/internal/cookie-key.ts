@@ -1,3 +1,2 @@
-
 // 授权认证 key
-export const AUTHORIZATION = 'Authorization';
+export const AUTHORIZATION = 'Authorization'
