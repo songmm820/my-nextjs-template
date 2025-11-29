@@ -2,10 +2,10 @@ import 'server-only'
 
 import { SignJWT, jwtVerify } from 'jose'
 
-// JWT 密钥
-const JWT_SECRET: string = 'secret'
+// JWT 密钥 min 32 bytes
+const JWT_SECRET: string = 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6'
 // JWT 过期时间 30d
-const JWT_EXPIRES_IN: number = 30 * 24 * 60 * 60
+const JWT_EXPIRES_IN: string = '30d'
 // JWT 签名算法
 const encodedKey = new TextEncoder().encode(JWT_SECRET)
 

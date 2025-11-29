@@ -1,6 +1,11 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import type { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 
+export type AxiosResponseType<R> = {
+  data: R
+  error?: string
+}
+
 /**
  * 请求拦截器配置
  *
@@ -60,22 +65,26 @@ export class AxiosClientClass {
   }
 
   // 封装get请求
-  get<P, R>(url: string, params?: P, config?: AxiosRequestConfig): Promise<R> {
+  get<P, R>(url: string, params?: P, config?: AxiosRequestConfig): Promise<AxiosResponseType<R>> {
     return this.instance.get(url, { params, ...config })
   }
 
   // 封装post请求
-  post<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<R> {
+  post<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<AxiosResponseType<R>> {
     return this.instance.post(url, data, config)
   }
 
   // 封装put请求
-  put<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<R> {
+  put<P, R>(url: string, data?: P, config?: AxiosRequestConfig): Promise<AxiosResponseType<R>> {
     return this.instance.put(url, data, config)
   }
 
   // 封装delete请求
-  delete<P, R>(url: string, params?: P, config?: AxiosRequestConfig): Promise<R> {
+  delete<P, R>(
+    url: string,
+    params?: P,
+    config?: AxiosRequestConfig
+  ): Promise<AxiosResponseType<R>> {
     return this.instance.delete(url, { params, ...config })
   }
 }

@@ -20,14 +20,17 @@ const PUBLIC_API_PATHS: Array<NavRouteHrefType> = [
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname
-
+  // 公开路由和api
   if (PUBLIC_API_PATHS.includes(path as Route) || PUBLIC_ROUTES.includes(path as Route)) {
     return NextResponse.next()
   }
   // 验证 jwt 令牌
   const jwtToken = request.cookies.get(AUTHORIZATION)?.value
   if (!jwtToken) {
-    return NextResponse.redirect(new URL('/sign-in', request.url))
+    // 未认证用户重定向到登录页，携带原始路径用于登录后跳转
+    const redirectUrl = new URL('/sign-in', request.url)
+    redirectUrl.searchParams.set('redirect', encodeURI(request.nextUrl.pathname))
+    return NextResponse.redirect(redirectUrl)
   }
   const payload = await verifyJwtToken(jwtToken)
 

@@ -1,4 +1,4 @@
-// @see https://www.landingfolio.com/library
+// @see https://www.landingfolaio.com/library
 
 import Image from 'next/image'
 

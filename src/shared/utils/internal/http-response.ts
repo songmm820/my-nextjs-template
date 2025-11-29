@@ -1,6 +1,7 @@
-import 'server-only'
+
+
 export class HttpResponse {
-  static success<R>(data: R) {
+  static success<R>(data?: R) {
     if (data === null || data === undefined) {
       return {} as R
     }
