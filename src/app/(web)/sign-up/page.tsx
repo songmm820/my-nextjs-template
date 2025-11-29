@@ -6,7 +6,7 @@ import { type FormRef } from '~/shared/features/internal/Form'
 import { authRegisterSchema, type AuthRegisterSchemaInput } from '~/shared/zod-schemas/auth.schema'
 import { useRouter } from 'next/navigation'
 import { CustomLink } from '~/shared/components/CustomLink'
-import { signUpApi } from '~/apis/auth'
+import { useSignUpSwrAPi } from '~/apis/auth'
 import { setCookie } from 'cookies-next/client'
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { useLoginUser } from '~/context/LoginUserProvider'
@@ -15,13 +15,14 @@ const SignInPage = () => {
   const router = useRouter()
   const { setUser } = useLoginUser()
   const formRef = useRef<FormRef<AuthRegisterSchemaInput>>(null)
+  const { trigger, isMutating } = useSignUpSwrAPi()
 
   const onSubmit = async () => {
     const isV = await formRef.current?.validate()
     if (!isV) return
     const values = formRef.current?.getFormValues()
     if (!values) return
-    const { data, error } = await signUpApi({
+    const { data, error } = await trigger({
       email: values.email,
       password: values.password,
       captcha: values.captcha
@@ -66,7 +67,7 @@ const SignInPage = () => {
           </FormField>
         </Form>
 
-        <Button className="mt-6" variant="primary" block onClick={onSubmit}>
+        <Button loading={isMutating} className="mt-6" variant="primary" block onClick={onSubmit}>
           Sign Up
         </Button>
 

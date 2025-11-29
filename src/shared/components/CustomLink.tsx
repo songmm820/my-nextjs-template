@@ -23,7 +23,7 @@ export function CustomLink({ children, ...props }: CustomLinkProps) {
 
   return (
     <Link
-      className="text-primary hover:brightness-90 transition-all duration-300 mx-2"
+      className="text-primary hover:brightness-90 transition-all duration-300 mx-2 hover:underline hover:underline-offset-4"
       onNavigate={handleNavigate}
       {...props}
     >

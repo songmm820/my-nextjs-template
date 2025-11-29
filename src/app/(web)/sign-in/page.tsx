@@ -5,7 +5,7 @@ import { Button, Form, FormField, Input } from '~/shared/features'
 import { type FormRef } from '~/shared/features/internal/Form'
 import { authSignSchema, type AuthSignSchemaInput } from '~/shared/zod-schemas/auth.schema'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { signInApi } from '~/apis/auth'
+import { useSignInSwrAPi } from '~/apis/auth'
 import { setCookie } from 'cookies-next/client'
 import { COOKIE_AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
 import { CustomLink } from '~/shared/components/CustomLink'
@@ -15,13 +15,14 @@ const SignInPage = () => {
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') as NavRouteHrefType
   const formRef = useRef<FormRef<AuthSignSchemaInput>>(null)
+  const { trigger, isMutating } = useSignInSwrAPi()
 
   const onSubmit = async () => {
     const isV = await formRef.current?.validate()
     if (!isV) return
     const values = formRef.current?.getFormValues()
     if (!values) return
-    const { data, error } = await signInApi(values)
+    const { data, error } = await trigger(values)
     if (error) {
       return
     }
@@ -31,6 +32,7 @@ const SignInPage = () => {
 
   return (
     <div className="max-full h-full overflow-hidden">
+      {JSON.stringify(isMutating)}
       <div className="mt-26 w-100 mx-auto">
         <Form<AuthSignSchemaInput>
           ref={formRef}
@@ -54,7 +56,7 @@ const SignInPage = () => {
           </FormField>
         </Form>
 
-        <Button className="mt-6" variant="primary" block onClick={onSubmit}>
+        <Button loading={isMutating} className="mt-6" variant="primary" block onClick={onSubmit}>
           Sign In
         </Button>
 
