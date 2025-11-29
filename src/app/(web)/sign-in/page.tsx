@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Button, Form, FormField, Input } from '~/shared/features'
 import { type FormRef } from '~/shared/features/internal/Form'
 import { authSignSchema, type AuthSignSchemaInput } from '~/shared/zod-schemas/auth.schema'
@@ -17,14 +17,8 @@ const SignInPage = () => {
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') as NavRouteHrefType
   const formRef = useRef<FormRef<AuthSignSchemaInput>>(null)
-  const imageCaptchaRef = useRef<ImageCaptchaRef>(null)
   const { trigger, isMutating } = useSignInSwrAPi()
-
-  const onGetImageCaptcha = () => {
-    const email = formRef.current?.getFormValues()?.email
-    if (!email) return
-    imageCaptchaRef.current?.onGetImageCaptcha(email)
-  }
+  const [emailLive, setEmailLive] = useState<string>('')
 
   const onSubmit = async () => {
     const isV = await formRef.current?.validate()
@@ -49,6 +43,9 @@ const SignInPage = () => {
             email: 'mmsong@yeah.net',
             password: '12345678'
           }}
+          onValueChange={(values) => {
+            setEmailLive(values.email)
+          }}
         >
           <FormField<AuthSignSchemaInput> name="email" label="Please input your email">
             <Input type="text" placeholder="Email" autoComplete="on" />
@@ -60,9 +57,9 @@ const SignInPage = () => {
 
           <FormField<AuthSignSchemaInput> name="captcha" label="Please input captcha">
             <div className="flex gap-3">
-              <Input className="flex-1" placeholder="captcha" autoComplete="on" />
+              <Input className="flex-1" placeholder="Captcha" autoComplete="on" />
               <ImageCaptcha
-                ref={imageCaptchaRef}
+                link={emailLive}
                 type={CaptchaTypeEnum.IMAGE}
                 use={CaptchaUseEnum.SIGN_IN}
               />
@@ -72,10 +69,6 @@ const SignInPage = () => {
 
         <Button loading={isMutating} className="mt-6" variant="primary" block onClick={onSubmit}>
           Sign In
-        </Button>
-
-        <Button className="mt-3" variant="outline" block onClick={onGetImageCaptcha}>
-          Get Captcha
         </Button>
 
         <div className="mt-4 flex justify-end">

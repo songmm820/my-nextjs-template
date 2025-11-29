@@ -2,10 +2,12 @@ import Image from 'next/image'
 import { forwardRef, useImperativeHandle, useState } from 'react'
 import { getCaptchaApi } from '~/apis/auth-api'
 import { type CaptchaTypeEnum, type CaptchaUseEnum } from '~/shared/enums/comm'
+import { Button } from '~/shared/features'
 
 export type ImageCaptchaProps = {
-  width: number
+  width?: number
   height?: number
+  link: string
   type: CaptchaTypeEnum
   use: CaptchaUseEnum
 }
@@ -15,34 +17,39 @@ export type ImageCaptchaRef = {
 }
 
 const ImageCaptchaRef = forwardRef<ImageCaptchaRef, ImageCaptchaProps>((props, ref) => {
-  const { width = 120, height = 40, type, use } = props
+  const { width = 120, height = 40, link, type, use } = props
   const [captchaUrl, setCaptChaUrl] = useState<string | null>(null)
 
-  const onGetImageCaptcha = (link: string) => {
-    getCaptchaApi({
+  const onGetImageCaptcha = async () => {
+    if (!link) return
+    const r = await getCaptchaApi({
       email: link,
-      type: type,
-      use: use
-    }).then(({ data, error }) => {
-      if (error) return
-      if (data) {
-        setCaptChaUrl(URL.createObjectURL(data))
-      }
+      type,
+      use
     })
+    const blob = await r.blob()
+    setCaptChaUrl(URL.createObjectURL(blob))
   }
 
   useImperativeHandle(ref, () => ({
     onGetImageCaptcha
   }))
 
-  if (!captchaUrl) return null
+  if (!captchaUrl)
+    return (
+      <Button variant="link" disabled={!link} onClick={onGetImageCaptcha}>
+        Get Captcha
+      </Button>
+    )
   return (
     <Image
-      className="border border-e7 rounded-md"
+      title="Get Again ?"
+      className="border border-e7 rounded-md cursor-pointer"
       src={captchaUrl}
       width={width}
       height={height}
       alt="captcha"
+      onClick={onGetImageCaptcha}
     />
   )
 })

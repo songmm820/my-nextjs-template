@@ -31,12 +31,8 @@ export const useSignUpSwrAPi = createSwrMutation<
 // 获取验证码
 export async function getCaptchaApi(p: CaptchaGetSchemaInput) {
   const url: NavRouteHrefType = '/api/auth/captcha'
-  return axiosInstance
-    .setHeaders('Content-Type', 'image/svg+xml')
-    .post<CaptchaGetSchemaInput, Blob>(url, p)
-  // return axiosInstance.post<CaptchaGetSchemaInput, Blob>(url, p)
+  return fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(p)
+  })
 }
-export const useGetCaptchaSwrAPi = createSwrMutation<CaptchaGetSchemaInput, Blob>(
-  '/api/auth/captcha',
-  getCaptchaApi
-)

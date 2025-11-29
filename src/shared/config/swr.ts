@@ -14,3 +14,10 @@ export function createSwrMutation<P, R>(
 ) {
   return () => useSWRMutation(key, (_, { arg }: { arg: P }) => apiFn(arg))
 }
+
+export function createSwrBlobMutation<P, R>(
+  key: string,
+  apiFn: (p: P) => Promise<R>
+) {
+  return () => useSWRMutation(key, (_, { arg }: { arg: P }) => apiFn(arg))
+}

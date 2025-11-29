@@ -1,4 +1,4 @@
-import React, { forwardRef, type JSX, type Ref, useId, useImperativeHandle } from 'react'
+import React, { forwardRef, type JSX, type Ref, useEffect, useId, useImperativeHandle } from 'react'
 import clsx from 'clsx'
 import { type ZodType } from 'zod'
 import {
@@ -6,7 +6,8 @@ import {
   type DefaultValues,
   type FieldValues,
   type Path,
-  type UseFormReturn
+  type UseFormReturn,
+  useWatch
 } from 'react-hook-form'
 import { FormContext } from '~/shared/features/context/form-context'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,6 +21,7 @@ export type FormProps<T extends FieldValues> = {
   className?: string
   initialValues?: DefaultValues<T>
   schema?: ZodType<T, T> | undefined | null
+  onValueChange?: (values: T) => void
 } & Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'>
 
 export type FormRef<T extends FieldValues> = {
@@ -32,13 +34,21 @@ export type FormRef<T extends FieldValues> = {
 }
 
 const Form = forwardRef(<T extends FieldValues>(props: FormProps<T>, ref: Ref<FormRef<T>>) => {
-  const { className, schema, initialValues, children, ...rest } = props
+  const { className, schema, initialValues, children, onValueChange, ...rest } = props
+
   const prefix = useId()
   const resolver = schema ? zodResolver(schema) : undefined
   const formInstance: UseFormReturn<T> = useForm<T>({
     resolver: resolver,
+    defaultValues: initialValues,
     mode: 'onBlur'
   })
+
+  const liveValues = useWatch({ control: formInstance.control })
+
+  useEffect(() => {
+    if (onValueChange) onValueChange(liveValues as T)
+  }, [liveValues, onValueChange])
 
   const focusField = async (name: Path<T>) => {
     await formInstance.trigger(name)
@@ -49,7 +59,12 @@ const Form = forwardRef(<T extends FieldValues>(props: FormProps<T>, ref: Ref<Fo
   }
 
   const validate = async () => {
-    return await formInstance.trigger()
+    const tr = await formInstance.trigger()
+    if (!tr) {
+      // eslint-disable-next-line no-console
+      console.error('The Form has error: ', formInstance.formState.errors)
+    }
+    return tr
   }
 
   const getFormValues = () => {

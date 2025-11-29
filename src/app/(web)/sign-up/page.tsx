@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Button, Form, FormField, Input } from '~/shared/features'
 import { type FormRef } from '~/shared/features/internal/Form'
 import { authRegisterSchema, type AuthRegisterSchemaInput } from '~/shared/zod-schemas/auth.schema'
@@ -10,12 +10,15 @@ import { useSignUpSwrAPi } from '~/apis/auth-api'
 import { setCookie } from 'cookies-next/client'
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { useLoginUser } from '~/context/LoginUserProvider'
+import ImageCaptcha from '~/shared/components/ImageCaptcha'
+import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 
 const SignInPage = () => {
   const router = useRouter()
   const { setUser } = useLoginUser()
   const formRef = useRef<FormRef<AuthRegisterSchemaInput>>(null)
   const { trigger, isMutating } = useSignUpSwrAPi()
+  const [emailLive, setEmailLive] = useState<string>('')
 
   const onSubmit = async () => {
     const isV = await formRef.current?.validate()
@@ -41,10 +44,8 @@ const SignInPage = () => {
         <Form<AuthRegisterSchemaInput>
           ref={formRef}
           schema={authRegisterSchema}
-          initialValues={{
-            email: 'mmsong@yeah.net',
-            captcha: '1345',
-            password: '12345678'
+          onValueChange={(values) => {
+            setEmailLive(values.email)
           }}
         >
           <FormField<AuthRegisterSchemaInput> name="email" label="Please input your email">
@@ -63,7 +64,14 @@ const SignInPage = () => {
           </FormField>
 
           <FormField<AuthRegisterSchemaInput> name="captcha" label="Please input captcha">
-            <Input placeholder="captcha" autoComplete="on" />
+            <div className="flex gap-3">
+              <Input placeholder="Captcha" autoComplete="on" />
+              <ImageCaptcha
+                link={emailLive}
+                type={CaptchaTypeEnum.IMAGE}
+                use={CaptchaUseEnum.SIGN_UP}
+              />
+            </div>
           </FormField>
         </Form>
 
