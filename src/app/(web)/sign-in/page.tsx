@@ -7,7 +7,8 @@ import { authSignSchema, type AuthSignSchemaInput } from '~/shared/zod-schemas/a
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signInApi } from '~/apis/auth'
 import { setCookie } from 'cookies-next/client'
-import { AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
+import { COOKIE_AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
+import { CustomLink } from '~/shared/components/CustomLink'
 
 const SignInPage = () => {
   const router = useRouter()
@@ -20,8 +21,11 @@ const SignInPage = () => {
     if (!isV) return
     const values = formRef.current?.getFormValues()
     if (!values) return
-    const { data } = await signInApi(values)
-    setCookie(AUTHORIZATION, data)
+    const { data, error } = await signInApi(values)
+    if (error) {
+      return
+    }
+    setCookie(COOKIE_AUTHORIZATION, data.token)
     router.push(redirect ?? '/')
   }
 
@@ -53,6 +57,11 @@ const SignInPage = () => {
         <Button className="mt-6" variant="primary" block onClick={onSubmit}>
           Sign In
         </Button>
+
+        <div className="mt-4 flex justify-end">
+          <span className="text-666">Dont have an account ?</span>
+          <CustomLink href="/sign-up">Sign Up</CustomLink>
+        </div>
       </div>
     </div>
   )

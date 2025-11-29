@@ -8,9 +8,9 @@ import { usePathname } from 'next/navigation'
 
 const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
   // 不显示 Header 的 routes
-  const hideHeaderRoutes: Array<NavRouteHrefType> = ['/sign-in']
+  const hideHeaderRoutes: Array<NavRouteHrefType> = ['/sign-in', '/sign-up']
   // 不显示 Footer 的 routes
-  const hideFooterRoutes: Array<NavRouteHrefType> = ['/sign-in']
+  const hideFooterRoutes: Array<NavRouteHrefType> = ['/sign-in', '/sign-up']
 
   const pathname = usePathname()
 

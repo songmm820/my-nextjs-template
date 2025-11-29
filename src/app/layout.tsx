@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
-import { ThemeProvider } from '~/context/theme-provider'
+import { ThemeProvider } from '~/context/ThemeProvider'
 import './globals.css'
+import { NavigationBlockerProvider } from '~/context/NavigationBlockerProvider'
+import { LoginUserProvider } from '~/context/LoginUserProvider'
 
 export const metadata: Metadata = {
   title: "Nicks's Knack",
@@ -16,11 +18,15 @@ const RootLayout = async ({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider>
+        <NavigationBlockerProvider>
           <NextIntlClientProvider>
-            {children} {/* Will render your page */}
+            <ThemeProvider>
+              <LoginUserProvider>
+                {children} {/* Will render your page */}
+              </LoginUserProvider>
+            </ThemeProvider>
           </NextIntlClientProvider>
-        </ThemeProvider>
+        </NavigationBlockerProvider>
       </body>
     </html>
   )

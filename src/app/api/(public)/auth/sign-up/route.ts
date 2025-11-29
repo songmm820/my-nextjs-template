@@ -1,28 +1,28 @@
-import type { NextRequest } from 'next/server'
+import { hash } from 'bcryptjs'
 import { NextResponse } from 'next/server'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/generated/prisma/enums'
-import { generateJwtToken, HttpResponse } from '~/shared/utils/server'
-import { authSignSchema } from '~/shared/zod-schemas/auth.schema'
-import { prisma } from '~prisma/prisma'
-import { hash } from 'bcryptjs'
 import { HASH_NUM } from '~/shared/constants'
+import { generateJwtToken, HttpResponse } from '~/shared/utils/server'
+import { authRegisterSchema } from '~/shared/zod-schemas/auth.schema'
+import { prisma } from '~prisma/prisma'
 import { type SignInUserInfo } from '~/types/auth-api'
+import type { NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
     const { email, password, captcha } = await request.json()
-    const vr = authSignSchema.safeParse({ email, password, captcha })
+    const vr = authRegisterSchema.safeParse({ email, password, captcha })
     if (!vr.success) {
       const [er] = vr.error.issues
       return NextResponse.json(HttpResponse.error(er.message))
     }
-    // 校验验证码 邮箱 | 验证码 | 用途 | 类型 | 过期时间是否匹配
+    // 校验验证码
     const dbCaptcha = await prisma.captcha.findFirst({
       where: {
         link: email,
         code: captcha,
         type: CaptchaTypeEnum.image,
-        use: CaptchaUseEnum.sign_in,
+        use: CaptchaUseEnum.sign_up,
         expiresAt: {
           gt: new Date()
         }
@@ -36,40 +36,42 @@ export async function POST(request: NextRequest) {
         )
       )
     }
-    // 校验用户
+    // 判断用户是否存在
     const dbUser = await prisma.systemUser.findUnique({
       where: {
         email
       }
     })
-    if (!dbUser) {
-      return NextResponse.json(
-        HttpResponse.error('The user associated with this email does not exist.')
-      )
+    if (dbUser) {
+      return NextResponse.json(HttpResponse.error('This email has been registered.'))
     }
-    const hashPassword = await hash(password, HASH_NUM)
-    // 校验密码
-    if (hashPassword !== dbUser.password) {
-      return NextResponse.json(HttpResponse.error('The password is incorrect, please try again.'))
-    }
-    // 签发JWT
+    const hashedPassword = await hash(password, HASH_NUM)
+    // 创建用户
+    const newDbUser = await prisma.systemUser.create({
+      data: {
+        email: email,
+        password: hashedPassword,
+        name: `Nick for ${email}` // 默认昵称
+      }
+    })
+    // 签发JWT，注册免登录
     const jwtToken = await generateJwtToken({
-      userId: dbUser.id,
-      email: email
+      userId: newDbUser.id,
+      email: newDbUser.email
     })
     return NextResponse.json(
       HttpResponse.success<SignInUserInfo>({
         token: jwtToken,
         user: {
-          userId: dbUser.id,
-          email: dbUser.email,
-          name: dbUser.name,
-          avatar: dbUser.avatar
+          userId: newDbUser.id,
+          email: newDbUser.email,
+          name: newDbUser.name,
+          avatar: newDbUser.avatar
         }
       })
     )
   } catch (error) {
     // Handle error
-    return NextResponse.json(HttpResponse.error(`Sign up failed:${String(error)}`))
+    return NextResponse.json(HttpResponse.error(`Sign in failed:${String(error)}`))
   }
 }

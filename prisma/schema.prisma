@@ -22,19 +22,20 @@ enum CaptchaTypeEnum {
 
 /// 验证码用途  获取邮箱验证码 | 其他
 enum CaptchaUseEnum {
-  sign_in        /// 登录
-  other        /// 其他
+  sign_in /// 登录
+  sign_up /// 注册
+  other /// 其他
 }
 
 /// 验证码表
 model Captcha {
-  id        String      @id @default(cuid())
-  link      String      @map("link")  /// 关联邮箱
-  code      String      @map("code") /// 验证码
+  id        String          @id @default(cuid())
+  link      String          @map("link") /// 关联邮箱
+  code      String          @map("code") /// 验证码
   type      CaptchaTypeEnum @map("type") /// 验证码类型
   use       CaptchaUseEnum  @map("use") /// 验证码用途
-  expiresAt DateTime    @map("expires_at")
-  createdAt DateTime    @default(now()) @map("created_at")
+  expiresAt DateTime        @map("expires_at")
+  createdAt DateTime        @default(now()) @map("created_at")
 
   @@map("captcha")
 }
@@ -42,8 +43,7 @@ model Captcha {
 /// 用户表
 model SystemUser {
   id        String   @id @default(cuid())
-  userId    String   @unique @map("user_id") /// 用户ID
-  name      String    /// 用户名
+  name      String /// 用户名
   email     String   @unique /// 邮箱
   avatar    String? /// 头像
   password  String?  @map("password") /// 密码(hashed)

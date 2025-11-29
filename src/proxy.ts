@@ -6,17 +6,24 @@
  */
 import type { Route } from 'next'
 import { NextResponse, type NextRequest } from 'next/server'
-import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
-import { AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
+import { verifyJwtToken } from '~/shared/utils/server'
+import { COOKIE_AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
 
 // 公开路由
-const PUBLIC_ROUTES: Array<NavRouteHrefType> = ['/sign-in']
+const PUBLIC_ROUTES: Array<NavRouteHrefType> = ['/sign-in', '/sign-up']
 // 公开api
 const PUBLIC_API_PATHS: Array<NavRouteHrefType> = [
   '/api/auth/sign-in',
   '/api/auth/captcha',
   '/api/auth/captcha'
 ]
+
+// 重定向到登录页
+export function redirectSignIn(request: NextRequest) {
+  const redirectUrl = new URL('/sign-in', request.url)
+  redirectUrl.searchParams.set('redirect', encodeURI(request.nextUrl.pathname))
+  return NextResponse.redirect(redirectUrl)
+}
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname
@@ -25,22 +32,14 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
   // 验证 jwt 令牌
-  const jwtToken = request.cookies.get(AUTHORIZATION)?.value
+  const jwtToken = request.cookies.get(COOKIE_AUTHORIZATION)?.value
   if (!jwtToken) {
-    // 未认证用户重定向到登录页，携带原始路径用于登录后跳转
-    const redirectUrl = new URL('/sign-in', request.url)
-    redirectUrl.searchParams.set('redirect', encodeURI(request.nextUrl.pathname))
-    return NextResponse.redirect(redirectUrl)
+    return redirectSignIn(request)
   }
+  // 验证 jwt 令牌
   const payload = await verifyJwtToken(jwtToken)
-
   if (!payload) {
-    return NextResponse.json(
-      HttpResponse.error('The token is error or expired, please sign in again.'),
-      {
-        status: 401
-      }
-    )
+    return redirectSignIn(request)
   }
 
   return NextResponse.next()
