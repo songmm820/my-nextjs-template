@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { CaptchaTypeEnum, CaptchaUseEnum } from '~/generated/prisma/enums'
+import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 
 // 获取验证码
 export const captchaGetSchema = z.object({

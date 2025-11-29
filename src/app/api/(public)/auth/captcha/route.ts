@@ -1,10 +1,9 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { generateCaptchaCode, generateCaptchaImage, HttpResponse } from '~/shared/utils/server'
-import { prisma } from '~prisma/prisma'
 import { captchaGetSchema } from '~/shared/zod-schemas/captcha.schema'
+import { getCaptchaRedis, setCaptchaRedis } from '~/apis/captcha-redis'
 
 // 失效时间
-const EXPIRE_TIME = 5 * 60 * 1000 // 5分钟
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,17 +14,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(HttpResponse.error(er.message))
     }
     // 先查找是否有未失效的验证码
-    const captcha = await prisma.captcha.findFirst({
-      where: {
-        link: email,
-        type: type,
-        use: use,
-        expiresAt: {
-          gt: new Date()
-        }
-      }
-    })
-    if (captcha) {
+    const dbCaptcha = await getCaptchaRedis(email, type, use)
+    if (dbCaptcha) {
       return NextResponse.json(
         HttpResponse.error('The email has been sent, please wait for a while before sending again.')
       )
@@ -33,15 +23,7 @@ export async function POST(request: NextRequest) {
     // 生成验证码
     const captchaCode = await generateCaptchaCode(4)
     const captchaImage = await generateCaptchaImage(captchaCode)
-    await prisma.captcha.create({
-      data: {
-        code: captchaCode,
-        link: email,
-        type: type,
-        use: use,
-        expiresAt: new Date(Date.now() + EXPIRE_TIME)
-      }
-    })
+    await setCaptchaRedis(email, type, use, captchaCode)
     return new Response(captchaImage, {
       headers: {
         'Content-Type': 'image/svg+xml',

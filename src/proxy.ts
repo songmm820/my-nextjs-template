@@ -8,12 +8,14 @@ import type { Route } from 'next'
 import { NextResponse, type NextRequest } from 'next/server'
 import { verifyJwtToken } from '~/shared/utils/server'
 import { COOKIE_AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
+import { getSignUserRedis } from '~/apis/auth-redis'
 
 // 公开路由
 const PUBLIC_ROUTES: Array<NavRouteHrefType> = ['/sign-in', '/sign-up']
 // 公开api
 const PUBLIC_API_PATHS: Array<NavRouteHrefType> = [
   '/api/auth/sign-in',
+  '/api/auth/sign-up',
   '/api/auth/captcha',
   '/api/auth/captcha'
 ]
@@ -41,7 +43,11 @@ export async function proxy(request: NextRequest) {
   if (!payload) {
     return redirectSignIn(request)
   }
-
+  // 查询 登录状态
+  const signUser = await getSignUserRedis(payload.userId)
+  if (!signUser) {
+    return redirectSignIn(request)
+  }
   return NextResponse.next()
 }
 

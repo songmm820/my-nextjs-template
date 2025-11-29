@@ -13,32 +13,18 @@ datasource db {
   provider = "mysql"
 }
 
-/// 验证码类型
-enum CaptchaTypeEnum {
-  /// 图形验证码
-  image
-  email /// 邮箱验证码
-}
-
-/// 验证码用途  获取邮箱验证码 | 其他
-enum CaptchaUseEnum {
-  sign_in /// 登录
-  sign_up /// 注册
-  other /// 其他
-}
-
 /// 验证码表
-model Captcha {
-  id        String          @id @default(cuid())
-  link      String          @map("link") /// 关联邮箱
-  code      String          @map("code") /// 验证码
-  type      CaptchaTypeEnum @map("type") /// 验证码类型
-  use       CaptchaUseEnum  @map("use") /// 验证码用途
-  expiresAt DateTime        @map("expires_at")
-  createdAt DateTime        @default(now()) @map("created_at")
-
-  @@map("captcha")
-}
+// model Captcha {
+//   id        String          @id @default(cuid())
+//   link      String          @map("link") /// 关联邮箱
+//   code      String          @map("code") /// 验证码
+//   type      CaptchaTypeEnum @map("type") /// 验证码类型
+//   use       CaptchaUseEnum  @map("use") /// 验证码用途
+//   expiresAt DateTime        @map("expires_at")
+//   createdAt DateTime        @default(now()) @map("created_at")
+//
+//   @@map("captcha")
+// }
 
 /// 用户表
 model SystemUser {

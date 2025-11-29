@@ -32,7 +32,6 @@ const SignInPage = () => {
 
   return (
     <div className="max-full h-full overflow-hidden">
-      {JSON.stringify(isMutating)}
       <div className="mt-26 w-100 mx-auto">
         <Form<AuthSignSchemaInput>
           ref={formRef}

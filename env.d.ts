@@ -8,6 +8,11 @@ declare namespace NodeJS {
 
     readonly GITHUB_CLIENT_ID: string
     readonly GITHUB_SECRET: string
+
+    readonly REDIS_URL: string
+    readonly REDIS_PASSWORD: string
+    readonly REDIS_PORT: string
+    readonly REDIS_HOST: string
     // 继续追加其他变量...
   }
 }
