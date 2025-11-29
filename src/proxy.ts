@@ -6,7 +6,7 @@
  */
 import type { Route } from 'next'
 import { NextResponse, type NextRequest } from 'next/server'
-import { HttpResponse, verifyJwtToken } from '~/shared/utils'
+import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
 import { AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
 
 // 公开路由

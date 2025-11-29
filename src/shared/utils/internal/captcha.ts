@@ -1,3 +1,6 @@
+import 'server-only'
+
+
 /**
  * 生成验证码
  *

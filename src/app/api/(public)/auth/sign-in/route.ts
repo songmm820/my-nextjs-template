@@ -2,7 +2,7 @@ import { hash } from 'bcryptjs'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { AUTHORIZATION } from '~/shared/constants'
-import { generateJwtToken, HttpResponse, setCookieSafe } from '~/shared/utils'
+import { generateJwtToken, HttpResponse, setCookieSafe } from '~/shared/utils/server'
 import { authSignSchema } from '~/shared/zod-schemas/auth.schema'
 
 export async function POST(request: NextRequest) {

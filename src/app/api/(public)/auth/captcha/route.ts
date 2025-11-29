@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { generateCaptchaCode, generateCaptchaImage, HttpResponse } from '~/shared/utils'
+import { generateCaptchaCode, generateCaptchaImage, HttpResponse } from '~/shared/utils/server'
 import { prisma } from '~prisma/prisma'
 import { captchaGetSchema } from '~/shared/zod-schemas/captcha.schema'
 
