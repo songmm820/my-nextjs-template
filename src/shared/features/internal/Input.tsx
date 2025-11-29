@@ -4,23 +4,27 @@ import { useFormContext, useFormFieldContext } from '~/shared/features/context/f
 export type InputProps = {
   error?: boolean
   defaultValue?: string
+  className?: string
 } & React.InputHTMLAttributes<HTMLInputElement>
 
 const BaseInput = (props: InputProps) => {
-  const { id, defaultValue, error, ...rest } = props
+  const { id, defaultValue, error, className, ...rest } = props
   return (
     <input
       id={id}
       defaultValue={defaultValue}
-      className={clsx([
-        'h-11',
-        'px-4',
-        'rounded-lg',
-        error
-          ? 'ring-1 ring-danger bg-white'
-          : 'bg-[#f0f0f0] focus-visible:ring-1 focus-visible:ring-primary focus-visible:bg-white',
-        'transition-all duration-300 '
-      ])}
+      className={clsx(
+        [
+          'h-11',
+          'px-4',
+          'rounded-lg',
+          error
+            ? 'ring-1 ring-danger bg-white'
+            : 'bg-[#f0f0f0] focus-visible:ring-1 focus-visible:ring-primary focus-visible:bg-white',
+          'transition-all duration-300 '
+        ],
+        className
+      )}
       {...rest}
       autoComplete="off"
     />

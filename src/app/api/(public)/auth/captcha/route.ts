@@ -2,8 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { generateCaptchaCode, generateCaptchaImage, HttpResponse } from '~/shared/utils/server'
 import { captchaGetSchema } from '~/shared/zod-schemas/captcha.schema'
 import { getCaptchaRedis, setCaptchaRedis } from '~/apis/captcha-redis'
-
-// 失效时间
+import { CaptchaTypeEnum } from '~/shared/enums/comm'
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,7 +22,10 @@ export async function POST(request: NextRequest) {
     // 生成验证码
     const captchaCode = await generateCaptchaCode(4)
     const captchaImage = await generateCaptchaImage(captchaCode)
-    await setCaptchaRedis(email, type, use, captchaCode)
+    // 邮箱验证码要计入缓存
+    if (type === CaptchaTypeEnum.EMAIL) {
+      await setCaptchaRedis(email, type, use, captchaCode)
+    }
     return new Response(captchaImage, {
       headers: {
         'Content-Type': 'image/svg+xml',

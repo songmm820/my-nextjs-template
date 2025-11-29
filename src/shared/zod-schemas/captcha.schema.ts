@@ -7,3 +7,5 @@ export const captchaGetSchema = z.object({
   type: z.enum(CaptchaTypeEnum, 'Please enter a valid captcha type'),
   use: z.enum(CaptchaUseEnum, 'Please enter a valid captcha use')
 })
+
+export type CaptchaGetSchemaInput = z.infer<typeof captchaGetSchema>

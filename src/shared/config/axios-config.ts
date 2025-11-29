@@ -1,4 +1,4 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
+import axios, { type AxiosInstance, type AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
 import type { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 
 export type AxiosResponseType<R> = {
@@ -32,7 +32,7 @@ const requestInterceptorsError = (error: any) => {
  * 可以对响应数据进行处理
  */
 const responseInterceptorsConfig = (response: AxiosResponse<any>) => {
-  return response.data
+  return response
 }
 
 /**
@@ -51,7 +51,7 @@ const responseInterceptorsError = (error: any) => {
  */
 export class AxiosClientClass {
   readonly instance: AxiosInstance
-  private config: AxiosRequestConfig
+  private readonly config: AxiosRequestConfig
 
   constructor(config: AxiosRequestConfig) {
     this.config = config
@@ -62,6 +62,11 @@ export class AxiosClientClass {
 
   getConfig(): AxiosRequestConfig {
     return this.config
+  }
+
+  setHeaders(key: string, value: string) {
+    this.instance.defaults.headers.common[key] = value
+    return this
   }
 
   // 封装get请求
@@ -97,3 +102,4 @@ export const axiosInstance = new AxiosClientClass({
   },
   withCredentials: true
 })
+

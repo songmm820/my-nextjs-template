@@ -1,7 +1,7 @@
 import { redis } from '~/shared/config/redis'
 import { type CaptchaTypeEnum, type CaptchaUseEnum } from '~/shared/enums/comm'
 
-const EXPIRE_TIME = 5 * 60 * 1000 // 5分钟
+const EXPIRE_TIME = 60
 
 /**
  * redis 获取验证码

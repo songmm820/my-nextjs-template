@@ -40,8 +40,8 @@ const Form = forwardRef(<T extends FieldValues>(props: FormProps<T>, ref: Ref<Fo
     mode: 'onBlur'
   })
 
-  const focusField = (name: Path<T>) => {
-    formInstance.trigger(name)
+  const focusField = async (name: Path<T>) => {
+    await formInstance.trigger(name)
   }
 
   const reset = () => {

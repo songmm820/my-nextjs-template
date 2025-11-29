@@ -8,11 +8,10 @@ import 'server-only'
  */
 export async function generateCaptchaCode(len: number): Promise<string> {
   const chars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  const code = Array.from(
+  return Array.from(
     { length: len },
     () => chars[Math.floor(Math.random() * chars.length)]
   ).join('')
-  return code
 }
 
 /**
@@ -34,6 +33,7 @@ type CaptchaSvgOptions = {
  * 生成验证码图片
  *
  * @param captcha 验证码
+ * @param options 配置
  */
 export async function generateCaptchaImage(
   captcha: string,
