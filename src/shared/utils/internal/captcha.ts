@@ -1,6 +1,5 @@
 import 'server-only'
 
-
 /**
  * 生成验证码
  *
@@ -8,10 +7,7 @@ import 'server-only'
  */
 export async function generateCaptchaCode(len: number): Promise<string> {
   const chars: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  return Array.from(
-    { length: len },
-    () => chars[Math.floor(Math.random() * chars.length)]
-  ).join('')
+  return Array.from({ length: len }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
 }
 
 /**
@@ -77,12 +73,10 @@ export async function generateCaptchaImage(
     })
     .join('')
 
-  const svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+  return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
     <rect width="100%" height="100%" fill="${backgroundColor}"/>
     ${noiseLines}
     ${noiseDots}
     ${charsSvg}
   </svg>`
-
-  return svg
 }
