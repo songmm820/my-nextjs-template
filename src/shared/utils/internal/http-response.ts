@@ -9,11 +9,11 @@ export class HttpResponse {
   }
 
   static error(error: string, code?: number) {
-    const r: { error: string; code?: number } = {
+    const r: { error: string; status_code?: number } = {
       error: error
     }
     if (code) {
-      r.code = code
+      r.status_code = code
     }
     return r
   }

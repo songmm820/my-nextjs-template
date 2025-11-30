@@ -1,5 +1,6 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import type { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
+import { toast } from 'sonner'
 
 export type AxiosResponseType<R> = {
   data: R
@@ -32,6 +33,9 @@ const requestInterceptorsError = (error: any) => {
  * 可以对响应数据进行处理
  */
 const responseInterceptorsConfig = (response: AxiosResponse<any>) => {
+  if (response?.data?.error) {
+    toast.success(response?.data?.error)
+  }
   return response.data
 }
 

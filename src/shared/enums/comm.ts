@@ -12,3 +12,10 @@ export const CaptchaUseEnum = {
   OTHER: 'other'
 } as const
 export type CaptchaUseEnum = (typeof CaptchaUseEnum)[keyof typeof CaptchaUseEnum]
+
+// 错误码类型
+export const ErrorStatusEnum = {
+  UN_AUTHORIZED: 1007
+} as const
+
+export type ErrorStatusEnum = (typeof ErrorStatusEnum)[keyof typeof ErrorStatusEnum]

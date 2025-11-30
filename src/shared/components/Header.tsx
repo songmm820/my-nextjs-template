@@ -1,8 +1,11 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useAuthGuard } from '~/context/AuthGuardProvider'
 
 const Header = () => {
+  const { onSignOut } = useAuthGuard()
+
   useEffect(() => {}, [])
 
   return (
@@ -10,7 +13,9 @@ const Header = () => {
       <div className="flex-1"></div>
       <div>
         <button className="ml-4 text-sm text-gray-600 hover:text-gray-900">Login</button>
-        <button className="ml-4 text-sm text-gray-600 hover:text-gray-900">Logout</button>
+        <button className="ml-4 text-sm text-gray-600 hover:text-gray-900" onClick={onSignOut}>
+          Logout
+        </button>
       </div>
     </header>
   )

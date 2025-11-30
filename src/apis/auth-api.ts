@@ -28,6 +28,13 @@ export const useSignUpSwrAPi = createSwrMutation<
   SignInUserInfo
 >('/api/auth/sign-up', signUpApi)
 
+// 退出登录
+export async function signOutApi() {
+  const url: NavRouteHrefType = '/api/auth/sign-out'
+  return axiosInstance.post<void, void>(url)
+}
+export const useSignOutSwrAPi = createSwrMutation<void, void>('/api/auth/sign-out', signOutApi)
+
 // 获取验证码
 export async function getCaptchaApi(p: CaptchaGetSchemaInput) {
   const url: NavRouteHrefType = '/api/auth/captcha'

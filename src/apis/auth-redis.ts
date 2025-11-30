@@ -23,3 +23,13 @@ export async function getSignUserRedis(userId: string) {
   const key = `sign:user:${userId}`
   return redis.get(key)
 }
+
+/**
+ * 清除登录状态
+ *
+ * @param userId 用户id
+ */
+export async function clearSignUserRedis(userId: string) {
+  const key = `sign:user:${userId}`
+  return redis.del(key)
+}

@@ -5,6 +5,7 @@ import './globals.css'
 import { NavigationBlockerProvider } from '~/context/NavigationBlockerProvider'
 import { LoginUserProvider } from '~/context/LoginUserProvider'
 import Script from 'next/script'
+import { AuthGuardProvider } from '~/context/AuthGuardProvider'
 
 // 图标库链接
 const envIconScriptLink =
@@ -23,15 +24,18 @@ const RootLayout = async ({
   return (
     <html lang="en">
       <head>
+        <title></title>
         <Script src={envIconScriptLink}></Script>
       </head>
       <body>
         <NavigationBlockerProvider>
           <NextIntlClientProvider>
             <ThemeProvider>
-              <LoginUserProvider>
-                {children} {/* Will render your page */}
-              </LoginUserProvider>
+              <AuthGuardProvider>
+                <LoginUserProvider>
+                  {children} {/* Will render your page */}
+                </LoginUserProvider>
+              </AuthGuardProvider>
             </ThemeProvider>
           </NextIntlClientProvider>
         </NavigationBlockerProvider>
