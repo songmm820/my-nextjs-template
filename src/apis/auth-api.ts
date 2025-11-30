@@ -35,6 +35,23 @@ export async function signOutApi() {
 }
 export const useSignOutSwrAPi = createSwrMutation<void, void>('/api/auth/sign-out', signOutApi)
 
+// 查询当前登录用户信息
+export async function getLoginUserApi() {
+  const url: NavRouteHrefType = '/api/auth/sign-user'
+  return axiosInstance.get<
+    void,
+    {
+      user: SignInUserInfo['user']
+    }
+  >(url)
+}
+export const useGetLoginUserSwrAPi = createSwrMutation<
+  void,
+  {
+    user: SignInUserInfo['user']
+  }
+>('/api/auth/sign-user', getLoginUserApi)
+
 // 获取验证码
 export async function getCaptchaApi(p: CaptchaGetSchemaInput) {
   const url: NavRouteHrefType = '/api/auth/captcha'

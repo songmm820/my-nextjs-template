@@ -24,3 +24,11 @@ export async function getCookieSafe(key: string): Promise<string | null> {
   const cookieStore = await cookies()
   return cookieStore.get(key)?.value || null
 }
+
+/**
+ * 安全删除 cookie
+ */
+export async function removeCookieSafe(key: string): Promise<void> {
+  const cookieStore = await cookies()
+  cookieStore.delete(key)
+}

@@ -6,9 +6,9 @@
  */
 import type { Route } from 'next'
 import { NextResponse, type NextRequest } from 'next/server'
-import { verifyJwtToken } from '~/shared/utils/server'
+import { removeCookieSafe, verifyJwtToken } from '~/shared/utils/server'
 import { COOKIE_AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
-import { getSignUserRedis } from '~/apis/auth-redis'
+import { isSignUserRedis } from '~/apis/auth-redis'
 
 // 公开路由
 const PUBLIC_ROUTES: Array<NavRouteHrefType> = ['/sign-in', '/sign-up']
@@ -21,7 +21,8 @@ const PUBLIC_API_PATHS: Array<NavRouteHrefType> = [
 ]
 
 // 重定向到登录页
-export function redirectSignIn(request: NextRequest) {
+export async function redirectSignIn(request: NextRequest) {
+  await removeCookieSafe(COOKIE_AUTHORIZATION)
   const redirectUrl = new URL('/sign-in', request.url)
   redirectUrl.searchParams.set('redirect', encodeURI(request.nextUrl.pathname))
   return NextResponse.redirect(redirectUrl)
@@ -33,20 +34,20 @@ export async function proxy(request: NextRequest) {
   if (PUBLIC_API_PATHS.includes(path as Route) || PUBLIC_ROUTES.includes(path as Route)) {
     return NextResponse.next()
   }
-  // 验证 jwt 令牌
-  const jwtToken = request.cookies.get(COOKIE_AUTHORIZATION)?.value
-  if (!jwtToken) {
-    return redirectSignIn(request)
+  // 获取客户端携带的 jwt 令牌
+  const questJwtToken = request.cookies.get(COOKIE_AUTHORIZATION)?.value
+  if (!questJwtToken) {
+    return await redirectSignIn(request)
   }
   // 验证 jwt 令牌
-  const payload = await verifyJwtToken(jwtToken)
+  const payload = await verifyJwtToken(questJwtToken)
   if (!payload) {
-    return redirectSignIn(request)
+    return await redirectSignIn(request)
   }
   // 查询 登录状态
-  const signUser = await getSignUserRedis(payload.userId)
+  const signUser = await isSignUserRedis(payload.userId)
   if (!signUser) {
-    return redirectSignIn(request)
+    return await redirectSignIn(request)
   }
   return NextResponse.next()
 }

@@ -11,10 +11,12 @@ import { COOKIE_AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
 import { CustomLink } from '~/shared/components/CustomLink'
 import ImageCaptcha from '~/shared/components/ImageCaptcha'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
+import { useLoginUser } from '~/context/LoginUserProvider'
 
 const SignInPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { setUser } = useLoginUser()
   const redirect = searchParams.get('redirect') as NavRouteHrefType
   const formRef = useRef<FormRef<AuthSignSchemaInput>>(null)
   const { trigger, isMutating } = useSignInSwrAPi()
@@ -30,6 +32,7 @@ const SignInPage = () => {
       return
     }
     setCookie(COOKIE_AUTHORIZATION, data.token)
+    setUser(data.user)
     router.push(redirect ?? '/')
   }
 

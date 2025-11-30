@@ -5,7 +5,7 @@ import { redis } from '~/shared/config/redis'
 const EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000
 
 /**
- * 登录用户
+ * 设置登录用户
  *
  * @param signInfo 登录信息
  */
@@ -15,13 +15,23 @@ export async function setSignUserRedis(signInfo: SignInUserInfo) {
 }
 
 /**
- * 查询用户是否登录
+ * 获取当前登录用户
  *
  * @param userId 用户id
  */
-export async function getSignUserRedis(userId: string) {
+export async function getSignUserRedis(userId: string): Promise<SignInUserInfo> {
   const key = `sign:user:${userId}`
-  return redis.get(key)
+  const signInfo = await redis.get(key)
+  if (!signInfo) throw new Error('No login user information found.')
+  return JSON.parse(signInfo) as SignInUserInfo
+}
+
+/**
+ * 判断某个用户是否登录
+ */
+export async function isSignUserRedis(userId: string) {
+  const key = `sign:user:${userId}`
+  return redis.exists(key)
 }
 
 /**

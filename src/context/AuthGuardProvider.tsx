@@ -2,9 +2,10 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 import { getCookie, deleteCookie } from 'cookies-next/client'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { useSignOutSwrAPi } from '~/apis/auth-api'
+import { useLoginUser } from '~/context/LoginUserProvider'
 
 type AuthGuardType = {
   isLogin: boolean
@@ -14,8 +15,8 @@ type AuthGuardType = {
 const AuthGuardProviderContext = createContext<AuthGuardType | null>(null)
 
 export const AuthGuardProvider = ({ children }: { children: React.ReactNode }) => {
-  const pathname = usePathname()
   const router = useRouter()
+  const { getUser } = useLoginUser()
   const { trigger } = useSignOutSwrAPi()
 
   const [isLogin, setIsLogin] = useState<boolean>(() => {
@@ -31,7 +32,10 @@ export const AuthGuardProvider = ({ children }: { children: React.ReactNode }) =
     router.push('/sign-in')
   }
 
-  useEffect(() => {}, [pathname, isLogin, router])
+  useEffect(() => {
+    if (!isLogin) return
+    getUser().then()
+  }, [getUser, isLogin])
 
   return (
     <AuthGuardProviderContext.Provider value={{ isLogin: isLogin, onSignOut: onSignOut }}>

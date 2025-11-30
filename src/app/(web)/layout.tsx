@@ -36,7 +36,7 @@ const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
         </>
       )}
 
-      <main className="h-[calc(100%-64px)]">{children}</main>
+      <main>{children}</main>
 
       {!hideFooterRoutes.includes(pathname as NavRouteHrefType) && <Footer />}
     </div>

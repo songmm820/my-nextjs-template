@@ -1,19 +1,22 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
 import { type SignInUserInfo } from '~/types/auth-api'
+import { useGetLoginUserSwrAPi } from '~/apis/auth-api'
 
 type LoginUserType = SignInUserInfo['user'] & {}
 
 type LoginUserContextType = {
   user: LoginUserType | null
   setUser: (user: LoginUserType | null) => void
+  getUser: () => Promise<void>
 }
 
 const LoginUserProviderContext = createContext<LoginUserContextType | null>(null)
 
 export const LoginUserProvider = ({ children }: { children: React.ReactNode }) => {
   const [loginUser, setLoginUser] = useState<LoginUserType | null>(null)
+  const { trigger } = useGetLoginUserSwrAPi()
 
   const setUser = (user: LoginUserType | null) => {
     if (!user) return
@@ -21,11 +24,18 @@ export const LoginUserProvider = ({ children }: { children: React.ReactNode }) =
     setLoginUser(user)
   }
 
+  const getUser = useCallback(async () => {
+    const { data, error } = await trigger()
+    if (error) return
+    setLoginUser(data.user)
+  }, [trigger])
+
   return (
     <LoginUserProviderContext.Provider
       value={{
         user: loginUser,
-        setUser
+        setUser,
+        getUser
       }}
     >
       {/* 用户信息为空 阻断渲染 */}

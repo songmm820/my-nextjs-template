@@ -31,11 +31,9 @@ const RootLayout = async ({
         <NavigationBlockerProvider>
           <NextIntlClientProvider>
             <ThemeProvider>
-              <AuthGuardProvider>
-                <LoginUserProvider>
-                  {children} {/* Will render your page */}
-                </LoginUserProvider>
-              </AuthGuardProvider>
+              <LoginUserProvider>
+                <AuthGuardProvider>{children}</AuthGuardProvider>
+              </LoginUserProvider>
             </ThemeProvider>
           </NextIntlClientProvider>
         </NavigationBlockerProvider>
