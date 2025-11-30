@@ -35,7 +35,6 @@ export const AuthGuardProvider = ({ children }: { children: React.ReactNode }) =
 
   return (
     <AuthGuardProviderContext.Provider value={{ isLogin: isLogin, onSignOut: onSignOut }}>
-      {pathname}
       {children}
     </AuthGuardProviderContext.Provider>
   )
