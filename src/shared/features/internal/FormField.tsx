@@ -21,6 +21,8 @@ export function FormField<T>(props: FormFieldProps<T>) {
     left: 'inline-flex gap-4',
     right: 'inline-flex flex-row-reverse gap-4'
   }
+  const fieldState = formInstance.getFieldState(name as string)
+  const isError = fieldState?.invalid
 
   return (
     <FormFieldContext.Provider
@@ -32,7 +34,15 @@ export function FormField<T>(props: FormFieldProps<T>) {
       <div className={clsx('w-full', labelPositionClass[labelPosition])}>
         {label && (
           <label htmlFor={fieldId} className="py-1.5 text-base text-666 tracking-widest">
-            {label}
+            <div className="inline-flex items-center gap-2">
+              <span
+                className={clsx(
+                  'w-2 h-2 inline-flex rounded-full transition-all duration-300',
+                  isError ? 'bg-danger' : 'bg-primary'
+                )}
+              />
+              <span>{label}</span>
+            </div>
           </label>
         )}
         {children}

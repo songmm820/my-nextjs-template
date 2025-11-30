@@ -41,7 +41,7 @@ const Form = forwardRef(<T extends FieldValues>(props: FormProps<T>, ref: Ref<Fo
   const formInstance: UseFormReturn<T> = useForm<T>({
     resolver: resolver,
     defaultValues: initialValues,
-    mode: 'onBlur'
+    mode: 'all'
   })
 
   const liveValues = useWatch({ control: formInstance.control })

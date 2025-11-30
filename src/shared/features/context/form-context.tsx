@@ -28,6 +28,5 @@ type FormFieldContextType = {
 export const FormFieldContext = createContext<FormFieldContextType | null>(null)
 
 export const useFormFieldContext = () => {
-  const context = useContext(FormFieldContext)
-  return context
+  return useContext(FormFieldContext)
 }
