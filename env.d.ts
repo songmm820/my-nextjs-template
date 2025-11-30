@@ -9,10 +9,15 @@ declare namespace NodeJS {
     readonly GITHUB_CLIENT_ID: string
     readonly GITHUB_SECRET: string
 
-    readonly REDIS_URL: string
     readonly REDIS_PASSWORD: string
     readonly REDIS_PORT: string
     readonly REDIS_HOST: string
+
+    readonly MINIO_USE_SSL: string
+    readonly MINIO_ENDPOINT: string
+    readonly MINIO_PORT: string
+    readonly MINIO_ACCESS_KEY: string
+    readonly MINIO_SECRET_KEY: string
     // 继续追加其他变量...
   }
 }

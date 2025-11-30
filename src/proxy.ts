@@ -17,7 +17,7 @@ const PUBLIC_API_PATHS: Array<NavRouteHrefType> = [
   '/api/auth/sign-in',
   '/api/auth/sign-up',
   '/api/auth/captcha',
-  '/api/auth/captcha'
+  '/api/file'
 ]
 
 // 重定向到登录页

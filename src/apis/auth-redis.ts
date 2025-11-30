@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { type SignInUserInfo } from '~/types/auth-api'
 import { redis } from '~/shared/config/redis'
 

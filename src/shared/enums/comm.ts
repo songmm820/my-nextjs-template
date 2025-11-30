@@ -19,3 +19,13 @@ export const ErrorStatusEnum = {
 } as const
 
 export type ErrorStatusEnum = (typeof ErrorStatusEnum)[keyof typeof ErrorStatusEnum]
+
+// Minio 文件夹类型
+export const MinioFolderEnum = {
+  AVATAR: 'avatar',
+  OTHER: 'other'
+} as const
+
+export const MinioFolderList = Object.values(MinioFolderEnum)
+
+export type MinioFolderEnum = (typeof MinioFolderEnum)[keyof typeof MinioFolderEnum]

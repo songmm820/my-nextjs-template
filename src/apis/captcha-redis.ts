@@ -1,3 +1,5 @@
+import 'server-only'
+
 import { redis } from '~/shared/config/redis'
 import { type CaptchaTypeEnum, type CaptchaUseEnum } from '~/shared/enums/comm'
 
