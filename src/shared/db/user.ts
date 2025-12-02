@@ -29,8 +29,21 @@ export async function dbQueryUserByEmail(email: string) {
  * @param user 用户信息(可选字段)
  */
 export async function dbCreateUser(user: Prisma.SystemUserCreateInput) {
-  return await prisma.systemUser.create({
-    data: user
+  // 开启事务
+  const transaction = await prisma.$transaction(async (prisma) => {
+    // 1.创建用户
+    const dbUser = await prisma.systemUser.create({
+      data: user
+    })
+    // 2.初始化用户等级信息
+    await prisma.systemUserLevel.create({
+      data: {
+        userId: dbUser.id,
+        level: 1,
+        experience: 0
+      }
+    })
+    // 3.初始化用户配置信息 @TODO
   })
 }
 
@@ -54,5 +67,18 @@ export async function dbUserExistByEmail(email: string): Promise<boolean> {
 export async function dbSoftDeleteUserById(id: string) {
   return await prisma.systemUser.softDelete({
     where: { id: id }
+  })
+}
+
+/**
+ * 根据用户ID查询用户的配置信息
+ *
+ * @param id 用户ID
+ */
+export async function dbQueryUserConfigById(id: string) {
+  return await prisma.systemUserConfig.findUnique({
+    where: {
+      userId: id
+    }
   })
 }
