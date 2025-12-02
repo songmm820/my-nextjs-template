@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server'
 import { generateJwtToken, HttpResponse } from '~/shared/utils/server'
 import { authRegisterSchema } from '~/shared/zod-schemas/auth.schema'
-import { prisma } from '~prisma/prisma'
 import { type SignInUserInfo } from '~/types/auth-api'
 import type { NextRequest } from 'next/server'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 import { hashPassword } from '~/shared/utils/internal/password'
-import { getCaptchaRedis, verifyCaptcha } from '~/apis/captcha-redis'
-import { setSignUserRedis } from '~/apis/auth-redis'
+import { getCaptchaRedis, verifyCaptcha } from '~/shared/db/captcha-redis'
+import { setSignUserRedis } from '~/shared/db/auth-redis'
+import { dbCreateUser, dbUserExistByEmail } from '~/shared/db/user'
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,22 +32,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(HttpResponse.error('The captcha may error. '))
     }
     // 判断用户是否存在
-    const dbUser = await prisma.systemUser.findUnique({
-      where: {
-        email
-      }
-    })
-    if (dbUser) {
+    const isExist = await dbUserExistByEmail(email)
+    if (isExist) {
       return NextResponse.json(HttpResponse.error('This email has been registered.'))
     }
     const hashedPassword = await hashPassword(password)
     // 创建用户
-    const newDbUser = await prisma.systemUser.create({
-      data: {
-        email: email,
-        password: hashedPassword,
-        name: `Nick for ${email}` // 默认昵称
-      }
+    const newDbUser = await dbCreateUser({
+      email: email,
+      password: hashedPassword,
+      name: 'Nick User' // 默认昵称
     })
     // 签发JWT，注册免登录
     const jwtToken = await generateJwtToken({

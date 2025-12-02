@@ -30,6 +30,8 @@ export async function getSignUserRedis(userId: string): Promise<SignInUserInfo> 
 
 /**
  * 判断某个用户是否登录
+ * 
+ * @param userId 用户id
  */
 export async function isSignUserRedis(userId: string) {
   const key = `sign:user:${userId}`

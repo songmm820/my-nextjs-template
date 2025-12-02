@@ -1,6 +1,6 @@
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { verifyJwtToken } from '~/shared/utils/internal/jwt'
-import { getSignUserRedis } from '~/apis/auth-redis'
+import { getSignUserRedis } from '~/shared/db/auth-redis'
 import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse } from '~/shared/utils/internal/http-response'
 import { type SignInUserInfo } from '~/types/auth-api'

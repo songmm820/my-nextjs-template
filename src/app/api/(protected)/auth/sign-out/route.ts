@@ -1,6 +1,6 @@
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { verifyJwtToken } from '~/shared/utils/internal/jwt'
-import { clearSignUserRedis } from '~/apis/auth-redis'
+import { clearSignUserRedis } from '~/shared/db/auth-redis'
 import { HttpResponse } from '~/shared/utils/internal/http-response'
 import { type NextRequest, NextResponse } from 'next/server'
 

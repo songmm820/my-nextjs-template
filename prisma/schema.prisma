@@ -13,18 +13,19 @@ datasource db {
   provider = "mysql"
 }
 
-/// 验证码表
-// model Captcha {
-//   id        String          @id @default(cuid())
-//   link      String          @map("link") /// 关联邮箱
-//   code      String          @map("code") /// 验证码
-//   type      CaptchaTypeEnum @map("type") /// 验证码类型
-//   use       CaptchaUseEnum  @map("use") /// 验证码用途
-//   expiresAt DateTime        @map("expires_at")
-//   createdAt DateTime        @default(now()) @map("created_at")
-//
-//   @@map("captcha")
-// }
+/// 可见性等级枚举
+enum VisibilityLevelEnum {
+  PUBLIC /// 公开
+  FOLLOWERS /// 关注者
+  PRIVATE /// 私有（仅自己可见）
+}
+
+/// 动态权限枚举
+enum DynamicPermissionEnum {
+  ALL /// 所有人
+  FOLLOWERS /// 关注者
+  SELF /// 自己
+}
 
 /// 用户表
 model SystemUser {
@@ -36,16 +37,35 @@ model SystemUser {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  @@index([email])
   @@map("system_user")
 }
 
-/// 用户与等级关联表
+/// 用户等级表
 model SystemUserLevel {
-  id        String   @id @default(cuid())
-  userId    String   @unique @map("user_id") /// 用户ID
-  level     Int      @map("level") /// 等级
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id         String   @id @default(cuid())
+  userId     String   @unique @map("user_id") /// 用户ID
+  level      Int      @map("level") /// 等级
+  experience Int      @map("experience") /// 当前经验值
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
+  @@index([userId])
   @@map("system_user_level")
+}
+
+/// 用户配置表
+model SystemUserConfig {
+  id                      String                @id @default(cuid())
+  userId                  String                @unique @map("user_id") /// 用户ID
+  themeColor              String                @map("theme_color") /// 主题颜色
+  profileVisibility       VisibilityLevelEnum   @map("profile_visibility") /// 个人资料可见性
+  onlineStatusVisibleFlag Boolean               @map("online_status_visible_flag") /// 是否显示在线状态
+  whoCanComment           DynamicPermissionEnum @map("who_can_comment") /// 谁可以评论我的动态
+  whoCanMessage           DynamicPermissionEnum @map("who_can_message") /// 谁可以给我发消息
+  createdAt               DateTime              @default(now()) @map("created_at")
+  updatedAt               DateTime              @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("system_user_config")
 }

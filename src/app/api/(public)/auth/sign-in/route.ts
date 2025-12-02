@@ -1,13 +1,13 @@
 import type { NextRequest } from 'next/server'
-import { prisma } from '~prisma/prisma'
 import { NextResponse } from 'next/server'
 import { generateJwtToken, HttpResponse } from '~/shared/utils/server'
 import { authSignSchema } from '~/shared/zod-schemas/auth.schema'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 import { type SignInUserInfo } from '~/types/auth-api'
 import { comparePassword } from '~/shared/utils/internal/password'
-import { getCaptchaRedis, verifyCaptcha } from '~/apis/captcha-redis'
-import { setSignUserRedis } from '~/apis/auth-redis'
+import { getCaptchaRedis, verifyCaptcha } from '~/shared/db/captcha-redis'
+import { setSignUserRedis } from '~/shared/db/auth-redis'
+import { dbQueryUserByEmail } from '~/shared/db/user'
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,11 +31,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(HttpResponse.error('The captcha may error. '))
     }
     // 校验用户
-    const dbUser = await prisma.systemUser.findUnique({
-      where: {
-        email
-      }
-    })
+    const dbUser = await dbQueryUserByEmail(email)
     if (!dbUser) {
       return NextResponse.json(
         HttpResponse.error('The user associated with this email does not exist.')
