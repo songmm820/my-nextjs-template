@@ -19,6 +19,7 @@ export async function setCookieSafe(key: string, value: string): Promise<void> {
 
 /**
  * 安全获取 cookie
+ * @param key 键
  */
 export async function getCookieSafe(key: string): Promise<string | null> {
   const cookieStore = await cookies()
@@ -27,6 +28,8 @@ export async function getCookieSafe(key: string): Promise<string | null> {
 
 /**
  * 安全删除 cookie
+ * 
+ * @param key 键
  */
 export async function removeCookieSafe(key: string): Promise<void> {
   const cookieStore = await cookies()

@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { generateCaptchaCode, generateCaptchaImage, HttpResponse } from '~/shared/utils/server'
 import { captchaGetSchema } from '~/shared/zod-schemas/captcha.schema'
-import { getCaptchaRedis, setCaptchaRedis } from '~/apis/captcha-redis'
 import { CaptchaTypeEnum } from '~/shared/enums/comm'
+import { getCaptchaRedis, setCaptchaRedis } from '~/shared/db/captcha-redis'
 
 export async function POST(request: NextRequest) {
   try {

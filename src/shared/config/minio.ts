@@ -97,8 +97,3 @@ export async function uploadFile(type: MinioFolderEnum, file: File): Promise<Upl
   const url = await minio.presignedGetObject(BUCKET_NAME, key, 24 * 60 * 60)
   return { url, objectName: key }
 }
-
-const isExistBucket = await bucketExists(BUCKET_NAME)
-if (!isExistBucket) {
-  await createBucket(BUCKET_NAME)
-}
