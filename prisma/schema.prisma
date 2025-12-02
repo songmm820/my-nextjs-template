@@ -46,7 +46,6 @@ model SystemUser {
 model SystemUserLevel {
   id         String    @id @default(cuid())
   userId     String    @unique @map("user_id") /// 用户ID
-  level      Int       @default(1) @map("level") /// 等级
   experience Int       @default(0) @map("experience") /// 当前经验值
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime  @updatedAt @map("updated_at")

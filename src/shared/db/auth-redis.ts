@@ -1,6 +1,6 @@
 import 'server-only'
 
-import { type SignInUserInfo } from '~/types/auth-api'
+import { type SignInUserInfoVO } from '~/types/user-api'
 import { redis } from '~/shared/config/redis'
 
 // 7d
@@ -11,8 +11,8 @@ const EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000
  *
  * @param signInfo 登录信息
  */
-export async function setSignUserRedis(signInfo: SignInUserInfo) {
-  const key = `sign:user:${signInfo.user.userId}`
+export async function setSignUserRedis(signInfo: SignInUserInfoVO) {
+  const key = `sign:user:${signInfo.user.id}`
   return redis.set(key, JSON.stringify(signInfo), 'EX', EXPIRE_TIME)
 }
 
@@ -21,11 +21,11 @@ export async function setSignUserRedis(signInfo: SignInUserInfo) {
  *
  * @param userId 用户id
  */
-export async function getSignUserRedis(userId: string): Promise<SignInUserInfo> {
+export async function getSignUserRedis(userId: string): Promise<SignInUserInfoVO> {
   const key = `sign:user:${userId}`
   const signInfo = await redis.get(key)
   if (!signInfo) throw new Error('No login user information found.')
-  return JSON.parse(signInfo) as SignInUserInfo
+  return JSON.parse(signInfo) as SignInUserInfoVO
 }
 
 /**

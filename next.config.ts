@@ -88,12 +88,12 @@ const nextConfig: NextConfig = {
   /**
    * 您可以指定要用于自定义构建目录的名称
    */
-  distDir: '.next',
+  distDir: '.next'
 
   /**
    * Next.js 应用程序的构建输出格式。
    */
-  output: 'standalone'
+  // output: 'standalone'
 }
 
 /* This is the default configuration for the plugin. You can customize it as needed. */

@@ -1,10 +1,10 @@
 'use client'
 
 import { createContext, useCallback, useContext, useState } from 'react'
-import { type SignInUserInfo } from '~/types/auth-api'
+import { type SignInUserInfoVO } from '~/types/user-api'
 import { useGetLoginUserSwrAPi } from '~/apis/auth-api'
 
-type LoginUserType = SignInUserInfo['user'] & {}
+type LoginUserType = SignInUserInfoVO['user'] & {}
 
 type LoginUserContextType = {
   user: LoginUserType | null

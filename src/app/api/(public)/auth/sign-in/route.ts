@@ -3,11 +3,11 @@ import { NextResponse } from 'next/server'
 import { generateJwtToken, HttpResponse } from '~/shared/utils/server'
 import { authSignSchema } from '~/shared/zod-schemas/auth.schema'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
-import { type SignInUserInfo } from '~/types/auth-api'
 import { comparePassword } from '~/shared/utils/internal/password'
 import { getCaptchaRedis, verifyCaptcha } from '~/shared/db/captcha-redis'
 import { setSignUserRedis } from '~/shared/db/auth-redis'
 import { dbQueryUserByEmail } from '~/shared/db/user'
+import { type SignInUserInfoVO } from '~/types/user-api'
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,10 +47,10 @@ export async function POST(request: NextRequest) {
       userId: dbUser.id,
       email: email
     })
-    const signUser: SignInUserInfo = {
+    const signUser: SignInUserInfoVO = {
       token: jwtToken,
       user: {
-        userId: dbUser.id,
+        id: dbUser.id,
         email: dbUser.email,
         name: dbUser.name,
         avatar: dbUser.avatar
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
     // 保存用户信息
     await setSignUserRedis(signUser)
-    return NextResponse.json(HttpResponse.success<SignInUserInfo>(signUser))
+    return NextResponse.json(HttpResponse.success<SignInUserInfoVO>(signUser))
   } catch (error) {
     // Handle error
     return NextResponse.json(HttpResponse.error(`Sign up failed:${String(error)}`))

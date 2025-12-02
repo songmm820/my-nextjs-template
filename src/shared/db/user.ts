@@ -1,10 +1,11 @@
 import 'server-only'
 
 import { prisma } from '~prisma/prisma'
-import { type Prisma } from '~/generated/prisma/client'
+import { DynamicPermissionEnum, type Prisma, VisibilityLevelEnum } from '~/generated/prisma/client'
+import { type SignInUserVO, type UserConfigVO } from '~/types/user-api'
 
 /**
- * 根据邮箱查询用户
+ * 根据邮箱登录
  *
  * @param email 邮箱
  */
@@ -24,13 +25,32 @@ export async function dbQueryUserByEmail(email: string) {
 }
 
 /**
+ * 根据用户id查询用户
+ *
+ * @param id 用户id
+ */
+export async function dbQueryUserById(id: string): Promise<SignInUserVO | null> {
+  return await prisma.systemUser.findUnique({
+    where: {
+      id: id
+    },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      avatar: true
+    }
+  })
+}
+
+/**
  * 创建用户
  *
  * @param user 用户信息(可选字段)
  */
 export async function dbCreateUser(user: Prisma.SystemUserCreateInput) {
   // 开启事务
-  const transaction = await prisma.$transaction(async (prisma) => {
+  return await prisma.$transaction(async (prisma) => {
     // 1.创建用户
     const dbUser = await prisma.systemUser.create({
       data: user
@@ -39,11 +59,21 @@ export async function dbCreateUser(user: Prisma.SystemUserCreateInput) {
     await prisma.systemUserLevel.create({
       data: {
         userId: dbUser.id,
-        level: 1,
         experience: 0
       }
     })
-    // 3.初始化用户配置信息 @TODO
+    // 3.初始化用户配置信息
+    await prisma.systemUserConfig.create({
+      data: {
+        userId: dbUser.id,
+        profileVisibility: VisibilityLevelEnum.PUBLIC,
+        onlineStatusVisibleFlag: true,
+        whoCanComment: DynamicPermissionEnum.ALL,
+        whoCanMessage: DynamicPermissionEnum.ALL,
+        themeColor: '#07A065'
+      }
+    })
+    return dbUser
   })
 }
 
@@ -60,25 +90,21 @@ export async function dbUserExistByEmail(email: string): Promise<boolean> {
 }
 
 /**
- * 根据用户ID删除用户（软删除）
- *
- * @param id 用户ID
- */
-export async function dbSoftDeleteUserById(id: string) {
-  return await prisma.systemUser.softDelete({
-    where: { id: id }
-  })
-}
-
-/**
  * 根据用户ID查询用户的配置信息
  *
  * @param id 用户ID
  */
-export async function dbQueryUserConfigById(id: string) {
+export async function dbQueryUserConfigById(id: string): Promise<UserConfigVO | null> {
   return await prisma.systemUserConfig.findUnique({
     where: {
       userId: id
+    },
+    select: {
+      themeColor: true,
+      profileVisibility: true,
+      onlineStatusVisibleFlag: true,
+      whoCanComment: true,
+      whoCanMessage: true
     }
   })
 }
