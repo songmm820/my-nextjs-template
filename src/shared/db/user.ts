@@ -36,7 +36,7 @@ export async function dbCreateUser(user: Prisma.SystemUserCreateInput) {
 
 /**
  * 根据邮箱判断用户是否存在
- * 
+ *
  * @param email 邮箱
  */
 export async function dbUserExistByEmail(email: string): Promise<boolean> {
@@ -44,4 +44,15 @@ export async function dbUserExistByEmail(email: string): Promise<boolean> {
     where: { email }
   })
   return count > 0
+}
+
+/**
+ * 根据用户ID删除用户（软删除）
+ *
+ * @param id 用户ID
+ */
+export async function dbSoftDeleteUserById(id: string) {
+  return await prisma.systemUser.softDelete({
+    where: { id: id }
+  })
 }

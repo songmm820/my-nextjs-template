@@ -5,7 +5,7 @@
  */
 
 import 'dotenv/config'
-import { PrismaClient } from '~/generated/prisma/client'
+import { Prisma, PrismaClient } from '~/generated/prisma/client'
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 
 const adapter = new PrismaMariaDb({
@@ -16,12 +16,66 @@ const adapter = new PrismaMariaDb({
   database: process.env.DATABASE_NAME,
   connectionLimit: 5
 })
-const prisma = new PrismaClient({ adapter, log: ['query', 'info', 'warn', 'error'] })
 
-prisma.$on('query', (e) => {
-  console.log('Query: ' + e.query)
-  console.log('Params: ' + e.params)
-  console.log('Duration: ' + e.duration + 'ms')
+const prisma = new PrismaClient({
+  adapter,
+  log: ['query', 'info', 'warn', 'error']
 })
+  .$on('query', (e) => {
+    console.log('Query: ' + e.query)
+    console.log('Params: ' + e.params)
+    console.log('Duration: ' + e.duration + 'ms')
+  })
+  .$extends({
+    query: {
+      // 在所有模型中添加软删除
+      $allModels: {
+        // 查询操作：自动过滤已删除
+        async findMany({ args, query }) {
+          args.where = { ...args.where, deletedAt: null }
+          return query(args)
+        },
+        async findUnique({ args, query }) {
+          args.where = { ...args.where, deletedAt: null }
+          return query(args)
+        },
+        async findFirst({ args, query }) {
+          args.where = { ...args.where, deletedAt: null }
+          return query(args)
+        },
+
+        // 更新操作：禁止更新已删除记录
+        async update({ args, query }) {
+          args.where = { ...args.where, deletedAt: null }
+          return query(args)
+        },
+        async updateMany({ args, query }) {
+          args.where = { ...args.where, deletedAt: null }
+          return query(args)
+        }
+      }
+    },
+    model: {
+      $allModels: {
+        // 添加一个软删除方法
+        async softDelete<T>(
+          this: T,
+          {
+            where
+          }: {
+            where: Prisma.Args<T, 'update'>['where']
+          }
+        ): Promise<boolean> {
+          const context = Prisma.getExtensionContext(this)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const result = await (context as any).update({
+            where: where,
+            data: { deletedAt: new Date() }
+          })
+          return result !== null
+        }
+      }
+    }
+  })
 
 export { prisma }
