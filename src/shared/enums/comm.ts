@@ -7,8 +7,8 @@ export type CaptchaTypeEnum = (typeof CaptchaTypeEnum)[keyof typeof CaptchaTypeE
 
 // 验证码用途
 export const CaptchaUseEnum = {
-  SIGN_IN: 'sign_in',
-  SIGN_UP: 'sign_up',
+  SIGN_IN: 'signIn',
+  SIGN_UP: 'signUp',
   OTHER: 'other'
 } as const
 export type CaptchaUseEnum = (typeof CaptchaUseEnum)[keyof typeof CaptchaUseEnum]
