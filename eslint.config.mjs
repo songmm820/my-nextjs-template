@@ -32,6 +32,8 @@ const eslintConfig = defineConfig([
       '@typescript-eslint/no-for-in-array': 'error',
       // 禁止空对象类型
       '@typescript-eslint/no-empty-object-type': 'warn',
+      // 关闭react hooks依赖检测
+      'react-hooks/exhaustive-deps': 'off',
       // tab 键使用 4 个空格
       indent: ['error', 2, { SwitchCase: 1 }],
       // 类型导入方式

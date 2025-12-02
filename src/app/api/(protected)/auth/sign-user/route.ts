@@ -3,7 +3,7 @@ import { verifyJwtToken } from '~/shared/utils/internal/jwt'
 import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse } from '~/shared/utils/internal/http-response'
 import { dbQueryUserById, dbQueryUserConfigById } from '~/shared/db/user'
-import { type SignInUserVO, type UserConfigVO } from '~/types/user-api'
+import { type UserVO, type UserConfigVO } from '~/types/user-api'
 
 export async function GET(request: NextRequest) {
   try {
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(
       HttpResponse.success<{
-        user: SignInUserVO | null
+        user: UserVO | null
         config: UserConfigVO | null
       }>({
         user: signUser,

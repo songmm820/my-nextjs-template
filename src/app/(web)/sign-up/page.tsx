@@ -9,13 +9,11 @@ import { CustomLink } from '~/shared/components/CustomLink'
 import { useSignUpSwrAPi } from '~/apis/auth-api'
 import { setCookie } from 'cookies-next/client'
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
-import { useLoginUser } from '~/context/LoginUserProvider'
 import ImageCaptcha from '~/shared/components/ImageCaptcha'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 
 const SignInPage = () => {
   const router = useRouter()
-  const { setUser } = useLoginUser()
   const formRef = useRef<FormRef<AuthRegisterSchemaInput>>(null)
   const { trigger, isMutating } = useSignUpSwrAPi()
   const [emailLive, setEmailLive] = useState<string>('')
@@ -34,7 +32,6 @@ const SignInPage = () => {
       return
     }
     setCookie(COOKIE_AUTHORIZATION, data.token)
-    setUser(data.user)
     router.push('/')
   }
 

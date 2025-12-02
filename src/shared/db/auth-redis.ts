@@ -11,7 +11,7 @@ const EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000
  *
  * @param signInfo 登录信息
  */
-export async function setSignUserRedis(signInfo: SignInUserInfoVO) {
+export async function setSignUserRedis(signInfo: Pick<SignInUserInfoVO, 'user' | 'token'>) {
   const key = `sign:user:${signInfo.user.id}`
   return redis.set(key, JSON.stringify(signInfo), 'EX', EXPIRE_TIME)
 }

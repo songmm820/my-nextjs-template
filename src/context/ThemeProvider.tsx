@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useLayoutEffect, useState } from 'react'
 import { primaryColorList } from '~/shared/utils/client'
 
-type ThemeColorType = (typeof primaryColorList)[number]
+export type ThemeColorType = (typeof primaryColorList)[number]
 
 type ThemeProviderProps = {
   children: React.ReactNode

@@ -1,41 +1,40 @@
 'use client'
 
-import { createContext, useCallback, useContext, useState } from 'react'
-import { type SignInUserInfoVO } from '~/types/user-api'
-import { useGetLoginUserSwrAPi } from '~/apis/auth-api'
-
-type LoginUserType = SignInUserInfoVO['user'] & {}
+import { createContext, useContext, useState } from 'react'
+import { type UserConfigVO, type UserVO } from '~/types/user-api'
 
 type LoginUserContextType = {
-  user: LoginUserType | null
-  setUser: (user: LoginUserType | null) => void
-  getUser: () => Promise<void>
+  user: UserVO | null
+  setUserInfo: (user: UserVO) => void
+  config: UserConfigVO | null
+  setConfig: (config: UserConfigVO) => void
 }
 
 const LoginUserProviderContext = createContext<LoginUserContextType | null>(null)
 
 export const LoginUserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [loginUser, setLoginUser] = useState<LoginUserType | null>(null)
-  const { trigger } = useGetLoginUserSwrAPi()
+  const [user, setUser] = useState<UserVO | null>(null)
+  const [config, setConfig] = useState<UserConfigVO | null>(null)
 
-  const setUser = (user: LoginUserType | null) => {
+  const setUserInfo = (user: UserVO | null) => {
     if (!user) return
     if (Object.keys(user).length === 0) return
-    setLoginUser(user)
+    setUser(user)
   }
 
-  const getUser = useCallback(async () => {
-    const { data, error } = await trigger()
-    if (error) return
-    setLoginUser(data.user)
-  }, [trigger])
+  const setConfigInfo = (config: UserConfigVO | null) => {
+    if (!config) return
+    if (Object.keys(config).length === 0) return
+    setConfig(config)
+  }
 
   return (
     <LoginUserProviderContext.Provider
       value={{
-        user: loginUser,
-        setUser,
-        getUser
+        user,
+        setUserInfo,
+        config,
+        setConfig: setConfigInfo
       }}
     >
       {/* 用户信息为空 阻断渲染 */}

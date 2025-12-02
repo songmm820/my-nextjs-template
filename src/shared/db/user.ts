@@ -2,7 +2,7 @@ import 'server-only'
 
 import { prisma } from '~prisma/prisma'
 import { DynamicPermissionEnum, type Prisma, VisibilityLevelEnum } from '~/generated/prisma/client'
-import { type SignInUserVO, type UserConfigVO } from '~/types/user-api'
+import { type UserConfigVO, type UserVO } from '~/types/user-api'
 
 /**
  * 根据邮箱登录
@@ -29,7 +29,7 @@ export async function dbQueryUserByEmail(email: string) {
  *
  * @param id 用户id
  */
-export async function dbQueryUserById(id: string): Promise<SignInUserVO | null> {
+export async function dbQueryUserById(id: string): Promise<UserVO | null> {
   return await prisma.systemUser.findUnique({
     where: {
       id: id

@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
       userId: dbUser.id,
       email: email
     })
-    const signUser: SignInUserInfoVO = {
+    const signUser: Pick<SignInUserInfoVO, 'user' | 'token'> = {
       token: jwtToken,
       user: {
         id: dbUser.id,
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
     // 保存用户信息
     await setSignUserRedis(signUser)
-    return NextResponse.json(HttpResponse.success<SignInUserInfoVO>(signUser))
+    return NextResponse.json(HttpResponse.success<Pick<SignInUserInfoVO, 'user' | 'token'>>(signUser))
   } catch (error) {
     // Handle error
     return NextResponse.json(HttpResponse.error(`Sign up failed:${String(error)}`))
