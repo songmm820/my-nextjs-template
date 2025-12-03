@@ -3,10 +3,10 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { getCookie, deleteCookie } from 'cookies-next/client'
 import { useRouter } from 'next/navigation'
-import { COOKIE_AUTHORIZATION } from '~/shared/constants'
+import { COOKIE_AUTHORIZATION, type ThemeColorType } from '~/shared/constants'
 import { useGetLoginUserSwrAPi, useSignOutSwrAPi } from '~/apis/auth-api'
 import { useLoginUser } from '~/context/LoginUserProvider'
-import { type ThemeColorType, useTheme } from '~/context/ThemeProvider'
+import { useTheme } from './ThemeProvider'
 
 type AuthGuardType = {
   isLogin: boolean

@@ -1,8 +1,7 @@
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
-import { verifyJwtToken } from '~/shared/utils/internal/jwt'
 import { clearSignUserRedis } from '~/shared/db/auth-redis'
-import { HttpResponse } from '~/shared/utils/internal/http-response'
 import { type NextRequest, NextResponse } from 'next/server'
+import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
 
 export async function POST(request: NextRequest) {
   const jwtToken = request.cookies.get(COOKIE_AUTHORIZATION)?.value

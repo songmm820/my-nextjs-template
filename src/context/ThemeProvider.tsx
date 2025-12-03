@@ -1,18 +1,16 @@
 'use client'
 
-import { createContext, useCallback, useContext, useLayoutEffect, useState } from 'react'
-import { primaryColorList } from '~/shared/utils/client'
-
-export type ThemeColorType = (typeof primaryColorList)[number]
+import { setCookie } from 'cookies-next/client'
+import { createContext, useCallback, useContext } from 'react'
+import { COOKIE_THEME_COLOR, primaryColorList, type ThemeColorType } from '~/shared/constants'
 
 type ThemeProviderProps = {
   children: React.ReactNode
-  themeColor?: ThemeColorType
-  storageKey?: string
+  themeColor: ThemeColorType
 }
 
 type ThemeProviderState = {
-  themeColor: ThemeColorType
+  themeColor?: ThemeColorType
   setThemeColor: (themeColor: ThemeColorType) => void
 }
 
@@ -26,20 +24,18 @@ const initialState: ThemeProviderState = {
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 export const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => {
-  const [themeColor, setThemeColor] = useState<ThemeColorType>(defaultPrimaryColor)
+  const { themeColor } = props
 
-  useLayoutEffect(() => {
+  const onSaveColor = useCallback((color: ThemeColorType) => {
+    if (!color) return
+    setCookie(COOKIE_THEME_COLOR, color)
     const root = document.documentElement
-    root.style.setProperty('--primary', themeColor)
-  }, [themeColor])
-
-  const onSetThemeColor = useCallback((color: ThemeColorType) => {
-    setThemeColor(color)
+    root.style.setProperty('--primary', color)
   }, [])
 
   const value = {
     themeColor,
-    setThemeColor: onSetThemeColor
+    setThemeColor: onSaveColor
   }
 
   return (

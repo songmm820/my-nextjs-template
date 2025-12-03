@@ -4,7 +4,7 @@ import { type SystemUser, type SystemUserConfig } from '~/generated/prisma/clien
 export type UserVO = Pick<SystemUser, 'id' | 'email' | 'name' | 'avatar'>
 
 // 登录信息
-export type SignInUserInfoVO = {
+export type LoginVO = {
   token: string
 } & {
   user: UserVO

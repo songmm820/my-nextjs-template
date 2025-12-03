@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
-import { ThemeProvider } from '~/context/ThemeProvider'
 import './globals.css'
 import { NavigationBlockerProvider } from '~/context/NavigationBlockerProvider'
 import { LoginUserProvider } from '~/context/LoginUserProvider'
 import Script from 'next/script'
 import { AuthGuardProvider } from '~/context/AuthGuardProvider'
+import { ThemeProvider } from '~/context/ThemeProvider'
+import { COOKIE_THEME_COLOR, type ThemeColorType } from '~/shared/constants'
+import { getCookieSafe } from '~/shared/utils/server'
 
 // 图标库链接
 const envIconScriptLink =
@@ -21,20 +23,31 @@ const RootLayout = async ({
 }: Readonly<{
   children: React.ReactNode
 }>) => {
+  const themeColor = ((await getCookieSafe(COOKIE_THEME_COLOR)) as ThemeColorType) || '#0062ff'
+
   return (
     <html lang="en">
       <head>
-        <title></title>
-        <Script src={envIconScriptLink}></Script>
+        <Script src={envIconScriptLink} strategy="lazyOnload" />
+        {/* 内联主题样式，避免闪烁 */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+            :root {
+              --primary: ${themeColor};
+            }
+          `
+          }}
+        />
       </head>
       <body>
         <NavigationBlockerProvider>
           <NextIntlClientProvider>
-            <ThemeProvider>
-              <LoginUserProvider>
-                <AuthGuardProvider>{children}</AuthGuardProvider>
-              </LoginUserProvider>
-            </ThemeProvider>
+            <LoginUserProvider>
+              <AuthGuardProvider>
+                <ThemeProvider themeColor={themeColor}>{children}</ThemeProvider>
+              </AuthGuardProvider>
+            </LoginUserProvider>
           </NextIntlClientProvider>
         </NavigationBlockerProvider>
       </body>

@@ -1,8 +1,7 @@
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
-import { verifyJwtToken } from '~/shared/utils/internal/jwt'
 import { type NextRequest, NextResponse } from 'next/server'
-import { HttpResponse } from '~/shared/utils/internal/http-response'
-import { dbQueryUserById, dbQueryUserConfigById } from '~/shared/db/user'
+import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
+import { dbQueryUserById, dbQueryUserConfigById } from '~/shared/db/user-db'
 import { type UserVO, type UserConfigVO } from '~/types/user-api'
 
 export async function GET(request: NextRequest) {

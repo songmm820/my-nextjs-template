@@ -6,12 +6,12 @@
  */
 import type { Route } from 'next'
 import { NextResponse, type NextRequest } from 'next/server'
-import { removeCookieSafe, verifyJwtToken } from '~/shared/utils/server'
 import { COOKIE_AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
 import { isSignUserRedis } from '~/shared/db/auth-redis'
+import { removeCookieSafe, verifyJwtToken } from './shared/utils/server'
 
 // 公开路由
-const PUBLIC_ROUTES: Array<NavRouteHrefType> = ['/sign-in', '/sign-up']
+const PUBLIC_ROUTES: Array<NavRouteHrefType> = ['/sign-in', '/sign-up', '/about']
 // 公开api
 const PUBLIC_API_PATHS: Array<NavRouteHrefType> = [
   '/api/auth/sign-in',

@@ -6,14 +6,14 @@ import {
   type AuthSignSchemaInput
 } from '~/shared/zod-schemas/auth.schema'
 import { type CaptchaGetSchemaInput } from '~/shared/zod-schemas/captcha.schema'
-import { type SignInUserInfoVO } from '~/types/user-api'
+import { type LoginVO } from '~/types/user-api'
 
 // 登录api
 export const signInApi = (p: AuthSignSchemaInput) => {
   const url: NavRouteHrefType = '/api/auth/sign-in'
-  return axiosInstance.post<AuthSignSchemaInput, SignInUserInfoVO>(url, p)
+  return axiosInstance.post<AuthSignSchemaInput, LoginVO>(url, p)
 }
-export const useSignInSwrAPi = createSwrMutation<AuthSignSchemaInput, SignInUserInfoVO>(
+export const useSignInSwrAPi = createSwrMutation<AuthSignSchemaInput, LoginVO>(
   '/api/auth/sign-in',
   signInApi
 )
@@ -21,11 +21,11 @@ export const useSignInSwrAPi = createSwrMutation<AuthSignSchemaInput, SignInUser
 // 注册api
 export function signUpApi(p: Omit<AuthRegisterSchemaInput, 'twoPassword'>) {
   const url: NavRouteHrefType = '/api/auth/sign-up'
-  return axiosInstance.post<Omit<AuthRegisterSchemaInput, 'twoPassword'>, SignInUserInfoVO>(url, p)
+  return axiosInstance.post<Omit<AuthRegisterSchemaInput, 'twoPassword'>, LoginVO>(url, p)
 }
 export const useSignUpSwrAPi = createSwrMutation<
   Omit<AuthRegisterSchemaInput, 'twoPassword'>,
-  SignInUserInfoVO
+  LoginVO
 >('/api/auth/sign-up', signUpApi)
 
 // 退出登录
@@ -38,11 +38,11 @@ export const useSignOutSwrAPi = createSwrMutation<void, void>('/api/auth/sign-ou
 // 查询当前登录用户信息
 export async function getLoginUserApi() {
   const url: NavRouteHrefType = '/api/auth/sign-user'
-  return axiosInstance.get<void, Pick<SignInUserInfoVO, 'user' | 'config'>>(url)
+  return axiosInstance.get<void, Pick<LoginVO, 'user' | 'config'>>(url)
 }
 export const useGetLoginUserSwrAPi = createSwrMutation<
   void,
-  Pick<SignInUserInfoVO, 'user' | 'config'>
+  Pick<LoginVO, 'user' | 'config'>
 >('/api/auth/sign-user', getLoginUserApi)
 
 // 获取验证码

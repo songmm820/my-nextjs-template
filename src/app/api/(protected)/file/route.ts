@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { HttpResponse } from '~/shared/utils/internal/http-response'
+import { HttpResponse } from '~/shared/utils/server'
 import { uploadFile } from '~/shared/config/minio'
 import { type MinioFolderEnum, MinioFolderList } from '~/shared/enums/comm'
 
