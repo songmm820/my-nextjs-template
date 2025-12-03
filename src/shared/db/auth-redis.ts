@@ -11,7 +11,7 @@ const EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000
  *
  * @param signInfo 登录信息
  */
-export async function setSignUserRedis(signInfo: Pick<LoginVO, 'user' | 'token'>) {
+export async function setSignUserRedis(signInfo: LoginVO) {
   const key = `sign:user:${signInfo.user.id}`
   return redis.set(key, JSON.stringify(signInfo), 'EX', EXPIRE_TIME)
 }
@@ -21,10 +21,10 @@ export async function setSignUserRedis(signInfo: Pick<LoginVO, 'user' | 'token'>
  *
  * @param userId 用户id
  */
-export async function getSignUserRedis(userId: string): Promise<LoginVO> {
+export async function getSignUserRedis(userId: string): Promise<LoginVO | null> {
   const key = `sign:user:${userId}`
   const signInfo = await redis.get(key)
-  if (!signInfo) throw new Error('No login user information found.')
+  if (!signInfo) return null
   return JSON.parse(signInfo) as LoginVO
 }
 

@@ -29,14 +29,14 @@ const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
       <Toaster position="top-center" />
       {!hideHeaderRoutes.includes(pathname as NavRouteHrefType) && (
         <>
-          <div className="h-[64px] flex-shrink-0" />
+          <div className="h-16 flex-shrink-0" />
           <div className="fixed top-0 left-0 w-full z-99">
             <Header />
           </div>
         </>
       )}
 
-      <main>{children}</main>
+      {children}
 
       {!hideFooterRoutes.includes(pathname as NavRouteHrefType) && <Footer />}
     </div>

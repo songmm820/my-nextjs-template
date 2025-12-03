@@ -38,12 +38,12 @@ export const useSignOutSwrAPi = createSwrMutation<void, void>('/api/auth/sign-ou
 // 查询当前登录用户信息
 export async function getLoginUserApi() {
   const url: NavRouteHrefType = '/api/auth/sign-user'
-  return axiosInstance.get<void, Pick<LoginVO, 'user' | 'config'>>(url)
+  return axiosInstance.get<void, LoginVO>(url)
 }
-export const useGetLoginUserSwrAPi = createSwrMutation<
-  void,
-  Pick<LoginVO, 'user' | 'config'>
->('/api/auth/sign-user', getLoginUserApi)
+export const useGetLoginUserSwrAPi = createSwrMutation<void, LoginVO>(
+  '/api/auth/sign-user',
+  getLoginUserApi
+)
 
 // 获取验证码
 export async function getCaptchaApi(p: CaptchaGetSchemaInput) {

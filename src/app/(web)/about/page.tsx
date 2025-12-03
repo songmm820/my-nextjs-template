@@ -7,7 +7,7 @@ const AboutPage = () => {
   const { setThemeColor } = useTheme()
 
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-4">
+    <div className="h-full w-full flex flex-col justify-center items-center gap-4">
       <div className="w-20 h-20 bg-primary"></div>
       <Button
         variant="primary"

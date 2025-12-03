@@ -4,7 +4,7 @@ import { authSignSchema } from '~/shared/zod-schemas/auth.schema'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 import { getCaptchaRedis, verifyCaptcha } from '~/shared/db/captcha-redis'
 import { setSignUserRedis } from '~/shared/db/auth-redis'
-import { dbQueryUserByEmail } from '~/shared/db/user-db'
+import { dbQueryUserByEmail, dbQueryUserConfigById } from '~/shared/db/user-db'
 import { type LoginVO } from '~/types/user-api'
 import { comparePassword, generateJwtToken, HttpResponse } from '~/shared/utils/server'
 
@@ -41,23 +41,27 @@ export async function POST(request: NextRequest) {
     if (!isValid) {
       return NextResponse.json(HttpResponse.error('The password is incorrect, please try again.'))
     }
-    // 签发JWT
-    const jwtToken = await generateJwtToken({
-      userId: dbUser.id,
-      email: email
-    })
-    const signUser: Pick<LoginVO, 'user' | 'token'> = {
+    // 并行执行
+    const [jwtToken, userConfig] = await Promise.all([
+      generateJwtToken({
+        userId: dbUser.id,
+        email: email
+      }),
+      dbQueryUserConfigById(dbUser.id)
+    ])
+    const signUser: LoginVO = {
       token: jwtToken,
       user: {
         id: dbUser.id,
         email: dbUser.email,
         name: dbUser.name,
         avatar: dbUser.avatar
-      }
+      },
+      config: userConfig
     }
     // 保存用户信息
-    await setSignUserRedis(signUser)
-    return NextResponse.json(HttpResponse.success<Pick<LoginVO, 'user' | 'token'>>(signUser))
+    setSignUserRedis(signUser).then()
+    return NextResponse.json(HttpResponse.success<LoginVO>(signUser))
   } catch (error) {
     // Handle error
     return NextResponse.json(HttpResponse.error(`Sign up failed:${String(error)}`))

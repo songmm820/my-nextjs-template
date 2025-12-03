@@ -3,22 +3,35 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
 import { dbQueryUserById, dbQueryUserConfigById } from '~/shared/db/user-db'
 import { type UserVO, type UserConfigVO } from '~/types/user-api'
+import { getSignUserRedis } from '~/shared/db/auth-redis'
+
+type ApiResponse = {
+  user: UserVO
+  config: UserConfigVO
+}
 
 export async function GET(request: NextRequest) {
   try {
     const jwtToken = request.cookies.get(COOKIE_AUTHORIZATION)?.value
-    // 这里没有一定有jwt，如果没有，在proxy.ts中已经被处理过了
+    // 这里一定有验证过身份了，如果没有，在proxy.ts中已经被处理过了
     const payload = await verifyJwtToken(jwtToken!)
     const userId = payload?.userId
-    const signUser = await dbQueryUserById(userId!)
-    // 获取用户配置信息
-    const userConfig = await dbQueryUserConfigById(userId!)
-
+    // 先获取Redis缓存中的
+    const loginVo = await getSignUserRedis(userId!)
+    if (loginVo) {
+      return NextResponse.json(
+        HttpResponse.success<ApiResponse>({
+          user: loginVo.user,
+          config: loginVo.config
+        })
+      )
+    }
+    const [signUser, userConfig] = await Promise.all([
+      dbQueryUserById(userId!),
+      dbQueryUserConfigById(userId!)
+    ])
     return NextResponse.json(
-      HttpResponse.success<{
-        user: UserVO | null
-        config: UserConfigVO | null
-      }>({
+      HttpResponse.success<ApiResponse>({
         user: signUser,
         config: userConfig
       })

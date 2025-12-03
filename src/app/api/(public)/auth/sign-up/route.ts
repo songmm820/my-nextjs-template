@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 import { getCaptchaRedis, verifyCaptcha } from '~/shared/db/captcha-redis'
 import { setSignUserRedis } from '~/shared/db/auth-redis'
-import { dbCreateUser, dbUserExistByEmail } from '~/shared/db/user-db'
+import { dbCreateUser, dbQueryUserConfigById, dbUserExistByEmail } from '~/shared/db/user-db'
 import { generateJwtToken, hashPassword, HttpResponse } from '~/shared/utils/server'
 import { type LoginVO } from '~/types/user-api'
 
@@ -42,23 +42,26 @@ export async function POST(request: NextRequest) {
       password: hashedPassword,
       name: 'Nick User' // 默认昵称
     })
-    // 签发JWT，注册免登录
-    const jwtToken = await generateJwtToken({
-      userId: newDbUser.id,
-      email: newDbUser.email
-    })
-    const signUser: Pick<LoginVO, 'user' | 'token'> = {
+    const [jwtToken, userConfig] = await Promise.all([
+      generateJwtToken({
+        userId: newDbUser.id,
+        email: newDbUser.email
+      }),
+      dbQueryUserConfigById(newDbUser.id)
+    ])
+    const signUser: LoginVO = {
       token: jwtToken,
       user: {
         id: newDbUser.id,
         email: newDbUser.email,
         name: newDbUser.name,
         avatar: newDbUser.avatar
-      }
+      },
+      config: userConfig
     }
     // 保存用户信息
-    await setSignUserRedis(signUser)
-    return NextResponse.json(HttpResponse.success<Pick<LoginVO, 'user' | 'token'>>(signUser))
+    setSignUserRedis(signUser).then()
+    return NextResponse.json(HttpResponse.success<LoginVO>(signUser))
   } catch (error) {
     // Handle error
     return NextResponse.json(HttpResponse.error(`Sign in failed:${String(error)}`))

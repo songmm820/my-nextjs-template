@@ -29,8 +29,8 @@ export async function dbQueryUserByEmail(email: string) {
  *
  * @param id 用户id
  */
-export async function dbQueryUserById(id: string): Promise<UserVO | null> {
-  return await prisma.systemUser.findUnique({
+export async function dbQueryUserById(id: string): Promise<UserVO> {
+  const user = await prisma.systemUser.findUnique({
     where: {
       id: id
     },
@@ -41,6 +41,10 @@ export async function dbQueryUserById(id: string): Promise<UserVO | null> {
       avatar: true
     }
   })
+  if (!user) {
+    throw new Error('User not found')
+  }
+  return user
 }
 
 /**
@@ -94,8 +98,8 @@ export async function dbUserExistByEmail(email: string): Promise<boolean> {
  *
  * @param id 用户ID
  */
-export async function dbQueryUserConfigById(id: string): Promise<UserConfigVO | null> {
-  return await prisma.systemUserConfig.findUnique({
+export async function dbQueryUserConfigById(id: string): Promise<UserConfigVO> {
+  const config = await prisma.systemUserConfig.findUnique({
     where: {
       userId: id
     },
@@ -107,4 +111,8 @@ export async function dbQueryUserConfigById(id: string): Promise<UserConfigVO | 
       whoCanMessage: true
     }
   })
+  if (!config) {
+    throw new Error('Query user config failed')
+  }
+  return config
 }

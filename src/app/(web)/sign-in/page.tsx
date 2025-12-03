@@ -7,7 +7,7 @@ import { authSignSchema, type AuthSignSchemaInput } from '~/shared/zod-schemas/a
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSignInSwrAPi } from '~/apis/auth-api'
 import { setCookie } from 'cookies-next/client'
-import { COOKIE_AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
+import { COOKIE_AUTHORIZATION, COOKIE_THEME_COLOR, type NavRouteHrefType } from '~/shared/constants'
 import { CustomLink } from '~/shared/components/CustomLink'
 import ImageCaptcha from '~/shared/components/ImageCaptcha'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
@@ -30,6 +30,7 @@ const SignInPage = () => {
       return
     }
     setCookie(COOKIE_AUTHORIZATION, data.token)
+    setCookie(COOKIE_THEME_COLOR, data.config.themeColor)
     router.push(redirect ?? '/')
   }
 
