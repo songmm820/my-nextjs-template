@@ -61,7 +61,7 @@ const NavLins = (props: NavLinsProps) => {
         <CustomLink
           key={i}
           href={it.link}
-          className={clsx('text-md text-666 hover:text-primary relative', {
+          className={clsx('text-base text-666 hover:text-primary relative', {
             'text-primary': avtiveLink === it.link,
             "after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-1/2": true
           })}
