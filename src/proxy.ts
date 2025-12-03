@@ -20,6 +20,12 @@ const PUBLIC_API_PATHS: Array<NavRouteHrefType> = [
   '/api/file'
 ]
 
+// 重定向
+async function redirect(request: NextRequest, url: string) {
+  const redirectUrl = new URL(url, request.url)
+  return NextResponse.redirect(redirectUrl)
+}
+
 // 重定向到登录页
 export async function redirectSignIn(request: NextRequest) {
   await removeCookieSafe(COOKIE_AUTHORIZATION)
@@ -30,6 +36,10 @@ export async function redirectSignIn(request: NextRequest) {
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname
+  // 如果访问 /,则重定向到首页
+  if (path === '/') {
+    return redirect(request, '/home')
+  }
   // 公开路由和api
   if (PUBLIC_API_PATHS.includes(path as Route) || PUBLIC_ROUTES.includes(path as Route)) {
     return NextResponse.next()

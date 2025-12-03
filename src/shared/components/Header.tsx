@@ -12,7 +12,7 @@ import { Button, Input } from '~/shared/features'
 
 const NAV_LINKS: Array<NavLinkType> = [
   {
-    link: '/',
+    link: '/home',
     label: 'Home'
   },
   {
@@ -34,12 +34,14 @@ const Header = () => {
         <NavLins links={NAV_LINKS} avtiveLink={pathname} />
       </div>
       <div className="flex">
-        {user && <Avatar name={user?.name} src={user?.avatar} size={36} />}
-        <div className='mx-6'>
+        <div className="mx-6">
           <GlobalSearchInput />
         </div>
         <CreationCenterButton />
-        <button className="ml-4 text-md text-666 hover:text-gray-900" onClick={onSignOut}>
+        <div className="mx-4 w-8 h-8">
+          {user && <Avatar name={user?.name} src={user?.avatar} size={36} />}
+        </div>
+        <button className="text-md text-666 hover:text-gray-900" onClick={onSignOut}>
           Logout
         </button>
       </div>

@@ -7,15 +7,23 @@ import { authSignSchema, type AuthSignSchemaInput } from '~/shared/zod-schemas/a
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSignInSwrAPi } from '~/apis/auth-api'
 import { setCookie } from 'cookies-next/client'
-import { COOKIE_AUTHORIZATION, COOKIE_THEME_COLOR, type NavRouteHrefType } from '~/shared/constants'
+import {
+  COOKIE_AUTHORIZATION,
+  type NavRouteHrefType,
+  type ThemeColorType
+} from '~/shared/constants'
 import { CustomLink } from '~/shared/components/CustomLink'
 import ImageCaptcha from '~/shared/components/ImageCaptcha'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
+import { useTheme } from '~/context/ThemeProvider'
+import { useLoginUser } from '~/context/LoginUserProvider'
 
 const SignInPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') as NavRouteHrefType
+  const { setThemeColor } = useTheme()
+  const { setUserInfo } = useLoginUser()
   const formRef = useRef<FormRef<AuthSignSchemaInput>>(null)
   const { trigger, isMutating } = useSignInSwrAPi()
   const [emailLive, setEmailLive] = useState<string>('')
@@ -30,7 +38,8 @@ const SignInPage = () => {
       return
     }
     setCookie(COOKIE_AUTHORIZATION, data.token)
-    setCookie(COOKIE_THEME_COLOR, data.config.themeColor)
+    setThemeColor(data.config.themeColor as ThemeColorType)
+    setUserInfo(data.user)
     router.push(redirect ?? '/')
   }
 

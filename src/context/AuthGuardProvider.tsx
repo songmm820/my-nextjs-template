@@ -1,12 +1,13 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { getCookie, deleteCookie } from 'cookies-next/client'
+import { getCookie } from 'cookies-next/client'
 import { useRouter } from 'next/navigation'
 import { COOKIE_AUTHORIZATION, type ThemeColorType } from '~/shared/constants'
 import { useGetLoginUserSwrAPi, useSignOutSwrAPi } from '~/apis/auth-api'
 import { useLoginUser } from '~/context/LoginUserProvider'
 import { useTheme } from './ThemeProvider'
+import { deleteCookie } from 'cookies-next'
 
 type AuthGuardType = {
   isLogin: boolean
