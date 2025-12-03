@@ -47,8 +47,8 @@ const Button = (props: ButtonProps) => {
     <button
       className={twMerge(
         clsx(
-          'h-11 rounded-lg font-medium transition-all duration-300',
-          block ? 'w-full' : 'w-31',
+          'h-11 rounded-lg transition-all duration-300 px-3',
+          block ? 'w-full' : 'min-w-31',
           variant === 'default' && 'bg-[#f0f0f0]',
           variant === 'primary' && 'bg-primary text-white ',
           variant === 'outline' && 'border border-primary text-primary',
@@ -60,7 +60,7 @@ const Button = (props: ButtonProps) => {
       {...rest}
       onClick={onClick}
     >
-      <span className="inline-flex justify-center items-center gap-2">
+      <span className="h-full inline-flex justify-center items-center gap-2">
         {loading && <LoadingIcon />}
         {children}
       </span>

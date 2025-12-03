@@ -8,7 +8,6 @@ export const authSignSchema = z
     captcha: z.string().length(4, 'Captcha must be 4 characters long')
   })
   .strict()
-
 export type AuthSignSchemaInput = z.infer<typeof authSignSchema>
 
 // 注册
@@ -24,5 +23,4 @@ export const authRegisterSchema = z
     path: ['twoPassword']
   })
   .strict()
-
 export type AuthRegisterSchemaInput = z.infer<typeof authRegisterSchema>

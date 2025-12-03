@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { twMerge } from 'tailwind-merge'
 import { useFormContext, useFormFieldContext } from '~/shared/features/context/form-context'
 
 export type InputProps = {
@@ -13,17 +14,19 @@ const BaseInput = (props: InputProps) => {
     <input
       id={id}
       defaultValue={defaultValue}
-      className={clsx(
-        [
-          'h-11',
-          'px-4',
-          'rounded-lg',
-          error
-            ? 'ring-1 ring-danger bg-white'
-            : 'bg-[#f0f0f0] focus-visible:ring-1 focus-visible:ring-primary focus-visible:bg-white',
-          'transition-all duration-300 '
-        ],
-        className
+      className={twMerge(
+        clsx(
+          [
+            'h-11',
+            'px-4',
+            'rounded-lg text-md text-666',
+            error
+              ? 'ring-1 ring-danger bg-white'
+              : 'bg-[#f0f0f0] focus-visible:ring-1 focus-visible:ring-primary focus-visible:bg-white',
+            'transition-all duration-300 placeholder:text-999'
+          ],
+          className
+        )
       )}
       {...rest}
       autoComplete="off"

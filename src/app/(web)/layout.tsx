@@ -25,7 +25,7 @@ const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full hidden md:block">
       <Toaster position="top-center" />
       {!hideHeaderRoutes.includes(pathname as NavRouteHrefType) && (
         <>

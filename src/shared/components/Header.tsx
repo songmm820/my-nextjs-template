@@ -1,13 +1,14 @@
 'use client'
 
 import { useEffect } from 'react'
+import { type NavRouteHrefType } from '~/shared/constants'
+import clsx from 'clsx'
 import { useAuthGuard } from '~/context/AuthGuardProvider'
 import { useLoginUser } from '~/context/LoginUserProvider'
 import Avatar from '~/shared/components/Avatar'
-import { type NavRouteHrefType } from '~/shared/constants'
-import { CustomLink } from './CustomLink'
-import clsx from 'clsx'
+import { CustomLink } from '~/shared/components/CustomLink'
 import { usePathname } from 'next/navigation'
+import { Button, Input } from '~/shared/features'
 
 const NAV_LINKS: Array<NavLinkType> = [
   {
@@ -34,7 +35,10 @@ const Header = () => {
       </div>
       <div className="flex">
         {user && <Avatar name={user?.name} src={user?.avatar} size={36} />}
-
+        <div className='mx-6'>
+          <GlobalSearchInput />
+        </div>
+        <CreationCenterButton />
         <button className="ml-4 text-md text-666 hover:text-gray-900" onClick={onSignOut}>
           Logout
         </button>
@@ -61,15 +65,32 @@ const NavLins = (props: NavLinsProps) => {
         <CustomLink
           key={i}
           href={it.link}
-          className={clsx('text-base text-666 hover:text-primary relative', {
-            'text-primary': avtiveLink === it.link,
-            "after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-1/2": true
+          className={clsx('text-base text-666 hover:text-primary/90 relative', {
+            'text-primary/80': avtiveLink === it.link,
+            "after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-primary/50 after:transition-all after:duration-300 hover:after:w-1/2": true
           })}
         >
           {it.label}
         </CustomLink>
       ))}
     </div>
+  )
+}
+
+const CreationCenterButton = () => {
+  return (
+    <Button className="rounded-3xl h-9 bg-primary/90" variant="primary">
+      <span className="text-md">Creation Center</span>
+    </Button>
+  )
+}
+
+const GlobalSearchInput = () => {
+  return (
+    <Input
+      className="rounded-3xl h-9 w-80"
+      placeholder="Search for articles, topics, and users .."
+    />
   )
 }
 
