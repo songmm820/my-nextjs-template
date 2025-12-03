@@ -1,14 +1,13 @@
 'use client'
 
 import { useEffect } from 'react'
-import { type NavRouteHrefType } from '~/shared/constants'
 import clsx from 'clsx'
-import { useAuthGuard } from '~/context/AuthGuardProvider'
 import { useLoginUser } from '~/context/LoginUserProvider'
 import Avatar from '~/shared/components/Avatar'
 import { CustomLink } from '~/shared/components/CustomLink'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Button, Input } from '~/shared/features'
+import { type NavRouteHrefType } from '~/shared/constants'
 
 const NAV_LINKS: Array<NavLinkType> = [
   {
@@ -23,7 +22,7 @@ const NAV_LINKS: Array<NavLinkType> = [
 
 const Header = () => {
   const pathname = usePathname()
-  const { onSignOut } = useAuthGuard()
+  const router = useRouter()
   const { user } = useLoginUser()
 
   useEffect(() => {}, [])
@@ -31,19 +30,16 @@ const Header = () => {
   return (
     <header className="h-16 flex items-center px-6 backdrop-blur-md shadow-[rgba(0,0,0,0.07)_0px_4px_8px_0px]">
       <div className="flex-1 h-full">
-        <NavLins links={NAV_LINKS} avtiveLink={pathname} />
+        <NavLinks links={NAV_LINKS} activeLink={pathname} />
       </div>
       <div className="flex">
         <div className="mx-6">
           <GlobalSearchInput />
         </div>
         <CreationCenterButton />
-        <div className="mx-4 w-8 h-8">
+        <div className="ml-4 w-10 h-10 flex justify-center items-center cursor-pointer" onClick={() => router.push('/my/setting')}>
           {user && <Avatar name={user?.name} src={user?.avatar} size={36} />}
         </div>
-        <button className="text-md text-666 hover:text-gray-900" onClick={onSignOut}>
-          Logout
-        </button>
       </div>
     </header>
   )
@@ -54,13 +50,13 @@ type NavLinkType = {
   label: string
 }
 
-type NavLinsProps = {
+type NavLinksProps = {
   links: Array<NavLinkType>
-  avtiveLink: NavRouteHrefType | string
+  activeLink: NavRouteHrefType | string
 }
 
-const NavLins = (props: NavLinsProps) => {
-  const { links, avtiveLink } = props
+const NavLinks = (props: NavLinksProps) => {
+  const { links, activeLink } = props
   return (
     <div className="w-full h-full flex items-center gap-6">
       {links.map((it, i) => (
@@ -68,7 +64,7 @@ const NavLins = (props: NavLinsProps) => {
           key={i}
           href={it.link}
           className={clsx('text-base text-666 hover:text-primary/90 relative', {
-            'text-primary/80': avtiveLink === it.link,
+            'text-primary/80 font-medium': activeLink === it.link,
             "after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-primary/50 after:transition-all after:duration-300 hover:after:w-1/2": true
           })}
         >

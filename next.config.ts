@@ -65,12 +65,7 @@ const nextConfig: NextConfig = {
    * 用于配置 Next.js 的图像优化功能。你可以定义允许的域名、图像尺寸、格式等
    */
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'avatars.githubusercontent.com'
-      }
-    ]
+    remotePatterns: []
   },
 
   /**

@@ -99,7 +99,7 @@ export class AxiosClientClass {
 }
 
 export const axiosInstance = new AxiosClientClass({
-  baseURL: './',
+  baseURL: '',
   timeout: 6000,
   responseType: 'json',
   headers: {

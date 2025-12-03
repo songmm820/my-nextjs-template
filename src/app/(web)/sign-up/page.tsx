@@ -32,7 +32,7 @@ const SignInPage = () => {
       return
     }
     setCookie(COOKIE_AUTHORIZATION, data.token)
-    router.push('/')
+    router.push('/home')
   }
 
   return (
