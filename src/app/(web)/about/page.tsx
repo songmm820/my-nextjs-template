@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react'
 import z from 'zod'
-import { Button, CheckBox, Form, FormField, Input, Radio } from '~/shared/features'
+import { Button, CheckBox, Form, FormField, Input, Modal, Radio } from '~/shared/features'
 import { type FormRef } from '~/shared/features/internal/Form'
 
 export const paramsInput = z
@@ -22,9 +22,15 @@ const AboutPage = () => {
   const [checkboxValue, setCheckboxValue] = useState<Array<string>>([])
   const [radioValue, setRadioValue] = useState<string>('1')
   const [inputValue, setInputValue] = useState('今天')
+  const [openModal, setOpenModal] = useState(false)
 
   return (
     <div className="h-full w-120 mx-auto flex flex-col justify-center gap-4">
+      <Button onClick={() => setOpenModal(true)}>Open Modal</Button>
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        123123
+      </Modal>
+
       <CheckBox
         value={checkboxValue}
         onChange={(v) => setCheckboxValue(v)}

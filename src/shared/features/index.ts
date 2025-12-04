@@ -4,6 +4,7 @@ import { FormField, type FormFieldProps } from './internal/FormField'
 import Button, { type ButtonProps } from './internal/Button'
 import Radio, { type RadioProps } from './internal/Radio'
 import CheckBox, { type CheckBoxProps } from './internal/CheckBox'
+import Modal, { type ModalProps } from './internal/Modal'
 
 export {
   InputProps,
@@ -17,5 +18,7 @@ export {
   RadioProps,
   Radio as Radio,
   CheckBoxProps,
-  CheckBox as CheckBox
+  CheckBox as CheckBox,
+  ModalProps,
+  Modal as Modal
 }
