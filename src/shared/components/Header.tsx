@@ -90,7 +90,7 @@ const CreationCenterButton = () => {
 const GlobalSearchInput = () => {
   return (
     <Input
-      className="rounded-3xl h-9 w-80 bg-transparent ring ring-primary/80"
+      className="rounded-3xl h-9 w-80 bg-transparent ring ring-primary/30"
       placeholder="Search for articles, topics, and users .."
     />
   )
