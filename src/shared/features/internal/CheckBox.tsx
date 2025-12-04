@@ -5,7 +5,7 @@ import { useId } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { useFormContext, useFormFieldContext } from '~/shared/features/context/form-context'
 
-type OptionItem = {
+export type CheckBoxOptionItemType = {
   label: string | React.ReactNode
   value: string
   description?: string | React.ReactNode
@@ -14,23 +14,23 @@ type OptionItem = {
 export type CheckBoxProps = {
   id?: string
   className?: string
-  value?: Array<OptionItem['value']>
-  options?: Array<OptionItem>
-  onChange?: (value: Array<OptionItem['value']>) => void
+  value?: Array<CheckBoxOptionItemType['value']>
+  options?: Array<CheckBoxOptionItemType>
+  onChange?: (value: Array<CheckBoxOptionItemType['value']>) => void
 }
 
 const BaseCheckBox = (props: CheckBoxProps) => {
   const { id, className, options, value, onChange } = props
   const uId = useId()
 
-  const oId = (index: number, value: OptionItem['value']) =>
+  const oId = (index: number, value: CheckBoxOptionItemType['value']) =>
     id ? `${id}-${String(value)}` : `${uId}-${index}-${String(value)}`
 
-  const isChecked = (optionValue: OptionItem['value']) => {
+  const isChecked = (optionValue: CheckBoxOptionItemType['value']) => {
     return value?.includes(optionValue)
   }
 
-  const handleCheckBoxChange = (optionValue: OptionItem['value']) => {
+  const handleCheckBoxChange = (optionValue: CheckBoxOptionItemType['value']) => {
     if (isChecked(optionValue)) {
       // remove
       onChange?.(value?.filter((val) => val !== optionValue) || [])

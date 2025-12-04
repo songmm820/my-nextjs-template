@@ -65,6 +65,10 @@ const nextConfig: NextConfig = {
    * 用于配置 Next.js 的图像优化功能。你可以定义允许的域名、图像尺寸、格式等
    */
   images: {
+    /**
+     * 允许在开发环境中使用未优化的图像
+     */
+    unoptimized: true,
     remotePatterns: []
   },
 

@@ -28,7 +28,7 @@ const Header = () => {
   useEffect(() => {}, [])
 
   return (
-    <header className="h-16 flex items-center px-6 backdrop-blur-md shadow-[rgba(0,0,0,0.07)_0px_4px_8px_0px]">
+    <header className="bg-linear-to-br from-primary/10 to-white h-16 flex items-center px-6 backdrop-blur-md shadow-[rgba(0,0,0,0.07)_0px_4px_8px_0px]">
       <div className="flex-1 h-full">
         <NavLinks links={NAV_LINKS} activeLink={pathname} />
       </div>
@@ -68,7 +68,8 @@ const NavLinks = (props: NavLinksProps) => {
           href={it.link}
           className={clsx('text-base text-666 hover:text-primary/90 relative', {
             'text-primary/80 font-medium': activeLink === it.link,
-            "after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-primary/50 after:transition-all after:duration-300 hover:after:w-1/2": true
+            "after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2": true,
+            'after:w-0 after:h-0.5 after:bg-primary/50 after:transition-all after:duration-300 hover:after:w-1/2': true
           })}
         >
           {it.label}
@@ -89,7 +90,7 @@ const CreationCenterButton = () => {
 const GlobalSearchInput = () => {
   return (
     <Input
-      className="rounded-3xl h-9 w-80"
+      className="rounded-3xl h-9 w-80 bg-transparent ring ring-primary/80"
       placeholder="Search for articles, topics, and users .."
     />
   )

@@ -23,7 +23,7 @@ const SignInPage = () => {
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') as NavRouteHrefType
   const { setThemeColor } = useTheme()
-  const { setUserInfo } = useLoginUser()
+  const { setUserInfo, setConfig } = useLoginUser()
   const formRef = useRef<FormRef<AuthSignSchemaInput>>(null)
   const { trigger, isMutating } = useSignInSwrAPi()
   const [emailLive, setEmailLive] = useState<string>('')
@@ -40,6 +40,7 @@ const SignInPage = () => {
     setCookie(COOKIE_AUTHORIZATION, data.token)
     setThemeColor(data.config.themeColor as ThemeColorType)
     setUserInfo(data.user)
+    setConfig(data.config)
     router.push(redirect ?? '/')
   }
 

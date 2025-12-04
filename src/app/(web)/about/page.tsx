@@ -25,7 +25,7 @@ const AboutPage = () => {
   const [openModal, setOpenModal] = useState(false)
 
   return (
-    <div className="h-full w-120 mx-auto flex flex-col justify-center gap-4">
+    <div className="h-auto w-120 mx-auto flex flex-col justify-center gap-4">
       <Button onClick={() => setOpenModal(true)}>Open Modal</Button>
       <Modal open={openModal} onClose={() => setOpenModal(false)}>
         123123

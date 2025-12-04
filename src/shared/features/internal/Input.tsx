@@ -7,19 +7,17 @@ import { useFormContext, useFormFieldContext } from '~/shared/features/context/f
 
 export type InputProps = {
   error?: boolean
-  defaultValue?: string
   className?: string
   onChange?: (val: string) => void
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>
 
 const BaseInput = (props: InputProps) => {
-  const { id, defaultValue, error, className, onChange, ...rest } = props
+  const { id, error, className, onChange, ...rest } = props
   const uId = useId()
   const inputId = id ?? uId
   return (
     <input
       id={inputId}
-      defaultValue={defaultValue}
       className={twMerge(
         clsx(
           [
@@ -51,20 +49,17 @@ const Input = (props: InputProps) => {
     const errorStatus = error ?? false
     return <BaseInput id={id} error={errorStatus} {...rest} autoComplete="off" />
   } else {
-    const { initialValues, formInstance } = formCtx
+    const { formInstance } = formCtx
     const { fieldId, name } = formFieldCtx
     const errorStatus = Boolean(error ?? formInstance.formState.errors[name]?.message)
-    const defaultValue = initialValues?.[name]
-    const value = formInstance.watch(name)
+    const value = formInstance.watch(name) ?? ''
     return (
       <BaseInput
         id={id || fieldId}
         error={errorStatus}
-        defaultValue={defaultValue}
         value={value}
         autoComplete="off"
         {...rest}
-        {...formInstance.register(name)}
         onChange={(val) => formInstance.setValue(name, val, { shouldValidate: true })}
       />
     )

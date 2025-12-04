@@ -5,7 +5,7 @@ import { useId } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { useFormContext, useFormFieldContext } from '~/shared/features/context/form-context'
 
-type OptionItem = {
+export type RadioOptionItemType = {
   label: string | React.ReactNode
   value: string
   description?: string | React.ReactNode
@@ -14,19 +14,19 @@ type OptionItem = {
 export type RadioProps = {
   id?: string
   className?: string
-  value?: OptionItem['value']
-  options?: Array<OptionItem>
-  onChange?: (value: OptionItem['value']) => void
+  value?: RadioOptionItemType['value']
+  options?: Array<RadioOptionItemType>
+  onChange?: (value: RadioOptionItemType['value']) => void
 }
 
 const BaseRadio = (props: RadioProps) => {
   const { id, className, options, value, onChange } = props
   const uId = useId()
 
-  const oId = (index: number, value: OptionItem['value']) =>
+  const oId = (index: number, value: RadioOptionItemType['value']) =>
     id ? `${id}-${String(value)}` : `${uId}-${index}-${String(value)}`
 
-  const isChecked = (optionValue: OptionItem['value']) => {
+  const isChecked = (optionValue: RadioOptionItemType['value']) => {
     return optionValue == value
   }
 
