@@ -1,7 +1,7 @@
 'use client'
 
 import { setCookie } from 'cookies-next/client'
-import { createContext, useCallback, useContext } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
 import { COOKIE_THEME_COLOR, primaryColorList, type ThemeColorType } from '~/shared/constants'
 
 type ThemeProviderProps = {
@@ -25,16 +25,18 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 export const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => {
   const { themeColor } = props
+  const [color, setColor] = useState(themeColor)
 
   const onSaveColor = useCallback((color: ThemeColorType) => {
     if (!color) return
+    setColor(color)
     setCookie(COOKIE_THEME_COLOR, color)
     const root = document.documentElement
     root.style.setProperty('--primary', color)
   }, [])
 
   const value = {
-    themeColor,
+    themeColor: color,
     setThemeColor: onSaveColor
   }
 
