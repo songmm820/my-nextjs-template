@@ -53,7 +53,12 @@ const BaseRadio = (props: RadioProps) => {
             onClick={() => onChange?.(option.value)}
           >
             <div className="w-4 h-4 rounded-full border border-primary p-0.5">
-              <div className="w-full h-full rounded-full bg-primary"></div>
+              <div
+                className={clsx(
+                  'w-full h-full rounded-full ',
+                  isChecked(option.value) ? 'bg-primary' : 'bg-white'
+                )}
+              ></div>
             </div>
             <div className="flex flex-col">
               <div className="text-666 text-md">{option.label}</div>
