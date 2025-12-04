@@ -11,15 +11,15 @@ type OptionItem = {
   description?: string | React.ReactNode
 }
 
-export type RadioProps = {
+export type CheckBoxProps = {
   id?: string
   className?: string
-  value?: OptionItem['value']
+  value?: Array<OptionItem['value']>
   options?: Array<OptionItem>
-  onChange?: (value: OptionItem['value']) => void
+  onChange?: (value: Array<OptionItem['value']>) => void
 }
 
-const BaseRadio = (props: RadioProps) => {
+const BaseCheckBox = (props: CheckBoxProps) => {
   const { id, className, options, value, onChange } = props
   const uId = useId()
 
@@ -27,7 +27,17 @@ const BaseRadio = (props: RadioProps) => {
     id ? `${id}-${String(value)}` : `${uId}-${index}-${String(value)}`
 
   const isChecked = (optionValue: OptionItem['value']) => {
-    return optionValue == value
+    return value?.includes(optionValue)
+  }
+
+  const handleCheckBoxChange = (optionValue: OptionItem['value']) => {
+    if (isChecked(optionValue)) {
+      // remove
+      onChange?.(value?.filter((val) => val !== optionValue) || [])
+    } else {
+      // add
+      onChange?.([...(value || []), optionValue])
+    }
   }
 
   return (
@@ -36,7 +46,7 @@ const BaseRadio = (props: RadioProps) => {
         return (
           <div
             key={index}
-            role="radio"
+            role="checkbox"
             aria-checked={isChecked(option.value)}
             id={oId(index, option.value)}
             tabIndex={0}
@@ -50,13 +60,13 @@ const BaseRadio = (props: RadioProps) => {
               ),
               className
             )}
-            onClick={() => onChange?.(option.value)}
+            onClick={() => handleCheckBoxChange(option.value)}
           >
-            <div aria-hidden="true" className="w-4 h-4 rounded-full border border-primary p-0.5">
+            <div aria-hidden="true" className="w-4 h-4 rounded-sm border border-primary p-0.5">
               <div
                 className={clsx(
-                  'w-full h-full rounded-full ',
-                  isChecked(option.value) ? 'bg-primary' : 'bg-transparent'
+                  'w-full h-full rounded-sm ',
+                  isChecked(option.value) ? 'bg-primary' : 'bg-white'
                 )}
               ></div>
             </div>
@@ -71,20 +81,20 @@ const BaseRadio = (props: RadioProps) => {
   )
 }
 
-const Radio = (props: RadioProps) => {
+const CheckBox = (props: CheckBoxProps) => {
   const { id, ...rest } = props
   const formCtx = useFormContext()
   const formFieldCtx = useFormFieldContext()
   const isInForm = formCtx && formFieldCtx
 
   if (!isInForm) {
-    return <BaseRadio id={id} {...rest} />
+    return <BaseCheckBox id={id} {...rest} />
   } else {
     const { formInstance } = formCtx
     const { fieldId, name } = formFieldCtx
     const value = formInstance.watch(name)
     return (
-      <BaseRadio
+      <BaseCheckBox
         id={id || fieldId}
         value={value}
         {...rest}
@@ -94,4 +104,4 @@ const Radio = (props: RadioProps) => {
   }
 }
 
-export default Radio
+export default CheckBox

@@ -2,23 +2,56 @@
 
 import { useRef, useState } from 'react'
 import z from 'zod'
-import { Button, Form, FormField, Input, Radio } from '~/shared/features'
+import { Button, CheckBox, Form, FormField, Input, Radio } from '~/shared/features'
 import { type FormRef } from '~/shared/features/internal/Form'
 
 export const paramsInput = z
   .object({
-    day: z.string()
+    day: z.string({
+      message: '请选择一个星期'
+    }),
+    days: z.array(z.string(), {
+      message: '请选择多个星期'
+    })
   })
   .strict()
 type ParamsInput = z.infer<typeof paramsInput>
 
 const AboutPage = () => {
   const formRef = useRef<FormRef<ParamsInput>>(null)
+  const [checkboxValue, setCheckboxValue] = useState<Array<string>>([])
   const [radioValue, setRadioValue] = useState<string>('1')
   const [inputValue, setInputValue] = useState('今天')
 
   return (
-    <div className="h-full w-120 mx-auto flex flex-col justify-center items-center gap-4">
+    <div className="h-full w-120 mx-auto flex flex-col justify-center gap-4">
+      <CheckBox
+        value={checkboxValue}
+        onChange={(v) => setCheckboxValue(v)}
+        options={[
+          {
+            label: '星期一',
+            value: '1',
+            description: '今天是星期一'
+          },
+          {
+            label: '星期二',
+            value: '2',
+            description: '今天是星期二'
+          },
+          {
+            label: '星期三',
+            value: '3',
+            description: '今天是星期三'
+          },
+          {
+            label: '星期四',
+            value: '4',
+            description: '今天是星期四'
+          }
+        ]}
+      />
+      <hr />
       <Radio
         value={radioValue}
         onChange={(v) => setRadioValue(v)}
@@ -38,12 +71,7 @@ const AboutPage = () => {
 
       <Input value={inputValue} onChange={(v) => setInputValue(v)} />
 
-      <Form<ParamsInput>
-        ref={formRef}
-        initialValues={{
-          day: '3'
-        }}
-      >
+      <Form<ParamsInput> ref={formRef} schema={paramsInput} initialValues={{}}>
         <FormField<ParamsInput> name="day" label="Radio">
           <Radio
             options={[
@@ -80,9 +108,48 @@ const AboutPage = () => {
             ]}
           />
         </FormField>
+
+        <hr />
+
+        <FormField<ParamsInput> name="days" label="CheckBox">
+          <CheckBox
+            options={[
+              {
+                label: '星期一',
+                value: '1',
+                description: '今天是星期一'
+              },
+              {
+                label: '星期二',
+                value: '2',
+                description: '今天是星期二'
+              },
+              {
+                label: '星期三',
+                value: '3',
+                description: '今天是星期三'
+              },
+              {
+                label: '星期四',
+                value: '4',
+                description: '今天是星期四'
+              }
+            ]}
+          />
+        </FormField>
       </Form>
 
       <Button
+        variant="primary"
+        onClick={() => {
+          formRef.current?.validate()
+        }}
+      >
+        Submit
+      </Button>
+
+      <Button
+        className="submit"
         variant="primary"
         onClick={() => {
           formRef.current?.reset()
