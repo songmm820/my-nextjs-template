@@ -37,8 +37,11 @@ const Header = () => {
           <GlobalSearchInput />
         </div>
         <CreationCenterButton />
-        <div className="ml-4 w-10 h-10 flex justify-center items-center cursor-pointer" onClick={() => router.push('/my/setting')}>
-          {user && <Avatar name={user?.name} src={user?.avatar} size={36} />}
+        <div
+          className="ml-4 w-10 h-10 flex justify-center items-center cursor-pointer"
+          onClick={() => router.push('/my/setting')}
+        >
+          {user && <Avatar src={user?.avatar} size={36} />}
         </div>
       </div>
     </header>

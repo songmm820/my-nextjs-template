@@ -10,7 +10,16 @@ const Avatar = (props: AvatarProps) => {
 
   const avatar = src || '/images/default_avatar.png'
 
-  return <Image className="rounded-full" src='/images/default_bg.webp' width={size} height={size} alt="" />
+  return (
+    <Image
+      className="rounded-full"
+      src={avatar}
+      width={size}
+      height={size}
+      loading="eager"
+      alt=""
+    />
+  )
 }
 
 export default Avatar

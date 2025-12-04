@@ -94,5 +94,4 @@ export const secondaryColorList = [
   '#B2EAD4'
 ] as const
 
-
 export type ThemeColorType = (typeof primaryColorList)[number]

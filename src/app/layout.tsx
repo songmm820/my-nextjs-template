@@ -11,7 +11,7 @@ import { getCookieSafe } from '~/shared/utils/server'
 
 // 图标库链接
 const envIconScriptLink =
-  'https://lf1-cdn-tos.bytegoofy.com/obj/iconpark/svg_41789_1.171eb98c595fefca3982168cd8740866.js'
+  'https://lf1-cdn-tos.bytegoofy.com/obj/iconpark/svg_41789_3.6bdd52efdb9d45333ee92b2a558ea513.js'
 
 export const metadata: Metadata = {
   title: "Nicks's Knack",
@@ -23,7 +23,7 @@ const RootLayout = async ({
 }: Readonly<{
   children: React.ReactNode
 }>) => {
-  const themeColor = ((await getCookieSafe(COOKIE_THEME_COLOR)) as ThemeColorType) || '#0062ff'
+  const themeColor = ((await getCookieSafe(COOKIE_THEME_COLOR)) as ThemeColorType) || '#07A065'
 
   return (
     <html lang="en">

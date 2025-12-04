@@ -8,7 +8,7 @@ export type IconProps = {
   onClick?: () => void
 }
 
-export default function QsIcon(props: IconProps) {
+export default function Icon(props: IconProps) {
   const { className, name, size = 16, color = '#000000', onClick } = props
 
   const handleClick = () => {
@@ -22,7 +22,7 @@ export default function QsIcon(props: IconProps) {
         aria-hidden={true}
         width={size}
         height={size}
-        fill={color}
+        color={color}
         onClick={() => handleClick()}
       >
         <use xlinkHref={`#${name}`} />
