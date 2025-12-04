@@ -1,6 +1,6 @@
 import 'server-only'
 
-import { type LoginVO } from '~/types/user-api'
+import { type UserConfigVO, type LoginVO } from '~/types/user-api'
 import { redis } from '~/shared/config/redis'
 
 // 7d
@@ -22,7 +22,7 @@ export async function setSignUserRedis(signInfo: LoginVO) {
  * @param userId 用户id
  */
 export async function getSignUserRedis(userId: string): Promise<LoginVO | null> {
-  const key = `sign:user:${userId}`
+  const key = `user:sign:${userId}`
   const signInfo = await redis.get(key)
   if (!signInfo) return null
   return JSON.parse(signInfo) as LoginVO
@@ -34,7 +34,7 @@ export async function getSignUserRedis(userId: string): Promise<LoginVO | null> 
  * @param userId 用户id
  */
 export async function isSignUserRedis(userId: string) {
-  const key = `sign:user:${userId}`
+  const key = `user:sign:${userId}`
   return redis.exists(key)
 }
 
@@ -44,6 +44,27 @@ export async function isSignUserRedis(userId: string) {
  * @param userId 用户id
  */
 export async function clearSignUserRedis(userId: string) {
-  const key = `sign:user:${userId}`
+  const key = `user:sign:${userId}`
   return redis.del(key)
+}
+
+/**
+ * 根据userId设置用户配置信息
+ *
+ * @param userId 用户id
+ */
+export async function setUserConfigRedis(userId: string, config: string) {
+  const key = `user:config:${userId}`
+  return redis.set(key, config, 'EX', EXPIRE_TIME)
+}
+
+/**
+ * 根据userId获取用户配置信息
+ *
+ * @param userId 用户id
+ */
+export async function getUserConfigRedis(userId: string): Promise<UserConfigVO | null> {
+  const key = `user:config:${userId}`
+  const config = await redis.get(key)
+  return config ? (JSON.parse(config) as UserConfigVO) : null
 }

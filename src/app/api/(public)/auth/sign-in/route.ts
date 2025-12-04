@@ -8,6 +8,7 @@ import { dbQueryUserByEmail, dbQueryUserConfigById } from '~/shared/db/user-db'
 import { type LoginVO } from '~/types/user-api'
 import { comparePassword, generateJwtToken, HttpResponse } from '~/shared/utils/server'
 
+// 登录
 export async function POST(request: NextRequest) {
   try {
     const { email, password, captcha } = await request.json()

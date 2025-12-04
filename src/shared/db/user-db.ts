@@ -116,3 +116,19 @@ export async function dbQueryUserConfigById(id: string): Promise<UserConfigVO> {
   }
   return config
 }
+
+/**
+ * 根据用户ID更新用户的配置信息
+ */
+export async function dbUpdateUserConfigById(
+  id: string,
+  config: Prisma.SystemUserConfigUpdateInput
+) {
+  const newConfig = await prisma.systemUserConfig.update({
+    where: {
+      userId: id
+    },
+    data: config
+  })
+  return newConfig
+}

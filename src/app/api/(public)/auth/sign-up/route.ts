@@ -8,6 +8,7 @@ import { dbCreateUser, dbQueryUserConfigById, dbUserExistByEmail } from '~/share
 import { generateJwtToken, hashPassword, HttpResponse } from '~/shared/utils/server'
 import { type LoginVO } from '~/types/user-api'
 
+// 注册
 export async function POST(request: NextRequest) {
   try {
     const { email, password, captcha } = await request.json()

@@ -4,6 +4,7 @@ import { CaptchaTypeEnum } from '~/shared/enums/comm'
 import { getCaptchaRedis, setCaptchaRedis } from '~/shared/db/captcha-redis'
 import { generateCaptchaCode, generateCaptchaImage, HttpResponse } from '~/shared/utils/server'
 
+// 获取验证码
 export async function POST(request: NextRequest) {
   try {
     const { email, type, use } = await request.json()

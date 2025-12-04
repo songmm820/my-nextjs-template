@@ -1,9 +1,9 @@
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
-import { dbQueryUserById, dbQueryUserConfigById } from '~/shared/db/user-db'
+import { dbQueryUserById, dbQueryUserConfigById, dbUpdateUserConfigById } from '~/shared/db/user-db'
 import { type UserVO, type UserConfigVO } from '~/types/user-api'
-import { getSignUserRedis } from '~/shared/db/auth-redis'
+import { getSignUserRedis, setSignUserRedis } from '~/shared/db/auth-redis'
 import { userConfigUpdateSchema } from '~/shared/zod-schemas/user.schema'
 
 type ApiResponse = {
@@ -11,6 +11,7 @@ type ApiResponse = {
   config: UserConfigVO
 }
 
+// 查询当前登录用户信息
 export async function GET(request: NextRequest) {
   try {
     const jwtToken = request.cookies.get(COOKIE_AUTHORIZATION)?.value
@@ -42,19 +43,40 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// 更新当前登录用户信息
 export async function PUT(request: NextRequest) {
-  const { themeColor, profileVisibility, whoCanComment, whoCanMessage } = await request.json()
-  const vr = userConfigUpdateSchema.safeParse({
-    themeColor,
-    profileVisibility,
-    whoCanComment,
-    whoCanMessage
-  })
-  if (!vr.success) {
-    const [er] = vr.error.issues
-    return NextResponse.json(HttpResponse.error(er.message))
-  }
   try {
+    const { themeColor, profileVisibility, whoCanComment, whoCanMessage } = await request.json()
+    const vr = userConfigUpdateSchema.safeParse({
+      themeColor,
+      profileVisibility,
+      whoCanComment,
+      whoCanMessage
+    })
+    if (!vr.success) {
+      const [er] = vr.error.issues
+      return NextResponse.json(HttpResponse.error(er.message))
+    }
+    const jwtToken = request.cookies.get(COOKIE_AUTHORIZATION)?.value
+    // 这里一定有验证过身份了，如果没有，在proxy.ts中已经被处理过了
+    const payload = await verifyJwtToken(jwtToken!)
+    const userId = payload?.userId
+    const newConfig = await dbUpdateUserConfigById(userId!, {
+      themeColor,
+      profileVisibility,
+      whoCanComment,
+      whoCanMessage
+    })
+    // 更新缓存
+    const loginVo = await getSignUserRedis(userId!)
+    if (loginVo) {
+      const newLoginVo = {
+        ...loginVo,
+        config: newConfig
+      }
+      await setSignUserRedis(newLoginVo)
+    }
+    return NextResponse.json(HttpResponse.success(newConfig))
   } catch (error) {
     return NextResponse.json(HttpResponse.error(`${String(error)}`))
   }
