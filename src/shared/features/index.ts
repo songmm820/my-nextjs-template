@@ -2,6 +2,7 @@ import Input, { type InputProps } from './internal/Input'
 import Form, { type FormProps } from './internal/Form'
 import { FormField, type FormFieldProps } from './internal/FormField'
 import Button, { type ButtonProps } from './internal/Button'
+import Radio, { type RadioProps } from './internal/Radio'
 
 export {
   InputProps,
@@ -11,5 +12,7 @@ export {
   FormFieldProps,
   FormField as FormField,
   ButtonProps,
-  Button as Button
+  Button as Button,
+  RadioProps,
+  Radio as Radio
 }

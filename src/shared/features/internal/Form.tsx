@@ -1,3 +1,5 @@
+'use client'
+
 import React, { forwardRef, type JSX, type Ref, useEffect, useId, useImperativeHandle } from 'react'
 import clsx from 'clsx'
 import { type ZodType } from 'zod'
@@ -21,7 +23,7 @@ export type FormProps<T extends FieldValues> = {
   className?: string
   initialValues?: DefaultValues<T>
   schema?: ZodType<T, T> | undefined | null
-  onValueChange?: (values: T) => void
+  onChangeValues?: (values: T) => void
 } & Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'>
 
 export type FormRef<T extends FieldValues> = {
@@ -34,7 +36,7 @@ export type FormRef<T extends FieldValues> = {
 }
 
 const Form = forwardRef(<T extends FieldValues>(props: FormProps<T>, ref: Ref<FormRef<T>>) => {
-  const { className, schema, initialValues, children, onValueChange, ...rest } = props
+  const { className, schema, initialValues, children, onChangeValues, ...rest } = props
 
   const prefix = useId()
   const resolver = schema ? zodResolver(schema) : undefined
@@ -47,8 +49,8 @@ const Form = forwardRef(<T extends FieldValues>(props: FormProps<T>, ref: Ref<Fo
   const liveValues = useWatch({ control: formInstance.control })
 
   useEffect(() => {
-    if (onValueChange) onValueChange(liveValues as T)
-  }, [liveValues, onValueChange])
+    if (onChangeValues) onChangeValues(liveValues as T)
+  }, [liveValues, onChangeValues])
 
   const focusField = async (name: Path<T>) => {
     await formInstance.trigger(name)

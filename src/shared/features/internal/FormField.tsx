@@ -1,3 +1,5 @@
+'use client'
+
 import clsx from 'clsx'
 import { FormFieldContext, useFormContext } from '~/shared/features/context/form-context'
 

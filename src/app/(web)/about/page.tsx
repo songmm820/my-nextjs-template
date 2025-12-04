@@ -1,21 +1,94 @@
 'use client'
 
-import { useTheme } from '~/context/ThemeProvider'
-import { Button } from '~/shared/features'
+import { useRef, useState } from 'react'
+import z from 'zod'
+import { Button, Form, FormField, Input, Radio } from '~/shared/features'
+import { type FormRef } from '~/shared/features/internal/Form'
+
+export const paramsInput = z
+  .object({
+    day: z.string()
+  })
+  .strict()
+type ParamsInput = z.infer<typeof paramsInput>
 
 const AboutPage = () => {
-  const { setThemeColor } = useTheme()
+  const formRef = useRef<FormRef<ParamsInput>>(null)
+  const [radioValue, setRadioValue] = useState<string>('1')
+  const [inputValue, setInputValue] = useState('今天')
 
   return (
-    <div className="h-full w-full flex flex-col justify-center items-center gap-4">
-      <div className="w-20 h-20 bg-primary"></div>
+    <div className="h-full w-120 mx-auto flex flex-col justify-center items-center gap-4">
+      <Radio
+        value={radioValue}
+        onChange={(v) => setRadioValue(v)}
+        options={[
+          {
+            label: '星期一',
+            value: '1',
+            description: '今天是星期一'
+          },
+          {
+            label: '星期二',
+            value: '2',
+            description: '今天是星期二'
+          }
+        ]}
+      />
+
+      <Input value={inputValue} onChange={(v) => setInputValue(v)} />
+
+      <Form<ParamsInput>
+        ref={formRef}
+        initialValues={{
+          day: '1'
+        }}
+      >
+        <FormField<ParamsInput> name="day" label="Radio">
+          <Radio
+            options={[
+              {
+                label: '星期一',
+                value: '1',
+                description: '今天是星期一'
+              },
+              {
+                label: '星期二',
+                value: '2',
+                description: '今天是星期二'
+              },
+              {
+                label: '星期三',
+                value: '3',
+                description: '今天是星期三'
+              },
+              {
+                label: '星期四',
+                value: '4',
+                description: '今天是星期四'
+              },
+              {
+                label: '星期五',
+                value: '5',
+                description: '今天是星期五'
+              },
+              {
+                label: '星期六',
+                value: '6',
+                description: '今天是星期六'
+              }
+            ]}
+          />
+        </FormField>
+      </Form>
+
       <Button
         variant="primary"
         onClick={() => {
-          setThemeColor('#0C2EB6')
+          formRef.current?.reset()
         }}
       >
-        Color
+        Reset
       </Button>
     </div>
   )

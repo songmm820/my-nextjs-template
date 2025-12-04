@@ -53,7 +53,7 @@ const SignInPage = () => {
             email: 'mmsong@yeah.net',
             password: '12345678'
           }}
-          onValueChange={(values) => {
+          onChangeValues={(values) => {
             setEmailLive(values.email)
           }}
         >

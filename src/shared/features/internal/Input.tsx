@@ -1,4 +1,7 @@
+'use client'
+
 import clsx from 'clsx'
+import { useId } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { useFormContext, useFormFieldContext } from '~/shared/features/context/form-context'
 
@@ -6,20 +9,23 @@ export type InputProps = {
   error?: boolean
   defaultValue?: string
   className?: string
-} & React.InputHTMLAttributes<HTMLInputElement>
+  onChange?: (val: string) => void
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>
 
 const BaseInput = (props: InputProps) => {
-  const { id, defaultValue, error, className, ...rest } = props
+  const { id, defaultValue, error, className, onChange, ...rest } = props
+  const uId = useId()
+  const inputId = id ?? uId
   return (
     <input
-      id={id}
+      id={inputId}
       defaultValue={defaultValue}
       className={twMerge(
         clsx(
           [
             'h-11',
             'px-4',
-            'rounded-lg text-md text-666',
+            'rounded-md text-md text-666',
             error
               ? 'ring-1 ring-danger bg-white'
               : 'bg-[#f0f0f0] focus-visible:ring-1 focus-visible:ring-primary focus-visible:bg-white',
@@ -30,6 +36,7 @@ const BaseInput = (props: InputProps) => {
       )}
       {...rest}
       autoComplete="off"
+      onChange={(e) => onChange?.(e.target.value)}
     />
   )
 }
@@ -48,14 +55,17 @@ const Input = (props: InputProps) => {
     const { fieldId, name } = formFieldCtx
     const errorStatus = Boolean(error ?? formInstance.formState.errors[name]?.message)
     const defaultValue = initialValues?.[name]
+    const value = formInstance.watch(name)
     return (
       <BaseInput
         id={id || fieldId}
         error={errorStatus}
-        {...formInstance.register(name)}
         defaultValue={defaultValue}
-        {...rest}
+        value={value}
         autoComplete="off"
+        {...rest}
+        {...formInstance.register(name)}
+        onChange={(val) => formInstance.setValue(name, val, { shouldValidate: true })}
       />
     )
   }
