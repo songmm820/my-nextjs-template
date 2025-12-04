@@ -6,13 +6,17 @@ import { useLoginUser } from '~/context/LoginUserProvider'
 import ThemeColorPicker from '~/shared/components/ThemeColorPicker'
 import { useTheme } from '~/context/ThemeProvider'
 import { type ThemeColorType } from '~/shared/constants'
+import clsx from 'clsx'
 
 const MySettingPage = () => {
   const { user } = useLoginUser()
 
   return (
     <PageContainer>
-      <div className="w-full h-full flex flex-col items-center">
+      <div className={clsx('w-full h-full flex flex-col items-center py-6 rounded-2xl',
+        'bg-gradient-to-br from-primary/5 to-white',
+        'border-3 border-white'
+      )}>
         <div className="w-full text-center text-3xl font-medium">My Setting</div>
         <div className="w-160 mt-4 flex flex-col">
           <div className="w-full flex justify-center">

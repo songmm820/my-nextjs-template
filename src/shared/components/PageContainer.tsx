@@ -6,8 +6,8 @@ type PageContainerProps = {
 const PageContainer = (props: PageContainerProps) => {
   const { children } = props
   return (
-    <div className="w-full h-full min-h-100">
-      <div className="h-full max-w-300 mx-auto px-6 py-6">{children}</div>
+    <div className="w-full h-full min-h-100 bg-[#f5f5f7]">
+      <div className="h-full max-w-300 mx-auto px-6 py-4">{children}</div>
     </div>
   )
 }
