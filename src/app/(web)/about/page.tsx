@@ -41,7 +41,7 @@ const AboutPage = () => {
       <Form<ParamsInput>
         ref={formRef}
         initialValues={{
-          day: '1'
+          day: '3'
         }}
       >
         <FormField<ParamsInput> name="day" label="Radio">
