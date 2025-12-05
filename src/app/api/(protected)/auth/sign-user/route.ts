@@ -1,20 +1,22 @@
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
-import { type UserVO, type UserConfigVO } from '~/types/user-api'
+import { type UserVO, type UserConfigVO, type UserExpVO } from '~/types/user-api'
 import { userConfigUpdateSchema } from '~/shared/zod-schemas/user.schema'
 import {
   dbQueryUserById,
   dbQueryUserConfigById,
+  dbQueryUserExpById,
   dbUpdateUserConfigById,
-  redisGetSignUser,
-  redisGetUserConfig,
-  redisSetUserConfig
+  redisGetSignUser
 } from '~/shared/db'
+import { redisGetUserConfig, redisSetUserConfig } from '~/shared/db/user-redis'
+import { calculateLevelExp } from '~/shared/lib/level'
 
 type ApiResponse = {
   user: UserVO
   config: UserConfigVO
+  level: UserExpVO
 }
 
 // 查询当前登录用户信息
@@ -24,16 +26,21 @@ export async function GET(request: NextRequest) {
     // 这里一定有验证过身份了，如果没有，在proxy.ts中已经被处理过了
     const payload = await verifyJwtToken(jwtToken!)
     const userId = payload?.userId
+
     // 先获取Redis缓存中的
-    const [cacheSignInfo, cacheUserConfig] = await Promise.all([
+    const [cacheSignInfo, cacheUserConfig, dbExp] = await Promise.all([
       redisGetSignUser(userId!),
-      redisGetUserConfig(userId!)
+      redisGetUserConfig(userId!),
+      dbQueryUserExpById(userId!)
     ])
+    // 计算经验值
+    const expInfo = calculateLevelExp(dbExp?.experience ?? 0)
     if (cacheSignInfo && cacheUserConfig) {
       return NextResponse.json(
         HttpResponse.success<ApiResponse>({
           user: cacheSignInfo.user,
-          config: cacheUserConfig
+          config: cacheUserConfig,
+          level: calculateLevelExp(dbExp?.experience ?? 0)
         })
       )
     }
@@ -47,7 +54,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       HttpResponse.success<ApiResponse>({
         user: dbSignUser,
-        config: dbUserConfig
+        config: dbUserConfig,
+        level: expInfo
       })
     )
   } catch (error) {

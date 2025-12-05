@@ -16,3 +16,10 @@ export type UserConfigVO = Pick<
   SystemUserConfig,
   'themeColor' | 'profileVisibility' | 'onlineStatusVisibleFlag' | 'whoCanComment' | 'whoCanMessage'
 >
+
+// 用户经验信息
+export type UserExpVO = {
+  level: number // 等级
+  exp: number // 当前等级经验
+  maxExp: number // 当前等级升级所需总经验
+}

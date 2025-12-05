@@ -9,46 +9,46 @@ import { type CaptchaGetSchemaInput } from '~/shared/zod-schemas/captcha.schema'
 import { type LoginVO } from '~/types/user-api'
 
 // 登录api
+const signApiUrl: NavRouteHrefType = '/api/auth/sign-in'
 export const signInApi = (p: AuthSignSchemaInput) => {
-  const url: NavRouteHrefType = '/api/auth/sign-in'
-  return axiosInstance.post<AuthSignSchemaInput, LoginVO>(url, p)
+  return axiosInstance.post<AuthSignSchemaInput, LoginVO>(signApiUrl, p)
 }
 export const useSignInSwrAPi = createSwrMutation<AuthSignSchemaInput, LoginVO>(
-  '/api/auth/sign-in',
+  signApiUrl,
   signInApi
 )
 
 // 注册api
+const signUpApiUrl: NavRouteHrefType = '/api/auth/sign-up'
 export function signUpApi(p: Omit<AuthRegisterSchemaInput, 'twoPassword'>) {
-  const url: NavRouteHrefType = '/api/auth/sign-up'
-  return axiosInstance.post<Omit<AuthRegisterSchemaInput, 'twoPassword'>, LoginVO>(url, p)
+  return axiosInstance.post<Omit<AuthRegisterSchemaInput, 'twoPassword'>, LoginVO>(signUpApiUrl, p)
 }
 export const useSignUpSwrAPi = createSwrMutation<
   Omit<AuthRegisterSchemaInput, 'twoPassword'>,
   LoginVO
->('/api/auth/sign-up', signUpApi)
+>(signUpApiUrl, signUpApi)
 
 // 退出登录
+const signOutApiUrl: NavRouteHrefType = '/api/auth/sign-out'
 export async function signOutApi() {
-  const url: NavRouteHrefType = '/api/auth/sign-out'
-  return axiosInstance.post<void, void>(url)
+  return axiosInstance.post<void, void>(signOutApiUrl)
 }
-export const useSignOutSwrAPi = createSwrMutation<void, void>('/api/auth/sign-out', signOutApi)
+export const useSignOutSwrAPi = createSwrMutation<void, void>(signOutApiUrl, signOutApi)
 
 // 查询当前登录用户信息
+const signUserApiUrl: NavRouteHrefType = '/api/auth/sign-user'
 export async function getLoginUserApi() {
-  const url: NavRouteHrefType = '/api/auth/sign-user'
-  return axiosInstance.get<void, LoginVO>(url)
+  return axiosInstance.get<void, LoginVO>(signUserApiUrl)
 }
 export const useGetLoginUserSwrAPi = createSwrMutation<void, LoginVO>(
-  '/api/auth/sign-user',
+  signUserApiUrl,
   getLoginUserApi
 )
 
 // 获取验证码
+const captchaApiUrl: NavRouteHrefType = '/api/auth/captcha'
 export async function getCaptchaApi(p: CaptchaGetSchemaInput) {
-  const url: NavRouteHrefType = '/api/auth/captcha'
-  return fetch(url, {
+  return fetch(captchaApiUrl, {
     method: 'POST',
     body: JSON.stringify(p)
   })

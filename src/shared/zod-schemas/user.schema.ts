@@ -27,3 +27,4 @@ export const userConfigUpdateSchema = z.object({
     .enum(DynamicPermissionEnum, 'Please select a valid permission level for who can message.')
     .optional()
 })
+export type UserConfigUpdateSchemaInput = z.infer<typeof userConfigUpdateSchema>

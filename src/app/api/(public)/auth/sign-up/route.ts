@@ -7,12 +7,12 @@ import { type LoginVO } from '~/types/user-api'
 import {
   redisGetCaptcha,
   redisSetSignUser,
-  redisSetUserConfig,
   redisVerifyCaptcha,
   dbCreateUser,
   dbQueryUserConfigById,
   dbUserExistByEmail
 } from '~/shared/db'
+import { redisSetUserConfig } from '~/shared/db/user-redis'
 
 // 注册
 export async function POST(request: NextRequest) {

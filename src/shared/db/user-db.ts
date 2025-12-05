@@ -132,3 +132,38 @@ export async function dbUpdateUserConfigById(
   })
   return newConfig
 }
+
+/**
+ * 根据用户ID查询用户总经验值
+ *
+ * @param id 用户id
+ */
+export async function dbQueryUserExpById(id: string) {
+  return await prisma.systemUserLevel.findUnique({
+    where: {
+      userId: id
+    },
+    select: {
+      experience: true
+    }
+  })
+}
+
+/**
+ * 用户签到修改经验值
+ *
+ * @param id 用户id
+ * @param increment 经验值增量
+ */
+export async function dbUpdateUserLavelExperienceById(id: string, increment: number) {
+  return await prisma.systemUserLevel.update({
+    where: {
+      userId: id
+    },
+    data: {
+      experience: {
+        increment: increment
+      }
+    }
+  })
+}
