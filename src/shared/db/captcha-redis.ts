@@ -5,6 +5,10 @@ import { type CaptchaTypeEnum, type CaptchaUseEnum } from '~/shared/enums/comm'
 
 const EXPIRE_TIME = 60
 
+const captchaRedisKey = (type: CaptchaTypeEnum, use: CaptchaUseEnum, link: string) => {
+  return `captcha:${type}:${use}:${link}`
+}
+
 /**
  * redis 获取验证码
  *
@@ -12,8 +16,8 @@ const EXPIRE_TIME = 60
  * @param type 验证码类型
  * @param use 验证码用途
  */
-export async function getCaptchaRedis(link: string, type: CaptchaTypeEnum, use: CaptchaUseEnum) {
-  const key = `captcha:${type}:${use}:${link}`
+export async function redisGetCaptcha(link: string, type: CaptchaTypeEnum, use: CaptchaUseEnum) {
+  const key = captchaRedisKey(type, use, link)
   return redis.get(key)
 }
 
@@ -25,13 +29,13 @@ export async function getCaptchaRedis(link: string, type: CaptchaTypeEnum, use: 
  * @param use 验证码用途
  * @param captcha 验证码
  */
-export async function setCaptchaRedis(
+export async function redisSetCaptcha(
   link: string,
-  type: CaptchaUseEnum,
+  type: CaptchaTypeEnum,
   use: CaptchaUseEnum,
   captcha: string
 ) {
-  const key = `captcha:${type}:${use}:${link}`
+  const key = captchaRedisKey(type, use, link)
   return redis.set(key, captcha, 'EX', EXPIRE_TIME)
 }
 
@@ -42,8 +46,8 @@ export async function setCaptchaRedis(
  * @param type 验证码类型
  * @param use 验证码用途
  */
-export async function delCaptchaRedis(link: string, type: CaptchaTypeEnum, use: CaptchaUseEnum) {
-  const key = `captcha:${type}:${use}:${link}`
+export async function redisDelCaptcha(link: string, type: CaptchaTypeEnum, use: CaptchaUseEnum) {
+  const key = captchaRedisKey(type, use, link)
   return redis.del(key)
 }
 
@@ -55,19 +59,19 @@ export async function delCaptchaRedis(link: string, type: CaptchaTypeEnum, use: 
  * @param use 验证码用途
  * @param captcha 验证码
  */
-export async function verifyCaptcha(
+export async function redisVerifyCaptcha(
   link: string,
   type: CaptchaTypeEnum,
   use: CaptchaUseEnum,
   captcha: string
 ) {
-  const dbCaptcha = await getCaptchaRedis(link, type, use)
+  const dbCaptcha = await redisGetCaptcha(link, type, use)
   if (!dbCaptcha) {
     return false
   }
   const isV = dbCaptcha.toLowerCase() === captcha.toLowerCase()
   if (isV) {
-    await delCaptchaRedis(link, type, use)
+    await redisDelCaptcha(link, type, use)
   }
   return isV
 }

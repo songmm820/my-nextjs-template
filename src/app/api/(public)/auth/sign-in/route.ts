@@ -2,11 +2,16 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { authSignSchema } from '~/shared/zod-schemas/auth.schema'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
-import { getCaptchaRedis, verifyCaptcha } from '~/shared/db/captcha-redis'
-import { setSignUserRedis } from '~/shared/db/auth-redis'
-import { dbQueryUserByEmail, dbQueryUserConfigById } from '~/shared/db/user-db'
 import { type LoginVO } from '~/types/user-api'
 import { comparePassword, generateJwtToken, HttpResponse } from '~/shared/utils/server'
+import {
+  dbQueryUserByEmail,
+  dbQueryUserConfigById,
+  redisGetCaptcha,
+  redisSetSignUser,
+  redisSetUserConfig,
+  redisVerifyCaptcha
+} from '~/shared/db'
 
 // 登录
 export async function POST(request: NextRequest) {
@@ -18,15 +23,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(HttpResponse.error(er.message))
     }
     // 校验验证码 邮箱 | 验证码 | 用途 | 类型 | 过期时间是否匹配
-    const dbCaptcha = await getCaptchaRedis(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_IN)
+    const cacheCaptcha = await redisGetCaptcha(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_IN)
     // 如果没有查询到验证码
-    if (!dbCaptcha) {
+    if (!cacheCaptcha) {
       return NextResponse.json(
         HttpResponse.error('The captcha may expired. Please try requesting a new one again. ')
       )
     }
     // 如果验证码不匹配
-    const isV = await verifyCaptcha(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_IN, captcha)
+    const isV = await redisVerifyCaptcha(
+      email,
+      CaptchaTypeEnum.IMAGE,
+      CaptchaUseEnum.SIGN_IN,
+      captcha
+    )
     if (!isV) {
       return NextResponse.json(HttpResponse.error('The captcha may error. '))
     }
@@ -60,8 +70,13 @@ export async function POST(request: NextRequest) {
       },
       config: userConfig
     }
+
     // 保存用户信息
-    setSignUserRedis(signUser).then()
+    redisSetSignUser({
+      token: jwtToken,
+      user: signUser.user
+    }).then()
+    redisSetUserConfig(dbUser.id, userConfig).then()
     return NextResponse.json(HttpResponse.success<LoginVO>(signUser))
   } catch (error) {
     // Handle error

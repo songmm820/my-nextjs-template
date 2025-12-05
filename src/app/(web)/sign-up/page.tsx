@@ -41,7 +41,7 @@ const SignInPage = () => {
         <Form<AuthRegisterSchemaInput>
           ref={formRef}
           schema={authRegisterSchema}
-          onValueChange={(values) => {
+          onChangeValues={(values) => {
             setEmailLive(values.email)
           }}
         >

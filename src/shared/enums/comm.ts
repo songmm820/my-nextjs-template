@@ -1,5 +1,3 @@
-import { VisibilityLevelEnum } from '~/generated/prisma/enums'
-
 // 验证码类型
 export const CaptchaTypeEnum = {
   IMAGE: 'image',

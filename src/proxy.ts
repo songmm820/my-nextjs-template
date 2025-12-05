@@ -7,8 +7,8 @@
 import type { Route } from 'next'
 import { NextResponse, type NextRequest } from 'next/server'
 import { COOKIE_AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
-import { isSignUserRedis } from '~/shared/db/auth-redis'
-import { removeCookieSafe, verifyJwtToken } from './shared/utils/server'
+import { removeCookieSafe, verifyJwtToken } from '~/shared/utils/server'
+import { redisExistsSignUser } from './shared/db'
 
 // 公开路由
 const PUBLIC_ROUTES: Array<NavRouteHrefType> = ['/sign-in', '/sign-up', '/about']
@@ -55,7 +55,7 @@ export async function proxy(request: NextRequest) {
     return await redirectSignIn(request)
   }
   // 查询 登录状态
-  const signUser = await isSignUserRedis(payload.userId)
+  const signUser = await redisExistsSignUser(payload.userId)
   if (!signUser) {
     return await redirectSignIn(request)
   }

@@ -6,13 +6,20 @@ import { redis } from '~/shared/config/redis'
 // 7d
 const EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000
 
+// 登录用户信息Key
+const userSignRedisKey = (userId: string) => `user:sign:${userId}`
+// 用户配置信息Key
+const userConfigRedisKey = (userId: string) => `user:config:${userId}`
+
+type SignUserVO = Pick<LoginVO, 'token' | 'user'>
+
 /**
- * 设置登录用户
+ * 设置登录用户个人信息
  *
  * @param signInfo 登录信息
  */
-export async function setSignUserRedis(signInfo: LoginVO) {
-  const key = `sign:user:${signInfo.user.id}`
+export async function redisSetSignUser(signInfo: SignUserVO) {
+  const key = userSignRedisKey(signInfo.user.id)
   return redis.set(key, JSON.stringify(signInfo), 'EX', EXPIRE_TIME)
 }
 
@@ -21,11 +28,11 @@ export async function setSignUserRedis(signInfo: LoginVO) {
  *
  * @param userId 用户id
  */
-export async function getSignUserRedis(userId: string): Promise<LoginVO | null> {
-  const key = `user:sign:${userId}`
+export async function redisGetSignUser(userId: string): Promise<SignUserVO | null> {
+  const key = userSignRedisKey(userId)
   const signInfo = await redis.get(key)
   if (!signInfo) return null
-  return JSON.parse(signInfo) as LoginVO
+  return JSON.parse(signInfo) as SignUserVO
 }
 
 /**
@@ -33,8 +40,8 @@ export async function getSignUserRedis(userId: string): Promise<LoginVO | null> 
  *
  * @param userId 用户id
  */
-export async function isSignUserRedis(userId: string) {
-  const key = `user:sign:${userId}`
+export async function redisExistsSignUser(userId: string) {
+  const key = userSignRedisKey(userId)
   return redis.exists(key)
 }
 
@@ -43,8 +50,8 @@ export async function isSignUserRedis(userId: string) {
  *
  * @param userId 用户id
  */
-export async function clearSignUserRedis(userId: string) {
-  const key = `user:sign:${userId}`
+export async function redisDelSignUser(userId: string) {
+  const key = userSignRedisKey(userId)
   return redis.del(key)
 }
 
@@ -53,9 +60,9 @@ export async function clearSignUserRedis(userId: string) {
  *
  * @param userId 用户id
  */
-export async function setUserConfigRedis(userId: string, config: string) {
-  const key = `user:config:${userId}`
-  return redis.set(key, config, 'EX', EXPIRE_TIME)
+export async function redisSetUserConfig(userId: string, config: UserConfigVO) {
+  const key = userConfigRedisKey(userId)
+  return redis.set(key, JSON.stringify(config), 'EX', EXPIRE_TIME)
 }
 
 /**
@@ -63,8 +70,8 @@ export async function setUserConfigRedis(userId: string, config: string) {
  *
  * @param userId 用户id
  */
-export async function getUserConfigRedis(userId: string): Promise<UserConfigVO | null> {
-  const key = `user:config:${userId}`
+export async function redisGetUserConfig(userId: string): Promise<UserConfigVO | null> {
+  const key = userConfigRedisKey(userId)
   const config = await redis.get(key)
   return config ? (JSON.parse(config) as UserConfigVO) : null
 }

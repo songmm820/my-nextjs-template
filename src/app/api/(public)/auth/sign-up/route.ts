@@ -2,11 +2,17 @@ import { NextResponse } from 'next/server'
 import { authRegisterSchema } from '~/shared/zod-schemas/auth.schema'
 import type { NextRequest } from 'next/server'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
-import { getCaptchaRedis, verifyCaptcha } from '~/shared/db/captcha-redis'
-import { setSignUserRedis } from '~/shared/db/auth-redis'
-import { dbCreateUser, dbQueryUserConfigById, dbUserExistByEmail } from '~/shared/db/user-db'
 import { generateJwtToken, hashPassword, HttpResponse } from '~/shared/utils/server'
 import { type LoginVO } from '~/types/user-api'
+import {
+  redisGetCaptcha,
+  redisSetSignUser,
+  redisSetUserConfig,
+  redisVerifyCaptcha,
+  dbCreateUser,
+  dbQueryUserConfigById,
+  dbUserExistByEmail
+} from '~/shared/db'
 
 // 注册
 export async function POST(request: NextRequest) {
@@ -18,7 +24,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(HttpResponse.error(er.message))
     }
     // 查询验证码
-    const dbCaptcha = await getCaptchaRedis(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_UP)
+    const dbCaptcha = await redisGetCaptcha(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_UP)
     if (!dbCaptcha) {
       return NextResponse.json(
         HttpResponse.error(
@@ -27,7 +33,12 @@ export async function POST(request: NextRequest) {
       )
     }
     // 如果验证码不匹配
-    const isV = await verifyCaptcha(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_UP, captcha)
+    const isV = await redisVerifyCaptcha(
+      email,
+      CaptchaTypeEnum.IMAGE,
+      CaptchaUseEnum.SIGN_UP,
+      captcha
+    )
     if (!isV) {
       return NextResponse.json(HttpResponse.error('The captcha may error. '))
     }
@@ -61,7 +72,11 @@ export async function POST(request: NextRequest) {
       config: userConfig
     }
     // 保存用户信息
-    setSignUserRedis(signUser).then()
+    redisSetSignUser({
+      token: jwtToken,
+      user: signUser.user
+    }).then()
+    redisSetUserConfig(newDbUser.id, userConfig).then()
     return NextResponse.json(HttpResponse.success<LoginVO>(signUser))
   } catch (error) {
     // Handle error
