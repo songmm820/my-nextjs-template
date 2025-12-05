@@ -4,7 +4,17 @@ import * as Minio from 'minio'
 import { randomUUID } from 'node:crypto'
 import { type MinioFolderEnum } from '~/shared/enums/comm'
 
-const BUCKET_NAME = 'my-bucket'
+/**
+ * 设置桶权限为公有读
+ *
+ * 1. 设置桶权限为公有读
+ * wget https://dl.min.io/client/mc/release/linux-amd64/mc chmod +x mc mv mc /usr/local/bin/
+ * mc alias set local http://127.0.0.1:9000 minio_3Aa7hw minio_S2pcdc
+ * mc policy set public local/my-bucket
+ * mc anonymous set public local/my-bucket
+ */
+
+const BUCKET_NAME = process.env.MINIO_BUCKET_NAME!
 
 const mimeToExt: Record<string, string> = {
   'image/jpeg': 'jpg',
@@ -25,11 +35,25 @@ const minio = new Minio.Client({
 
 type UploadResponseType = {
   url: string
-  objectName: string
 }
 
 const objectKey = (type: MinioFolderEnum, ext?: string) =>
   `v1/${type}/${randomUUID()}${ext ? `.${ext}` : ''}`
+
+/**
+ * 生成 MinIO 公有读桶的永久链接（核心工具函数）
+ *
+ * @param objectKey MinIO 对象的唯一 Key
+ * @returns 无签名、永久有效的访问链接
+ */
+export function getMinioPermanentUrl(objectKey: string): string {
+  // 1. 处理协议头（HTTP/HTTPS）
+  const protocol = process.env.MINIO_USE_SSL === 'true' ? 'https://' : 'http://'
+  // 2. 处理端口（仅非默认端口时拼接：HTTPS默认443，HTTP默认80）
+  const port = Number(process.env.MINIO_PORT)
+  const bucketName = process.env.MINIO_BUCKET_NAME
+  return `${protocol}${process.env.MINIO_ENDPOINT}:${port}/${bucketName}/${objectKey}`
+}
 
 /**
  * 判断文件存储桶是否存在
@@ -41,33 +65,12 @@ export async function bucketExists(bName: string) {
 }
 
 /**
- * 将文件桶设为公有读
- *
- * @param bName 文件桶名称
- */
-export async function ensurePublicRead(bName: string) {
-  const policy = {
-    Version: '2012-10-17',
-    Statement: [
-      {
-        Effect: 'Allow',
-        Principal: '*',
-        Action: ['s3:GetObject'],
-        Resource: [`arn:aws:s3:::${bName}/*`]
-      }
-    ]
-  }
-  await minio.setBucketPolicy(bName, JSON.stringify(policy))
-}
-
-/**
  * 创建文件存储桶
  *
  * @param bName 文件桶名称
  */
 export async function createBucket(bName: string) {
   await minio.makeBucket(bName, 'us-east-1')
-  await ensurePublicRead(bName)
 }
 
 /**
@@ -93,7 +96,7 @@ export async function uploadFile(type: MinioFolderEnum, file: File): Promise<Upl
     'Content-Type': file.type,
     'Content-Length': buffer.length.toString()
   })
-  // 24h 有效下载链接
-  const url = await minio.presignedGetObject(BUCKET_NAME, key, 24 * 60 * 60)
-  return { url, objectName: key }
+  // 获取该图片的下载链接
+  const url = getMinioPermanentUrl(key)
+  return { url }
 }

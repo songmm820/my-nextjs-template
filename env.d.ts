@@ -18,6 +18,7 @@ declare namespace NodeJS {
     readonly MINIO_PORT: string
     readonly MINIO_ACCESS_KEY: string
     readonly MINIO_SECRET_KEY: string
+    readonly MINIO_BUCKET_NAME: string
     // 继续追加其他变量...
   }
 }
