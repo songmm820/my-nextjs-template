@@ -1,18 +1,19 @@
 import { axiosInstance } from '~/shared/config/axios-config'
 import { createSwrMutation } from '~/shared/config/swr'
 import { type UserConfigUpdateSchemaInput } from '~/shared/zod-schemas/user.schema'
+import { type UserConfigVO } from '~/types/user-api'
 
 // 修改用户配置
 const updateUserConfigApiUrl = '/api/user/config'
 const updateUserConfigApi = (p: UserConfigUpdateSchemaInput) => {
-  return axiosInstance.put<UserConfigUpdateSchemaInput, UserConfigUpdateSchemaInput>(
+  return axiosInstance.put<UserConfigUpdateSchemaInput, UserConfigVO>(
     updateUserConfigApiUrl,
     p
   )
 }
 export const useUpdateUserConfigSwrApi = createSwrMutation<
   UserConfigUpdateSchemaInput,
-  UserConfigUpdateSchemaInput
+  UserConfigVO
 >(updateUserConfigApiUrl, updateUserConfigApi)
 
 // 用户每日签到

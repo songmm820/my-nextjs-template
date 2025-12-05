@@ -16,7 +16,7 @@ import { calculateLevelExp } from '~/shared/lib/level'
 type ApiResponse = {
   user: UserVO
   config: UserConfigVO
-  level: UserExpVO
+  growthValue: UserExpVO
 }
 
 // 查询当前登录用户信息
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
         HttpResponse.success<ApiResponse>({
           user: cacheSignInfo.user,
           config: cacheUserConfig,
-          level: calculateLevelExp(dbExp?.experience ?? 0)
+          growthValue: expInfo
         })
       )
     }
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       HttpResponse.success<ApiResponse>({
         user: dbSignUser,
         config: dbUserConfig,
-        level: expInfo
+        growthValue: expInfo
       })
     )
   } catch (error) {
@@ -66,7 +66,8 @@ export async function GET(request: NextRequest) {
 // 更新当前登录用户信息
 export async function PUT(request: NextRequest) {
   try {
-    const { themeColor, profileVisibility, whoCanComment, whoCanMessage } = await request.json()
+    const { themeColor, profileVisibility, whoCanComment, whoCanMessage, onlineStatusVisibleFlag } =
+      await request.json()
     const vr = userConfigUpdateSchema.safeParse({
       themeColor,
       profileVisibility,
@@ -81,15 +82,16 @@ export async function PUT(request: NextRequest) {
     // 这里一定有验证过身份了，如果没有，在proxy.ts中已经被处理过了
     const payload = await verifyJwtToken(jwtToken!)
     const userId = payload?.userId
-    const newConfig = await dbUpdateUserConfigById(userId!, {
+    const dbNewConfig = await dbUpdateUserConfigById(userId!, {
       themeColor,
       profileVisibility,
       whoCanComment,
-      whoCanMessage
+      whoCanMessage,
+      onlineStatusVisibleFlag
     })
     // 更新缓存(不阻塞)
-    redisSetUserConfig(userId!, newConfig).then()
-    return NextResponse.json(HttpResponse.success(newConfig))
+    redisSetUserConfig(userId!, dbNewConfig).then()
+    return NextResponse.json(HttpResponse.success(dbNewConfig))
   } catch (error) {
     return NextResponse.json(HttpResponse.error(`${String(error)}`))
   }

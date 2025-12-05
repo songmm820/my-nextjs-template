@@ -16,7 +16,7 @@ export type UserInfoUpdateSchemaInput = z.infer<typeof userInfoUpdateSchema>
 
 // 修改用户配置
 export const userConfigUpdateSchema = z.object({
-  themeColoe: z.string().optional(),
+  themeColor: z.string().optional(),
   profileVisibility: z
     .enum(VisibilityLevelEnum, 'Please select a valid visibility level for profile visibility.')
     .optional(),

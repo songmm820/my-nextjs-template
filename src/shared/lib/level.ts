@@ -11,7 +11,7 @@ export const calculateLevelExp = (xp: number): CalcLevelResultType => {
   // 第一级经验为0-100 ，第二级经验为101-250，每新增一级经所需升级的验值增加150
   if (xp <= 100) {
     return {
-      level: 1,
+      level: 0,
       exp: xp,
       maxExp: 100
     }

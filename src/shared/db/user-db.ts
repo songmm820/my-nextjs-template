@@ -123,10 +123,17 @@ export async function dbQueryUserConfigById(id: string): Promise<UserConfigVO> {
 export async function dbUpdateUserConfigById(
   id: string,
   config: Prisma.SystemUserConfigUpdateInput
-) {
+): Promise<UserConfigVO> {
   const newConfig = await prisma.systemUserConfig.update({
     where: {
       userId: id
+    },
+    select: {
+      themeColor: true,
+      profileVisibility: true,
+      onlineStatusVisibleFlag: true,
+      whoCanComment: true,
+      whoCanMessage: true
     },
     data: config
   })

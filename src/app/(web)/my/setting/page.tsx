@@ -9,6 +9,7 @@ import { useTheme } from '~/context/ThemeProvider'
 import { type ThemeColorType } from '~/shared/constants'
 import { Radio, type RadioOptionItemType } from '~/shared/features'
 import { DynamicPermissionEnum, VisibilityLevelEnum } from '~/generated/prisma/enums'
+import { useUpdateUserConfigSwrApi } from '~/apis/user-api'
 
 const MySettingPage = () => {
   const { user } = useLoginUser()
@@ -29,7 +30,7 @@ const MySettingPage = () => {
               {user && <Avatar src={user?.avatar} size={150} />}
             </div>
           </div>
-          <div className='flex flex-col gap-6'>
+          <div className="flex flex-col gap-6">
             <ThemeColorSetting />
             <ProfileVisibilitySetting />
             <CommentPermissionSetting />
@@ -43,9 +44,13 @@ const MySettingPage = () => {
 
 const ThemeColorSetting = () => {
   const { themeColor, setThemeColor } = useTheme()
+  const { trigger } = useUpdateUserConfigSwrApi()
 
-  const handleThemeColorChange = (color: ThemeColorType) => {
+  const handleThemeColorChange = async (color: ThemeColorType) => {
     setThemeColor(color)
+    await trigger({
+      themeColor: color
+    })
   }
 
   return (
@@ -72,7 +77,8 @@ const VisibilityLevelEnumObjInfo = {
 }
 
 const ProfileVisibilitySetting = () => {
-  const { config } = useLoginUser()
+  const { config, setConfig } = useLoginUser()
+  const { trigger } = useUpdateUserConfigSwrApi()
   const current = config?.profileVisibility
 
   const options: Array<RadioOptionItemType> = Object.entries(VisibilityLevelEnumObjInfo).map(
@@ -83,10 +89,17 @@ const ProfileVisibilitySetting = () => {
     })
   )
 
+  const handleChange = async (value: string) => {
+    const c = await trigger({
+      profileVisibility: value as VisibilityLevelEnum
+    })
+    setConfig(c.data)
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <div className="text-xl font-medium">Profile Visibility</div>
-      <Radio value={current} options={options} />
+      <Radio value={current} options={options} onChange={handleChange} />
     </div>
   )
 }
@@ -107,7 +120,8 @@ const DynamicPermissionEnumObjInfo = {
 }
 
 const CommentPermissionSetting = () => {
-  const { config } = useLoginUser()
+  const { config, setConfig } = useLoginUser()
+  const { trigger } = useUpdateUserConfigSwrApi()
   const current = config?.whoCanComment
 
   const options: Array<RadioOptionItemType> = Object.entries(DynamicPermissionEnumObjInfo).map(
@@ -118,16 +132,24 @@ const CommentPermissionSetting = () => {
     })
   )
 
+  const handleChange = async (value: string) => {
+    const c = await trigger({
+      whoCanComment: value as DynamicPermissionEnum
+    })
+    setConfig(c.data)
+  }
+
   return (
     <div className=" flex flex-col gap-3">
       <div className="text-xl font-medium">Who Can Comment</div>
-      <Radio value={current} options={options} />
+      <Radio value={current} options={options} onChange={handleChange} />
     </div>
   )
 }
 
 const MessagePermissionSetting = () => {
-  const { config } = useLoginUser()
+  const { config, setConfig } = useLoginUser()
+  const { trigger } = useUpdateUserConfigSwrApi()
   const current = config?.whoCanMessage
 
   const options: Array<RadioOptionItemType> = Object.entries(DynamicPermissionEnumObjInfo).map(
@@ -138,10 +160,17 @@ const MessagePermissionSetting = () => {
     })
   )
 
+  const handleChange = async (value: string) => {
+    const c = await trigger({
+      whoCanMessage: value as DynamicPermissionEnum
+    })
+    setConfig(c.data)
+  }
+
   return (
     <div className=" flex flex-col gap-3">
       <div className="text-xl font-medium">Who Can Message</div>
-      <Radio value={current} options={options} />
+      <Radio value={current} options={options} onChange={handleChange} />
     </div>
   )
 }
