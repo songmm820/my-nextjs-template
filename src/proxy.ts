@@ -8,7 +8,7 @@ import type { Route } from 'next'
 import { NextResponse, type NextRequest } from 'next/server'
 import { COOKIE_AUTHORIZATION, type NavRouteHrefType } from '~/shared/constants'
 import { removeCookieSafe, verifyJwtToken } from '~/shared/utils/server'
-import { redisExistsSignUser } from './shared/db'
+import { redisExistsSignUser } from '~/shared/db'
 
 // 公开路由
 const PUBLIC_ROUTES: Array<NavRouteHrefType> = ['/sign-in', '/sign-up', '/about']
