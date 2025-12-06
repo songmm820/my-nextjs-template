@@ -22,6 +22,7 @@ export const LoginUserProvider = ({ children }: { children: React.ReactNode }) =
   const [growthValue, setGrowthValue] = useState<UserExpVO | null>(null)
   const [isTodaySigned, setIsTodaySigned] = useState<boolean>(false)
 
+
   const setUserInfo = (user: UserVO | null) => {
     if (!user) return
     if (Object.keys(user).length === 0) return

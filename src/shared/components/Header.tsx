@@ -80,8 +80,13 @@ const NavLinks = (props: NavLinksProps) => {
 }
 
 const CreationCenterButton = () => {
+  const router = useRouter()
   return (
-    <Button className="rounded-3xl h-9 bg-primary/90" variant="primary">
+    <Button
+      className="rounded-3xl h-9 bg-primary/90"
+      variant="primary"
+      onClick={() => router.push('/my/post/create')}
+    >
       <span className="text-md">Creation Center</span>
     </Button>
   )

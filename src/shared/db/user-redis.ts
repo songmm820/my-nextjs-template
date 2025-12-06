@@ -2,7 +2,7 @@ import { redis } from '~/shared/config/redis'
 import { type UserConfigVO } from '~/types/user-api'
 
 // 用户配置信息过期时间，单位毫秒 （7天）
-const CONFIG_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000
+const CONFIG_EXPIRE_TIME = 7 * 24 * 60 * 60
 // 签到记录过期时间，单位毫秒 （1年）
 const CHECK_IN_EXPIRE_TIME = 1 * 365 * 24 * 60 * 60
 // 用户配置信息Key
@@ -46,7 +46,7 @@ export async function redisGetUserConfig(userId: string): Promise<UserConfigVO |
  */
 export async function redisUserCheckInTodayCheck(userId: string): Promise<boolean> {
   const key = userCheckInRedisKey(userId)
-  const offset = new Date().getUTCDate() - 1
+  const offset = new Date().getDate() - 1
   const result = await redis.getbit(key, offset)
   return result === 0
 }
@@ -60,7 +60,7 @@ export async function redisUserCheckInTodayCheck(userId: string): Promise<boolea
  */
 export async function redisUserCheckIn(userId: string): Promise<number> {
   const key = userCheckInRedisKey(userId)
-  const today = new Date().getUTCDate()
+  const today = new Date().getDate()
   const offset = today - 1
   const oldValue = await redis.setbit(key, offset, 1)
   // 如果是0，则说明是第一次签到，如果是1，则说明已经签到过了

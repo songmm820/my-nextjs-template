@@ -10,12 +10,12 @@ import { type ThemeColorType } from '~/shared/constants'
 import { Button, Radio, type RadioOptionItemType } from '~/shared/features'
 import { DynamicPermissionEnum, VisibilityLevelEnum } from '~/generated/prisma/enums'
 import { useUpdateUserConfigSwrApi, useUserDailyCheckInSwrApi } from '~/apis/user-api'
-import { toast, Toaster } from 'sonner'
+import { toast } from 'sonner'
 
 const MySettingPage = () => {
   return (
     <PageContainer>
-      <div className={clsx('w-full h-full flex flex-col items-center py-6 rounded-2xl bg-white')}>
+      <div className={clsx('w-full flex flex-col items-center py-6 rounded-2xl bg-white')}>
         <div className="w-160 flex flex-col gap-3">
           <MyProfileSetting />
           <div className="mt-6 flex flex-col gap-6">
@@ -31,7 +31,7 @@ const MySettingPage = () => {
 }
 
 const LevelExp = () => {
-  const { growthValue, isTodaySigned, setGrowthValue } = useLoginUser()
+  const { growthValue, isTodaySigned, setGrowthValue,setTodaySigned } = useLoginUser()
   const { trigger } = useUserDailyCheckInSwrApi()
 
   const handleCheckIn = async () => {
@@ -41,6 +41,7 @@ const LevelExp = () => {
     }
     const { data, error } = await trigger()
     if (!error) {
+      setTodaySigned(true)
       setGrowthValue(data)
     }
   }
@@ -74,7 +75,7 @@ const MyProfileSetting = () => {
   return (
     <div className="flex flex-col gap-3">
       <div className="text-xl font-medium">My Profile</div>
-      <div className="w-full flex items-center gap-6">
+      <div className="w-full flex items-center gap-6 h-40">
         <div className="w-[150px] h-[150px]">
           {user && <Avatar isSquare src={user?.avatar} size={150} />}
         </div>

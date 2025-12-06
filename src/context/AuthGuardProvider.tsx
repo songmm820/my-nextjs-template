@@ -1,8 +1,8 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo } from 'react'
 import { getCookie } from 'cookies-next/client'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { COOKIE_AUTHORIZATION, type ThemeColorType } from '~/shared/constants'
 import { useGetLoginUserSwrAPi, useSignOutSwrAPi } from '~/apis/auth-api'
 import { useLoginUser } from '~/context/LoginUserProvider'
@@ -18,22 +18,18 @@ const AuthGuardProviderContext = createContext<AuthGuardType | null>(null)
 
 export const AuthGuardProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
+  const pathname = usePathname()
   const { setUserInfo, setConfig, setGrowthValue, setTodaySigned } = useLoginUser()
   const { setThemeColor } = useTheme()
 
   const { trigger: signInTrigger } = useGetLoginUserSwrAPi()
   const { trigger: signOutTrigger } = useSignOutSwrAPi()
 
-  const [isLogin, setIsLogin] = useState<boolean>(() => {
-    const tokenCookie = getCookie(COOKIE_AUTHORIZATION)
-    return !!tokenCookie
-  })
   const onSignOut = async () => {
     // remove cookie
     const { error } = await signOutTrigger()
     if (error) return
     deleteCookie(COOKIE_AUTHORIZATION)
-    setIsLogin(false)
     router.push('/sign-in')
   }
 
@@ -49,10 +45,16 @@ export const AuthGuardProvider = ({ children }: { children: React.ReactNode }) =
     })
   }
 
+  const isLogin = useMemo(() => {
+    const tokenCookie = getCookie(COOKIE_AUTHORIZATION)
+    return !!tokenCookie
+  }, [pathname])
+
   useEffect(() => {
-    if (!isLogin) return
+    const isLoginStatus = !!getCookie(COOKIE_AUTHORIZATION)
+    if (!isLoginStatus) return
     onGetSignUserInfo().then()
-  }, [isLogin])
+  }, [pathname])
 
   return (
     <AuthGuardProviderContext.Provider value={{ isLogin: isLogin, onSignOut: onSignOut }}>
