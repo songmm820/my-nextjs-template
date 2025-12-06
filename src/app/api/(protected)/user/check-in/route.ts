@@ -2,7 +2,9 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { CHECK_IN_EXPERIENCE, COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { dbUpdateUserLavelExperienceById } from '~/shared/db'
 import { redisUserCheckIn } from '~/shared/db/user-redis'
+import { calculateLevelExp } from '~/shared/lib/level'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
+import { type UserExpVO } from '~/types/user-api'
 
 // 用户签到
 export async function GET(request: NextRequest) {
@@ -12,8 +14,9 @@ export async function GET(request: NextRequest) {
     const payload = await verifyJwtToken(jwtToken!)
     const userId = payload?.userId
     await redisUserCheckIn(userId!)
-    await dbUpdateUserLavelExperienceById(userId!, CHECK_IN_EXPERIENCE)
-    return NextResponse.json(HttpResponse.success())
+    const dbUserExp = await dbUpdateUserLavelExperienceById(userId!, CHECK_IN_EXPERIENCE)
+    const useExoVo: UserExpVO = calculateLevelExp(dbUserExp.experience)
+    return NextResponse.json(HttpResponse.success<UserExpVO>(useExoVo))
   } catch (error) {
     return NextResponse.json(HttpResponse.error(`${String(error)}`))
   }

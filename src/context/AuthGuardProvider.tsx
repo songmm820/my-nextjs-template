@@ -18,7 +18,7 @@ const AuthGuardProviderContext = createContext<AuthGuardType | null>(null)
 
 export const AuthGuardProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter()
-  const { setUserInfo, setConfig } = useLoginUser()
+  const { setUserInfo, setConfig, setGrowthValue, setTodaySigned } = useLoginUser()
   const { setThemeColor } = useTheme()
 
   const { trigger: signInTrigger } = useGetLoginUserSwrAPi()
@@ -41,9 +41,11 @@ export const AuthGuardProvider = ({ children }: { children: React.ReactNode }) =
     signInTrigger().then(({ data, error }) => {
       if (error) return
       if (!data.user) return
+      setThemeColor(data.config.themeColor as ThemeColorType)
       setUserInfo(data.user)
       setConfig(data.config)
-      setThemeColor(data.config.themeColor as ThemeColorType)
+      setGrowthValue(data.growthValue)
+      setTodaySigned(data.isTodaySigned)
     })
   }
 

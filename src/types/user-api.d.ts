@@ -23,3 +23,11 @@ export type UserExpVO = {
   exp: number // 当前等级经验
   maxExp: number // 当前等级升级所需总经验
 }
+
+// 当前用户信息
+export type CurrentUserVO = {
+  user: UserVO
+  config: UserConfigVO // 配置信息
+  growthValue: UserExpVO // 成长值
+  isTodaySigned: boolean // 今天是否已签到
+}

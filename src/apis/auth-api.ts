@@ -6,7 +6,7 @@ import {
   type AuthSignSchemaInput
 } from '~/shared/zod-schemas/auth.schema'
 import { type CaptchaGetSchemaInput } from '~/shared/zod-schemas/captcha.schema'
-import { type LoginVO } from '~/types/user-api'
+import { type CurrentUserVO, type LoginVO } from '~/types/user-api'
 
 // 登录api
 const signApiUrl: NavRouteHrefType = '/api/auth/sign-in'
@@ -35,12 +35,13 @@ export async function signOutApi() {
 }
 export const useSignOutSwrAPi = createSwrMutation<void, void>(signOutApiUrl, signOutApi)
 
+
 // 查询当前登录用户信息
 const signUserApiUrl: NavRouteHrefType = '/api/auth/sign-user'
 export async function getLoginUserApi() {
-  return axiosInstance.get<void, LoginVO>(signUserApiUrl)
+  return axiosInstance.get<void, CurrentUserVO>(signUserApiUrl)
 }
-export const useGetLoginUserSwrAPi = createSwrMutation<void, LoginVO>(
+export const useGetLoginUserSwrAPi = createSwrMutation<void, CurrentUserVO>(
   signUserApiUrl,
   getLoginUserApi
 )

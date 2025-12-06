@@ -7,30 +7,18 @@ import { useLoginUser } from '~/context/LoginUserProvider'
 import ThemeColorPicker from '~/shared/components/ThemeColorPicker'
 import { useTheme } from '~/context/ThemeProvider'
 import { type ThemeColorType } from '~/shared/constants'
-import { Radio, type RadioOptionItemType } from '~/shared/features'
+import { Button, Radio, type RadioOptionItemType } from '~/shared/features'
 import { DynamicPermissionEnum, VisibilityLevelEnum } from '~/generated/prisma/enums'
-import { useUpdateUserConfigSwrApi } from '~/apis/user-api'
+import { useUpdateUserConfigSwrApi, useUserDailyCheckInSwrApi } from '~/apis/user-api'
+import { toast, Toaster } from 'sonner'
 
 const MySettingPage = () => {
-  const { user } = useLoginUser()
-
   return (
     <PageContainer>
-      <div
-        className={clsx(
-          'w-full h-full flex flex-col items-center py-6 rounded-2xl',
-          'bg-linear-to-br from-primary/5 to-white',
-          'border-2 border-white'
-        )}
-      >
-        <div className="w-full text-center text-3xl font-medium">My Setting</div>
-        <div className="w-160 mt-4 flex flex-col">
-          <div className="w-full flex justify-center">
-            <div className="w-[150px] h-[150px]">
-              {user && <Avatar src={user?.avatar} size={150} />}
-            </div>
-          </div>
-          <div className="flex flex-col gap-6">
+      <div className={clsx('w-full h-full flex flex-col items-center py-6 rounded-2xl bg-white')}>
+        <div className="w-160 flex flex-col gap-3">
+          <MyProfileSetting />
+          <div className="mt-6 flex flex-col gap-6">
             <ThemeColorSetting />
             <ProfileVisibilitySetting />
             <CommentPermissionSetting />
@@ -39,6 +27,74 @@ const MySettingPage = () => {
         </div>
       </div>
     </PageContainer>
+  )
+}
+
+const LevelExp = () => {
+  const { growthValue, isTodaySigned, setGrowthValue } = useLoginUser()
+  const { trigger } = useUserDailyCheckInSwrApi()
+
+  const handleCheckIn = async () => {
+    if (isTodaySigned) {
+      toast.warning('You have already checked in today,  please come back tomorrow.')
+      return
+    }
+    const { data, error } = await trigger()
+    if (!error) {
+      setGrowthValue(data)
+    }
+  }
+
+  return (
+    <div className="bg-primary/2 px-4 pt-2 pb-3 rounded-md">
+      <div className="flex items-center justify-between">
+        <div className="text-999 text-md">
+          <span>
+            {growthValue?.exp} / {growthValue?.maxExp}
+          </span>
+        </div>
+      </div>
+      <div className="mt-2 w-full h-1.5 rounded-full bg-[#ededed]">
+        {growthValue && (
+          <div
+            className="h-full bg-primary rounded-full"
+            style={{ width: `${(growthValue?.exp / growthValue?.maxExp) * 100}%` }}
+          ></div>
+        )}
+      </div>
+      <Button className="h-8 mt-4" block variant="outline" onClick={handleCheckIn}>
+        {isTodaySigned ? 'Checked In' : 'Check In'}
+      </Button>
+    </div>
+  )
+}
+
+const MyProfileSetting = () => {
+  const { user, growthValue } = useLoginUser()
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="text-xl font-medium">My Profile</div>
+      <div className="w-full flex items-center gap-6">
+        <div className="w-[150px] h-[150px]">
+          {user && <Avatar isSquare src={user?.avatar} size={150} />}
+        </div>
+        {user && (
+          <div className="flex flex-col gap-2 justify-center w-52">
+            <div className="mb-2 px-4">
+              <div className="text-666 text-xl flex items-center">
+                <div className="font-medium">{user?.name}</div>
+                <div className="ml-3 bg-primary text-white text-sm rounded-full flex items-center justify-center px-1.5 min-w-5 h-5">
+                  <span className="mr-0.5">Lv</span>
+                  <span>{growthValue?.level}</span>
+                </div>
+              </div>
+              <div className="text-666">{user?.email}</div>
+            </div>
+            <LevelExp />
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 

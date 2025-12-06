@@ -167,6 +167,9 @@ export async function dbUpdateUserLavelExperienceById(id: string, increment: num
     where: {
       userId: id
     },
+    select: {
+      experience: true
+    },
     data: {
       experience: {
         increment: increment

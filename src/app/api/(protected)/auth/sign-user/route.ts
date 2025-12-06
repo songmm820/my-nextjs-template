@@ -1,7 +1,7 @@
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
-import { type UserVO, type UserConfigVO, type UserExpVO } from '~/types/user-api'
+import { type CurrentUserVO } from '~/types/user-api'
 import { userConfigUpdateSchema } from '~/shared/zod-schemas/user.schema'
 import {
   dbQueryUserById,
@@ -10,14 +10,14 @@ import {
   dbUpdateUserConfigById,
   redisGetSignUser
 } from '~/shared/db'
-import { redisGetUserConfig, redisSetUserConfig } from '~/shared/db/user-redis'
+import {
+  redisGetUserConfig,
+  redisSetUserConfig,
+  redisUserCheckInTodayCheck
+} from '~/shared/db/user-redis'
 import { calculateLevelExp } from '~/shared/lib/level'
 
-type ApiResponse = {
-  user: UserVO
-  config: UserConfigVO
-  growthValue: UserExpVO
-}
+type ApiResponse = CurrentUserVO & {}
 
 // 查询当前登录用户信息
 export async function GET(request: NextRequest) {
@@ -28,10 +28,11 @@ export async function GET(request: NextRequest) {
     const userId = payload?.userId
 
     // 先获取Redis缓存中的
-    const [cacheSignInfo, cacheUserConfig, dbExp] = await Promise.all([
+    const [cacheSignInfo, cacheUserConfig, dbExp, cacheCIsheckIn] = await Promise.all([
       redisGetSignUser(userId!),
       redisGetUserConfig(userId!),
-      dbQueryUserExpById(userId!)
+      dbQueryUserExpById(userId!),
+      redisUserCheckInTodayCheck(userId!)
     ])
     // 计算经验值
     const expInfo = calculateLevelExp(dbExp?.experience ?? 0)
@@ -40,7 +41,8 @@ export async function GET(request: NextRequest) {
         HttpResponse.success<ApiResponse>({
           user: cacheSignInfo.user,
           config: cacheUserConfig,
-          growthValue: expInfo
+          growthValue: expInfo,
+          isTodaySigned: !cacheCIsheckIn
         })
       )
     }
@@ -55,7 +57,8 @@ export async function GET(request: NextRequest) {
       HttpResponse.success<ApiResponse>({
         user: dbSignUser,
         config: dbUserConfig,
-        growthValue: expInfo
+        growthValue: expInfo,
+        isTodaySigned: !cacheCIsheckIn
       })
     )
   } catch (error) {

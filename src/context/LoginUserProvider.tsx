@@ -1,13 +1,17 @@
 'use client'
 
 import { createContext, useContext, useState } from 'react'
-import { type UserConfigVO, type UserVO } from '~/types/user-api'
+import { type UserExpVO, type UserConfigVO, type UserVO } from '~/types/user-api'
 
 type LoginUserContextType = {
   user: UserVO | null
   setUserInfo: (user: UserVO) => void
   config: UserConfigVO | null
   setConfig: (config: UserConfigVO) => void
+  growthValue: UserExpVO | null
+  setGrowthValue: (growthValue: UserExpVO) => void
+  isTodaySigned: boolean,
+  setTodaySigned: (isTodaySigned: boolean) => void
 }
 
 const LoginUserProviderContext = createContext<LoginUserContextType | null>(null)
@@ -15,6 +19,8 @@ const LoginUserProviderContext = createContext<LoginUserContextType | null>(null
 export const LoginUserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserVO | null>(null)
   const [config, setConfig] = useState<UserConfigVO | null>(null)
+  const [growthValue, setGrowthValue] = useState<UserExpVO | null>(null)
+  const [isTodaySigned, setIsTodaySigned] = useState<boolean>(false)
 
   const setUserInfo = (user: UserVO | null) => {
     if (!user) return
@@ -28,16 +34,29 @@ export const LoginUserProvider = ({ children }: { children: React.ReactNode }) =
     setConfig(config)
   }
 
+  const setGrowthValueInfo = (growthValue: UserExpVO | null) => {
+    if (!growthValue) return
+    if (Object.keys(growthValue).length === 0) return
+    setGrowthValue(growthValue)
+  }
+
+  const setTodaySigned = (isTodaySigned: boolean) => {
+    setIsTodaySigned(isTodaySigned)
+  }
+
   return (
     <LoginUserProviderContext.Provider
       value={{
         user,
         setUserInfo,
         config,
-        setConfig: setConfigInfo
+        setConfig: setConfigInfo,
+        growthValue,
+        setGrowthValue: setGrowthValueInfo,
+        isTodaySigned,
+        setTodaySigned
       }}
     >
-      {/* 用户信息为空 阻断渲染 */}
       {children}
     </LoginUserProviderContext.Provider>
   )
