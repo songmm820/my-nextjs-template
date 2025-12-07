@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { COOKIE_AUTHORIZATION, type ThemeColorType } from '~/shared/constants'
 import { useGetLoginUserSwrAPi, useSignOutSwrAPi } from '~/apis/auth-api'
 import { useLoginUser } from '~/context/LoginUserProvider'
-import { useTheme } from './ThemeProvider'
+import { useTheme } from '~/context/ThemeProvider'
 import { deleteCookie } from 'cookies-next'
 
 type AuthGuardType = {

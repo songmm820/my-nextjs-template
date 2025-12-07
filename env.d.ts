@@ -19,6 +19,11 @@ declare namespace NodeJS {
     readonly MINIO_ACCESS_KEY: string
     readonly MINIO_SECRET_KEY: string
     readonly MINIO_BUCKET_NAME: string
+
+    readonly TENCENT_COS_SECRET_ID: string
+    readonly TENCENT_COS_SECRET_KEY: string
+    readonly TENCENT_COS_REGION: string
+    readonly TENCENT_COS_BUCKET: string
     // 继续追加其他变量...
   }
 }

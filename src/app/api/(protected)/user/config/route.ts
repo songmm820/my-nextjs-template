@@ -5,7 +5,7 @@ import { userConfigUpdateSchema } from '~/shared/zod-schemas/user.schema'
 import { dbUpdateUserConfigById } from '~/shared/db'
 import { redisSetUserConfig } from '~/shared/db/user-redis'
 
-// 更新当前登录用户信息
+// 更新当前登录用户配置信息
 export async function PUT(request: NextRequest) {
   try {
     const { themeColor, profileVisibility, whoCanComment, whoCanMessage } = await request.json()

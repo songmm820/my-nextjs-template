@@ -1,8 +1,12 @@
 import 'server-only'
 
 import { prisma } from '~prisma/prisma'
-import { DynamicPermissionEnum, type Prisma, VisibilityLevelEnum } from '~/generated/prisma/client'
-import { type UserConfigVO, type UserVO } from '~/types/user-api'
+import { DynamicPermissionEnum, type Prisma } from '~/generated/prisma/client'
+import { type UserConfigVO, type UserProfileInfoVO } from '~/types/user-api'
+import {
+  type UserConfigUpdateSchemaInput,
+  type UserProfileInfoUpdateSchemaInput
+} from '~/shared/zod-schemas/user.schema'
 
 /**
  * 根据邮箱登录
@@ -29,7 +33,7 @@ export async function dbQueryUserByEmail(email: string) {
  *
  * @param id 用户id
  */
-export async function dbQueryUserById(id: string): Promise<UserVO> {
+export async function dbQueryUserById(id: string): Promise<UserProfileInfoVO> {
   const user = await prisma.systemUser.findUnique({
     where: {
       id: id
@@ -70,7 +74,7 @@ export async function dbCreateUser(user: Prisma.SystemUserCreateInput) {
     await prisma.systemUserConfig.create({
       data: {
         userId: dbUser.id,
-        profileVisibility: VisibilityLevelEnum.PUBLIC,
+        profileVisibility: DynamicPermissionEnum.ALL,
         onlineStatusVisibleFlag: true,
         whoCanComment: DynamicPermissionEnum.ALL,
         whoCanMessage: DynamicPermissionEnum.ALL,
@@ -78,6 +82,29 @@ export async function dbCreateUser(user: Prisma.SystemUserCreateInput) {
       }
     })
     return dbUser
+  })
+}
+
+/**
+ * 根据id修改用户个人信息
+ *
+ * @param id 用户id
+ */
+export async function dbUpdateUserProfileInfoById(
+  id: string,
+  prifile: UserProfileInfoUpdateSchemaInput
+): Promise<UserProfileInfoVO> {
+  return await prisma.systemUser.update({
+    where: {
+      id: id
+    },
+    data: prifile,
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      avatar: true
+    }
   })
 }
 
@@ -119,10 +146,13 @@ export async function dbQueryUserConfigById(id: string): Promise<UserConfigVO> {
 
 /**
  * 根据用户ID更新用户的配置信息
+ *
+ * @param id 用户ID
+ * @param config 用户配置信息
  */
 export async function dbUpdateUserConfigById(
   id: string,
-  config: Prisma.SystemUserConfigUpdateInput
+  config: UserConfigUpdateSchemaInput
 ): Promise<UserConfigVO> {
   const newConfig = await prisma.systemUserConfig.update({
     where: {

@@ -2,7 +2,7 @@ import 'server-only'
 
 import * as Minio from 'minio'
 import { randomUUID } from 'node:crypto'
-import { type MinioFolderEnum } from '~/shared/enums/comm'
+import { type ObjectStorageEnum } from '~/shared/enums/comm'
 
 /**
  * 设置桶权限为公有读
@@ -37,7 +37,7 @@ type UploadResponseType = {
   url: string
 }
 
-const objectKey = (type: MinioFolderEnum, ext?: string) =>
+const objectKey = (type: ObjectStorageEnum, ext?: string) =>
   `v1/${type}/${randomUUID()}${ext ? `.${ext}` : ''}`
 
 /**
@@ -88,7 +88,7 @@ export async function removeBucket(bName: string) {
  * @param type 文件类型
  * @param file 文件
  */
-export async function uploadFile(type: MinioFolderEnum, file: File): Promise<UploadResponseType> {
+export async function uploadFile(type: ObjectStorageEnum, file: File): Promise<UploadResponseType> {
   const ext = mimeToExt[file.type] || file.name.split('.').pop()?.toLowerCase() || ''
   const key = objectKey(type, ext)
   const buffer = Buffer.from(await file.arrayBuffer())

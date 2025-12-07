@@ -60,9 +60,9 @@ model SystemUserConfig {
   id                      String                @id @default(cuid())
   userId                  String                @unique @map("user_id") /// 用户ID
   themeColor              String                @map("theme_color") /// 主题颜色
-  profileVisibility       VisibilityLevelEnum   @map("profile_visibility") /// 个人资料可见性
   onlineStatusVisibleFlag Boolean               @map("online_status_visible_flag") /// 是否显示在线状态
   whoCanComment           DynamicPermissionEnum @map("who_can_comment") /// 谁可以评论我的动态
+  profileVisibility       DynamicPermissionEnum   @map("profile_visibility") /// 个人资料可见性
   whoCanMessage           DynamicPermissionEnum @map("who_can_message") /// 谁可以给我发消息
   createdAt               DateTime              @default(now()) @map("created_at")
   updatedAt               DateTime              @updatedAt @map("updated_at")

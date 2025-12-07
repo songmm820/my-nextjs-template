@@ -8,9 +8,28 @@ import ThemeColorPicker from '~/shared/components/ThemeColorPicker'
 import { useTheme } from '~/context/ThemeProvider'
 import { type ThemeColorType } from '~/shared/constants'
 import { Button, Radio, type RadioOptionItemType } from '~/shared/features'
-import { DynamicPermissionEnum, VisibilityLevelEnum } from '~/generated/prisma/enums'
-import { useUpdateUserConfigSwrApi, useUserDailyCheckInSwrApi } from '~/apis/user-api'
+import { DynamicPermissionEnum } from '~/generated/prisma/enums'
+import {
+  useUpdateUserConfigSwrApi,
+  useUpdateUserProfileSwrApi,
+  useUserDailyCheckInSwrApi
+} from '~/apis/user-api'
 import { toast } from 'sonner'
+
+const DynamicPermissionEnumObjInfo = {
+  [DynamicPermissionEnum.ALL]: {
+    label: 'All',
+    description: 'Anyone One'
+  },
+  [DynamicPermissionEnum.FOLLOWERS]: {
+    label: 'Followers',
+    description: 'Only Your Followers'
+  },
+  [DynamicPermissionEnum.SELF]: {
+    label: 'Self',
+    description: 'Only You'
+  }
+}
 
 const MySettingPage = () => {
   return (
@@ -31,7 +50,7 @@ const MySettingPage = () => {
 }
 
 const LevelExp = () => {
-  const { growthValue, isTodaySigned, setGrowthValue,setTodaySigned } = useLoginUser()
+  const { growthValue, isTodaySigned, setGrowthValue, setTodaySigned } = useLoginUser()
   const { trigger } = useUserDailyCheckInSwrApi()
 
   const handleCheckIn = async () => {
@@ -71,12 +90,24 @@ const LevelExp = () => {
 }
 
 const MyProfileSetting = () => {
-  const { user, growthValue } = useLoginUser()
+  const { user, growthValue, setUserInfo } = useLoginUser()
+  const { trigger } = useUpdateUserProfileSwrApi()
+
+  /**
+   * 修改头像信息
+   */
+  const handleAvatarChange = async () => {
+    const { data } = await trigger({
+      name: '2222222222'
+    })
+    setUserInfo(data)
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <div className="text-xl font-medium">My Profile</div>
       <div className="w-full flex items-center gap-6 h-40">
-        <div className="w-[150px] h-[150px]">
+        <div className="w-[150px] h-[150px]" onClick={handleAvatarChange}>
           {user && <Avatar isSquare src={user?.avatar} size={150} />}
         </div>
         {user && (
@@ -118,37 +149,22 @@ const ThemeColorSetting = () => {
   )
 }
 
-const VisibilityLevelEnumObjInfo = {
-  [VisibilityLevelEnum.PUBLIC]: {
-    label: 'Public',
-    description: 'Anyone One'
-  },
-  [VisibilityLevelEnum.PRIVATE]: {
-    label: 'Private',
-    description: 'Only You'
-  },
-  [VisibilityLevelEnum.FOLLOWERS]: {
-    label: 'Followers',
-    description: 'Only Your Followers'
-  }
-}
-
 const ProfileVisibilitySetting = () => {
   const { config, setConfig } = useLoginUser()
   const { trigger } = useUpdateUserConfigSwrApi()
   const current = config?.profileVisibility
 
-  const options: Array<RadioOptionItemType> = Object.entries(VisibilityLevelEnumObjInfo).map(
+  const options: Array<RadioOptionItemType> = Object.entries(DynamicPermissionEnumObjInfo).map(
     ([key, value]) => ({
       label: value.label,
       description: value.description,
-      value: key as VisibilityLevelEnum
+      value: key as DynamicPermissionEnum
     })
   )
 
   const handleChange = async (value: string) => {
     const c = await trigger({
-      profileVisibility: value as VisibilityLevelEnum
+      profileVisibility: value as DynamicPermissionEnum
     })
     setConfig(c.data)
   }
@@ -159,21 +175,6 @@ const ProfileVisibilitySetting = () => {
       <Radio value={current} options={options} onChange={handleChange} />
     </div>
   )
-}
-
-const DynamicPermissionEnumObjInfo = {
-  [DynamicPermissionEnum.ALL]: {
-    label: 'All',
-    description: 'Anyone One'
-  },
-  [DynamicPermissionEnum.FOLLOWERS]: {
-    label: 'Followers',
-    description: 'Only Your Followers'
-  },
-  [DynamicPermissionEnum.SELF]: {
-    label: 'Self',
-    description: 'Only You'
-  }
 }
 
 const CommentPermissionSetting = () => {
@@ -213,7 +214,7 @@ const MessagePermissionSetting = () => {
     ([key, value]) => ({
       label: value.label,
       description: value.description,
-      value: key as VisibilityLevelEnum
+      value: key as DynamicPermissionEnum
     })
   )
 

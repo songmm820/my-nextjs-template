@@ -1,11 +1,11 @@
 'use client'
 
 import { createContext, useContext, useState } from 'react'
-import { type UserExpVO, type UserConfigVO, type UserVO } from '~/types/user-api'
+import { type UserExpVO, type UserConfigVO, type UserProfileInfoVO } from '~/types/user-api'
 
 type LoginUserContextType = {
-  user: UserVO | null
-  setUserInfo: (user: UserVO) => void
+  user: UserProfileInfoVO | null
+  setUserInfo: (user: UserProfileInfoVO) => void
   config: UserConfigVO | null
   setConfig: (config: UserConfigVO) => void
   growthValue: UserExpVO | null
@@ -17,13 +17,13 @@ type LoginUserContextType = {
 const LoginUserProviderContext = createContext<LoginUserContextType | null>(null)
 
 export const LoginUserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserVO | null>(null)
+  const [user, setUser] = useState<UserProfileInfoVO | null>(null)
   const [config, setConfig] = useState<UserConfigVO | null>(null)
   const [growthValue, setGrowthValue] = useState<UserExpVO | null>(null)
   const [isTodaySigned, setIsTodaySigned] = useState<boolean>(false)
 
 
-  const setUserInfo = (user: UserVO | null) => {
+  const setUserInfo = (user: UserProfileInfoVO | null) => {
     if (!user) return
     if (Object.keys(user).length === 0) return
     setUser(user)
