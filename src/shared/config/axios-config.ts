@@ -68,7 +68,7 @@ export class AxiosClientClass {
     return this.config
   }
 
-  setHeaders(key: string, value: string) {
+  setHeaders(key: string, value: string): this {
     this.instance.defaults.headers.common[key] = value
     return this
   }
@@ -98,6 +98,7 @@ export class AxiosClientClass {
   }
 }
 
+// json
 export const axiosInstance = new AxiosClientClass({
   baseURL: '',
   timeout: 6000,

@@ -15,6 +15,11 @@ import {
   useUserDailyCheckInSwrApi
 } from '~/apis/user-api'
 import { toast } from 'sonner'
+import AvatarSettingModal from './AvatarSettingModal'
+import { useState } from 'react'
+import { useObjectStorageUploadSwrApi } from '~/apis/object-storage-api'
+import { ObjectStorage } from '~/shared/enums/comm'
+import { createObjectStorageForm } from '~/shared/utils/client/file'
 
 const DynamicPermissionEnumObjInfo = {
   [DynamicPermissionEnum.ALL]: {
@@ -91,42 +96,67 @@ const LevelExp = () => {
 
 const MyProfileSetting = () => {
   const { user, growthValue, setUserInfo } = useLoginUser()
-  const { trigger } = useUpdateUserProfileSwrApi()
+  const { trigger: updateProfileTrigger } = useUpdateUserProfileSwrApi()
+  const { trigger: uploadFileTrigger } = useObjectStorageUploadSwrApi()
+  const [isShowModalSetting, setIsShowModalSetting] = useState<boolean>(false)
 
-  /**
-   * 修改头像信息
-   */
   const handleAvatarChange = async () => {
-    const { data } = await trigger({
-      name: '2222222222'
-    })
-    setUserInfo(data)
+    setIsShowModalSetting(true)
+  }
+
+  const handleAvatarOk = async (avatar: Blob) => {
+    // @TODO 图片裁剪有问题
+    // blob 转成 file
+    // const file = new File([avatar], 'avatar.png', { type: avatar.type })
+    // const formData = createObjectStorageForm({
+    //   object: file,
+    //   type: ObjectStorage.AVATAR
+    // })
+    // const { data } = await uploadFileTrigger(formData)
+    // const url = data.url
+    // if (url) {
+    //   const { data, error } = await updateProfileTrigger({
+    //     avatar: url
+    //   })
+    //   if (!error) {
+    //     setUserInfo(data)
+    //     setIsShowModalSetting(false)
+    //   }
+    // }
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="text-xl font-medium">My Profile</div>
-      <div className="w-full flex items-center gap-6 h-40">
-        <div className="w-[150px] h-[150px]" onClick={handleAvatarChange}>
-          {user && <Avatar isSquare src={user?.avatar} size={150} />}
-        </div>
-        {user && (
-          <div className="flex flex-col gap-2 justify-center w-52">
-            <div className="mb-2 px-4">
-              <div className="text-666 text-xl flex items-center">
-                <div className="font-medium">{user?.name}</div>
-                <div className="ml-3 bg-primary text-white text-sm rounded-full flex items-center justify-center px-1.5 min-w-5 h-5">
-                  <span className="mr-0.5">Lv</span>
-                  <span>{growthValue?.level}</span>
-                </div>
-              </div>
-              <div className="text-666">{user?.email}</div>
-            </div>
-            <LevelExp />
+    <>
+      <div className="flex flex-col gap-3">
+        <div className="text-xl font-medium">My Profile</div>
+        <div className="w-full flex items-center gap-6 h-40">
+          <div className="w-[150px] h-[150px]" onClick={handleAvatarChange}>
+            {user && <Avatar isSquare src={user?.avatar} size={150} />}
           </div>
-        )}
+          {user && (
+            <div className="flex flex-col gap-2 justify-center w-52">
+              <div className="mb-2 px-4">
+                <div className="text-666 text-xl flex items-center">
+                  <div className="font-medium">{user?.name}</div>
+                  <div className="ml-3 bg-primary text-white text-sm rounded-full flex items-center justify-center px-1.5 min-w-5 h-5">
+                    <span className="mr-0.5">Lv</span>
+                    <span>{growthValue?.level}</span>
+                  </div>
+                </div>
+                <div className="text-666">{user?.email}</div>
+              </div>
+              <LevelExp />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+
+      <AvatarSettingModal
+        open={isShowModalSetting}
+        onClose={() => setIsShowModalSetting(false)}
+        onCropComplete={handleAvatarOk}
+      />
+    </>
   )
 }
 

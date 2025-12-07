@@ -9,7 +9,7 @@ import clsx from 'clsx'
 import Button from './Button'
 
 export type ModalProps = {
-  open: boolean
+  open?: boolean
   title?: React.ReactNode
   children: React.ReactNode
   width?: number
@@ -26,7 +26,7 @@ export type ModalProps = {
 
 const Modal = (props: ModalProps) => {
   const {
-    open,
+    open = false,
     title,
     width = 520,
     children,
@@ -68,8 +68,11 @@ const Modal = (props: ModalProps) => {
   }
 
   const handleCancel = () => {
-    onCancle?.()
-    onClose?.()
+    if (!onCancle) {
+      onClose?.()
+    } else {
+      onCancle?.()
+    }
   }
 
   const handleOk = () => {
@@ -119,8 +122,8 @@ const Modal = (props: ModalProps) => {
               {isShowClose && (
                 <div
                   className={clsx(
-                    'absolute -right-10 top-0 w-8 h-8',
-                    'bg-white rounded-md flex items-center justify-center',
+                    'absolute -right-10 top-0 w-8 h-8 rounded-full',
+                    'bg-white flex items-center justify-center',
                     'cursor-pointer hover:bg-white/90 transition-colors duration-200'
                   )}
                   onClick={handleClose}
@@ -129,10 +132,8 @@ const Modal = (props: ModalProps) => {
                 </div>
               )}
 
-              {title && (
-                <header className="mb-1.5 px-4 font-medium text-333 text-lg">{title}</header>
-              )}
-              <main className="px-4 max-h-100 overflow-auto">{children}</main>
+              {title && <header className="mb-3 px-4 font-medium text-333 text-lg">{title}</header>}
+              <main className="px-4 max-h-200 overflow-auto">{children}</main>
               {(cancelNode || okNode) && (
                 <footer className="mt-6 px-4 w-full flex items-center justify-center gap-6">
                   {cancelNode && (

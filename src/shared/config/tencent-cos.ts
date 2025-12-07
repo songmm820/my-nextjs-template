@@ -87,7 +87,7 @@ export const tencentCosGetObjectUrl = (key: string) => {
     Bucket: BUCKET,
     Region: REGION,
     Key: key,
-    Sign: true // 获取带签名的对象 URL，可选填
+    Sign: false // 获取带签名的对象 URL，可选填，如果桶权限为私有读，可能需要带上签名
   })
 }
 

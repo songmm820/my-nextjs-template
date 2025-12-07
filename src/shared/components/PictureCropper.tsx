@@ -4,14 +4,14 @@ import ReactCrop, { type PercentCrop, type PixelCrop, type Crop } from 'react-im
 import 'react-image-crop/dist/ReactCrop.css'
 
 type PictureCropperProps = {
-  src?: string
+  src: string
   size?: number
   aspectRatio?: number
   onCropComplete?: (blob: Blob) => void
 }
 
 const PictureCropper = (props: PictureCropperProps) => {
-  const { src = '/example/v2-example.jpg', size = 400, aspectRatio = 1, onCropComplete } = props
+  const { src, size = 400, aspectRatio = 1, onCropComplete } = props
   const [crop, setCrop] = useState<Crop>()
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const PictureCropper = (props: PictureCropperProps) => {
       onComplete={handleOnComplete}
     >
       <Image
-        className="w-full h-auto"
+        className="w-auto h-full object-cover"
         src={src}
         width={size}
         height={size}

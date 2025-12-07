@@ -1,15 +1,9 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { useRef, useState } from 'react'
 import z from 'zod'
-// import PictureCropper from '~/shared/components/PictureCropper'
 import { Button, CheckBox, Form, FormField, Input, Modal, Radio } from '~/shared/features'
 import { type FormRef } from '~/shared/features/internal/Form'
-
-const PictureCropper = dynamic(() => import('~/shared/components/PictureCropper'), {
-  ssr: false
-})
 
 export const paramsInput = z
   .object({
@@ -32,11 +26,9 @@ const AboutPage = () => {
 
   return (
     <div className="h-auto w-120 mx-auto flex flex-col justify-center gap-4">
-      <PictureCropper />
-
       <Button onClick={() => setOpenModal(true)}>Open Modal</Button>
       <Modal title="Setting" open={openModal} onClose={() => setOpenModal(false)}>
-        <div className='h-300'>123132123</div>
+        <div className="h-300">123132123</div>
       </Modal>
 
       <CheckBox
