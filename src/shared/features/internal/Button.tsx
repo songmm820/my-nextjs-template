@@ -53,7 +53,7 @@ const Button = (props: ButtonProps) => {
           block ? 'w-full' : 'min-w-31',
           variant === 'default' && 'bg-[#f0f0f0]',
           variant === 'primary' && 'bg-primary text-white ',
-          variant === 'outline' && 'border border-primary text-primary',
+          variant === 'outline' && 'border border-primary text-primary hover:bg-primary/5',
           disabled ? 'cursor-not-allowed' : 'hover:brightness-90 cursor-pointer',
           className
         )
