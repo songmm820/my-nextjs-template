@@ -13,13 +13,6 @@ datasource db {
   provider = "mysql"
 }
 
-/// 可见性等级枚举
-enum VisibilityLevelEnum {
-  PUBLIC /// 公开
-  FOLLOWERS /// 关注者
-  PRIVATE /// 私有（仅自己可见）
-}
-
 /// 动态权限枚举
 enum DynamicPermissionEnum {
   ALL /// 所有人
@@ -62,7 +55,7 @@ model SystemUserConfig {
   themeColor              String                @map("theme_color") /// 主题颜色
   onlineStatusVisibleFlag Boolean               @map("online_status_visible_flag") /// 是否显示在线状态
   whoCanComment           DynamicPermissionEnum @map("who_can_comment") /// 谁可以评论我的动态
-  profileVisibility       DynamicPermissionEnum   @map("profile_visibility") /// 个人资料可见性
+  profileVisibility       DynamicPermissionEnum @map("profile_visibility") /// 个人资料可见性
   whoCanMessage           DynamicPermissionEnum @map("who_can_message") /// 谁可以给我发消息
   createdAt               DateTime              @default(now()) @map("created_at")
   updatedAt               DateTime              @updatedAt @map("updated_at")
@@ -70,4 +63,120 @@ model SystemUserConfig {
 
   @@index([userId, deletedAt])
   @@map("system_user_config")
+}
+
+/// 文章状态枚举
+enum PostStatusEnum {
+  DRAFT /// 草稿
+  PUBLISHED /// 已发布
+  HIDDEN /// 已隐藏（已发布但主动下线）
+  ARCHIVED /// 已归档（历史文章，不再展示）
+}
+
+/// 文章表
+model Post {
+  id          String                @id @default(cuid())
+  title       String                @map("title") @db.VarChar(200) /// 标题
+  summary     String?               @map("summary") @db.VarChar(200) /// 摘要
+  content     String                @map("content") @db.Text /// 内容
+  coverImage  String?               @map("cover_image") /// 封面图片
+  tag         String?               @map("tag") /// 标签
+  visibility  DynamicPermissionEnum @map("visibility") /// 文章可见性
+  status      PostStatusEnum        @map("status") /// 文章状态
+  isPinned    Boolean               @map("is_pinned") /// 是否置顶
+  publishedAt DateTime?             @map("published_at") /// 发布时间
+  createdAt   DateTime              @default(now()) @map("created_at")
+  updatedAt   DateTime              @updatedAt @map("updated_at")
+  deletedAt   DateTime?             @map("deleted_at")
+
+  @@index([visibility, isPinned, publishedAt, deletedAt])
+  @@map("post")
+}
+
+/// 文章-用户点赞关联表（显式中间表）
+model PostUserLike {
+  id        String    @id @default(cuid())
+  postId    String    @map("post_id") /// 文章ID
+  userId    String    @map("user_id") /// 用户ID
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@unique([postId, userId]) /// 每个用户只能点赞一次
+  @@index([userId, createdAt])
+  @@map("post_user_like")
+}
+
+/// 文章-用户评论关联表（显式中间表）
+model PostUserComment {
+  id        String    @id @default(cuid())
+  postId    String    @map("post_id") /// 文章ID
+  userId    String    @map("user_id") /// 用户ID
+  content   String    @map("content") @db.VarChar(200) /// 评论内容
+  parentId  String?   @map("parent_id") /// 父评论ID
+  likeCount Int    @default(0) @map("like_count") /// 评论点赞数
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@index([postId, userId, createdAt])
+  @@map("post_user_comment")
+}
+
+/// 举报状态枚举
+enum ReportStatusEnum {
+  PENDING /// 待处理
+  ACCEPTED /// 已接受
+  IGNORED /// 已忽略
+}
+
+/// 文章举报表
+model PostReport {
+  id         String           @id @default(cuid())
+  postId     String           @map("post_id")
+  reporterId String           @map("reporter_id")
+  reason     String           @db.VarChar(100) /// 举报理由
+  status     ReportStatusEnum @default(PENDING) /// 处理状态
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  @@index([postId])
+  @@index([status, createdAt])
+  @@map("blog_post_report")
+}
+
+/// 通知类型枚举
+enum NotificationEnum {
+  LIKE /// 点赞
+  COMMENT /// 评论
+  FOLLOW /// 关注
+}
+
+/// 用户通知表
+model UserNotification {
+  id        String           @id @default(cuid())
+  userId    String           @map("user_id") /// 接收者
+  type      NotificationEnum /// 通知类型
+  postId    String?          @map("post_id") /// 相关文章
+  fromId    String?          @map("from_id") /// 触发者（点赞人、评论人）
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+  deletedAt DateTime?        @map("deleted_at")
+
+  @@index([userId, read, createdAt])
+  @@map("user_notification")
+}
+
+
+/// 历史文章浏览记录表
+model PostHistory {
+  id        String    @id @default(cuid())
+  postId    String    @map("post_id") /// 文章ID
+  userId    String    @map("user_id") /// 用户ID
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@index([userId, createdAt])
+  @@map("post_history")
 }
