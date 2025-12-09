@@ -1,31 +1,31 @@
 import { axiosInstance } from '~/shared/config/axios-config'
 import { createSwrMutation } from '~/shared/config/swr'
 import {
-  type UserProfileInfoUpdateSchemaInput,
-  type UserConfigUpdateSchemaInput
+  type UserProfileInfoUpdateDTOSchema,
+  type UserConfigUpdateDTOSchema
 } from '~/shared/zod-schemas/user.schema'
 import { type UserExpVO, type UserConfigVO, type UserProfileInfoVO } from '~/types/user-api'
 
 // 修改用户个人信息
 const updateUserProfileApiUrl = '/api/user/profile'
-const updateUserProfileApi = (p: UserProfileInfoUpdateSchemaInput) => {
-  return axiosInstance.put<UserProfileInfoUpdateSchemaInput, UserProfileInfoVO>(
+const updateUserProfileApi = (p: UserProfileInfoUpdateDTOSchema) => {
+  return axiosInstance.put<UserProfileInfoUpdateDTOSchema, UserProfileInfoVO>(
     updateUserProfileApiUrl,
     p
   )
 }
 export const useUpdateUserProfileSwrApi = createSwrMutation<
-  UserProfileInfoUpdateSchemaInput,
+  UserProfileInfoUpdateDTOSchema,
   UserProfileInfoVO
 >(updateUserProfileApiUrl, updateUserProfileApi)
 
 // 修改用户配置
 const updateUserConfigApiUrl = '/api/user/config'
-const updateUserConfigApi = (p: UserConfigUpdateSchemaInput) => {
-  return axiosInstance.put<UserConfigUpdateSchemaInput, UserConfigVO>(updateUserConfigApiUrl, p)
+const updateUserConfigApi = (p: UserConfigUpdateDTOSchema) => {
+  return axiosInstance.put<UserConfigUpdateDTOSchema, UserConfigVO>(updateUserConfigApiUrl, p)
 }
 export const useUpdateUserConfigSwrApi = createSwrMutation<
-  UserConfigUpdateSchemaInput,
+  UserConfigUpdateDTOSchema,
   UserConfigVO
 >(updateUserConfigApiUrl, updateUserConfigApi)
 

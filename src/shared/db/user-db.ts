@@ -4,8 +4,8 @@ import { prisma } from '~prisma/prisma'
 import { DynamicPermissionEnum, type Prisma } from '~/generated/prisma/client'
 import { type UserConfigVO, type UserProfileInfoVO } from '~/types/user-api'
 import {
-  type UserConfigUpdateSchemaInput,
-  type UserProfileInfoUpdateSchemaInput
+  type UserConfigUpdateDTOSchema,
+  type UserProfileInfoUpdateDTOSchema
 } from '~/shared/zod-schemas/user.schema'
 
 /**
@@ -92,7 +92,7 @@ export async function dbCreateUser(user: Prisma.SystemUserCreateInput) {
  */
 export async function dbUpdateUserProfileInfoById(
   id: string,
-  prifile: UserProfileInfoUpdateSchemaInput
+  prifile: UserProfileInfoUpdateDTOSchema
 ): Promise<UserProfileInfoVO> {
   return await prisma.systemUser.update({
     where: {
@@ -152,7 +152,7 @@ export async function dbQueryUserConfigById(id: string): Promise<UserConfigVO> {
  */
 export async function dbUpdateUserConfigById(
   id: string,
-  config: UserConfigUpdateSchemaInput
+  config: UserConfigUpdateDTOSchema
 ): Promise<UserConfigVO> {
   const newConfig = await prisma.systemUserConfig.update({
     where: {

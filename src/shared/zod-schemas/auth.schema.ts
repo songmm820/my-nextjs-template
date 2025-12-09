@@ -1,17 +1,17 @@
 import { z } from 'zod'
 
 // 登录
-export const authSignSchema = z
+export const authSignDTOSchema = z
   .object({
     email: z.email('Please enter a valid email address'),
     password: z.string().min(8, 'Password must be at least 8 characters long'),
     captcha: z.string().length(4, 'Captcha must be 4 characters long')
   })
   .strict()
-export type AuthSignSchemaInput = z.infer<typeof authSignSchema>
+export type AuthSignDTOSchema = z.infer<typeof authSignDTOSchema>
 
 // 注册
-export const authRegisterSchema = z
+export const authRegisterDTOSchema = z
   .object({
     email: z.email('Please enter a valid email address'),
     password: z.string().min(8, 'Password must be at least 8 characters long'),
@@ -23,4 +23,4 @@ export const authRegisterSchema = z
     path: ['twoPassword']
   })
   .strict()
-export type AuthRegisterSchemaInput = z.infer<typeof authRegisterSchema>
+export type AuthRegisterDTOSchema = z.infer<typeof authRegisterDTOSchema>

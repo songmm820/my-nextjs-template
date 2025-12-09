@@ -2,7 +2,7 @@ import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
 import { type CurrentUserVO } from '~/types/user-api'
-import { userConfigUpdateSchema } from '~/shared/zod-schemas/user.schema'
+import { userConfigUpdateDTOSchema } from '~/shared/zod-schemas/user.schema'
 import {
   dbQueryUserById,
   dbQueryUserConfigById,
@@ -71,7 +71,7 @@ export async function PUT(request: NextRequest) {
   try {
     const { themeColor, profileVisibility, whoCanComment, whoCanMessage, onlineStatusVisibleFlag } =
       await request.json()
-    const vr = userConfigUpdateSchema.safeParse({
+    const vr = userConfigUpdateDTOSchema.safeParse({
       themeColor,
       profileVisibility,
       whoCanComment,

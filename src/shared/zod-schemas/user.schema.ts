@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { DynamicPermissionEnum } from '~/generated/prisma/enums'
 
 // 修改用户信息
-export const userProfileInfoUpdateSchema = z
+export const userProfileInfoUpdateDTOSchema = z
   .object({
     name: z
       .string()
@@ -12,10 +12,10 @@ export const userProfileInfoUpdateSchema = z
     avatar: z.url('This avatar url is invalid.').optional()
   })
   .strict()
-export type UserProfileInfoUpdateSchemaInput = z.infer<typeof userProfileInfoUpdateSchema>
+export type UserProfileInfoUpdateDTOSchema = z.infer<typeof userProfileInfoUpdateDTOSchema>
 
 // 修改用户配置
-export const userConfigUpdateSchema = z.object({
+export const userConfigUpdateDTOSchema = z.object({
   themeColor: z.string().optional(),
   profileVisibility: z
     .enum(DynamicPermissionEnum, 'Please select a valid visibility level for profile visibility.')
@@ -28,4 +28,4 @@ export const userConfigUpdateSchema = z.object({
     .optional(),
   onlineStatusVisibleFlag: z.boolean().optional()
 })
-export type UserConfigUpdateSchemaInput = z.infer<typeof userConfigUpdateSchema>
+export type UserConfigUpdateDTOSchema = z.infer<typeof userConfigUpdateDTOSchema>

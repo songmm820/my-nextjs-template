@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { captchaGetSchema } from '~/shared/zod-schemas/captcha.schema'
+import { captchaGetDTOSchema } from '~/shared/zod-schemas/captcha.schema'
 import { CaptchaTypeEnum } from '~/shared/enums/comm'
 import { generateCaptchaCode, generateCaptchaImage, HttpResponse } from '~/shared/utils/server'
 import { redisGetCaptcha, redisSetCaptcha } from '~/shared/db'
@@ -8,7 +8,7 @@ import { redisGetCaptcha, redisSetCaptcha } from '~/shared/db'
 export async function POST(request: NextRequest) {
   try {
     const { email, type, use } = await request.json()
-    const vr = captchaGetSchema.safeParse({ email, type, use })
+    const vr = captchaGetDTOSchema.safeParse({ email, type, use })
     if (!vr.success) {
       const [er] = vr.error.issues
       return NextResponse.json(HttpResponse.error(er.message))

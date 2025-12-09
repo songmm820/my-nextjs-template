@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { authRegisterSchema } from '~/shared/zod-schemas/auth.schema'
+import { authRegisterDTOSchema } from '~/shared/zod-schemas/auth.schema'
 import type { NextRequest } from 'next/server'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 import { generateJwtToken, hashPassword, HttpResponse } from '~/shared/utils/server'
@@ -18,7 +18,7 @@ import { redisSetUserConfig } from '~/shared/db/user-redis'
 export async function POST(request: NextRequest) {
   try {
     const { email, password, captcha } = await request.json()
-    const vr = authRegisterSchema.safeParse({ email, password, captcha, twoPassword: password })
+    const vr = authRegisterDTOSchema.safeParse({ email, password, captcha, twoPassword: password })
     if (!vr.success) {
       const [er] = vr.error.issues
       return NextResponse.json(HttpResponse.error(er.message))

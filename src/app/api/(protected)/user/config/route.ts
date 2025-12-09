@@ -1,7 +1,7 @@
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
-import { userConfigUpdateSchema } from '~/shared/zod-schemas/user.schema'
+import { userConfigUpdateDTOSchema } from '~/shared/zod-schemas/user.schema'
 import { dbUpdateUserConfigById } from '~/shared/db'
 import { redisSetUserConfig } from '~/shared/db/user-redis'
 
@@ -9,7 +9,7 @@ import { redisSetUserConfig } from '~/shared/db/user-redis'
 export async function PUT(request: NextRequest) {
   try {
     const { themeColor, profileVisibility, whoCanComment, whoCanMessage } = await request.json()
-    const vr = userConfigUpdateSchema.safeParse({
+    const vr = userConfigUpdateDTOSchema.safeParse({
       themeColor,
       profileVisibility,
       whoCanComment,

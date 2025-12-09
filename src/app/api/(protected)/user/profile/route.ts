@@ -3,16 +3,16 @@ import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { dbUpdateUserProfileInfoById, redisUpdateSignUser } from '~/shared/db'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
 import {
-  userProfileInfoUpdateSchema,
-  type UserProfileInfoUpdateSchemaInput
+  userProfileInfoUpdateDTOSchema,
+  type UserProfileInfoUpdateDTOSchema
 } from '~/shared/zod-schemas/user.schema'
 
 // 更新当前登录用户个人信息
 export async function PUT(request: NextRequest) {
   try {
-    const params = (await request.json()) as UserProfileInfoUpdateSchemaInput
+    const params = (await request.json()) as UserProfileInfoUpdateDTOSchema
     const { name, avatar } = params
-    const vr = userProfileInfoUpdateSchema.safeParse({
+    const vr = userProfileInfoUpdateDTOSchema.safeParse({
       name,
       avatar
     })
