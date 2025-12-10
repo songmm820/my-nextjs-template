@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { CHECK_IN_EXPERIENCE, COOKIE_AUTHORIZATION } from '~/shared/constants'
-import { dbUpdateUserLavelExperienceById } from '~/shared/db'
-import { redisUserCheckIn } from '~/shared/db/user-redis'
+import { dbUpdateUserLavelExperienceById,redisUserCheckIn } from '~/shared/db'
 import { calculateLevelExp } from '~/shared/lib/level'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
 import { type UserExpVO } from '~/types/user-api'

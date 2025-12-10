@@ -9,9 +9,9 @@ import {
   dbQueryUserConfigById,
   redisGetCaptcha,
   redisSetSignUser,
-  redisVerifyCaptcha
+  redisVerifyCaptcha,
+  redisSetUserConfig
 } from '~/shared/db'
-import { redisSetUserConfig } from '~/shared/db/user-redis'
 
 // 登录
 export async function POST(request: NextRequest) {

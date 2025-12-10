@@ -8,13 +8,11 @@ import {
   dbQueryUserConfigById,
   dbQueryUserExpById,
   dbUpdateUserConfigById,
-  redisGetSignUser
-} from '~/shared/db'
-import {
+  redisGetSignUser,
   redisGetUserConfig,
   redisSetUserConfig,
   redisUserCheckInTodayCheck
-} from '~/shared/db/user-redis'
+} from '~/shared/db'
 import { calculateLevelExp } from '~/shared/lib/level'
 
 type ApiResponse = CurrentUserVO & {}

@@ -2,8 +2,7 @@ import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
 import { userConfigUpdateDTOSchema } from '~/shared/zod-schemas/user.schema'
-import { dbUpdateUserConfigById } from '~/shared/db'
-import { redisSetUserConfig } from '~/shared/db/user-redis'
+import { dbUpdateUserConfigById, redisSetUserConfig } from '~/shared/db'
 
 // 更新当前登录用户配置信息
 export async function PUT(request: NextRequest) {

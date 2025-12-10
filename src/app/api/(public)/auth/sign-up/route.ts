@@ -10,9 +10,9 @@ import {
   redisVerifyCaptcha,
   dbCreateUser,
   dbQueryUserConfigById,
-  dbUserExistByEmail
+  dbUserExistByEmail,
+  redisSetUserConfig
 } from '~/shared/db'
-import { redisSetUserConfig } from '~/shared/db/user-redis'
 
 // 注册
 export async function POST(request: NextRequest) {
