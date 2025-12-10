@@ -8,6 +8,7 @@ import { AuthGuardProvider } from '~/context/AuthGuardProvider'
 import { ThemeProvider } from '~/context/ThemeProvider'
 import { COOKIE_THEME_COLOR, type ThemeColorType } from '~/shared/constants'
 import { getCookieSafe } from '~/shared/utils/server'
+import { Toaster } from 'react-hot-toast'
 
 // 图标库链接
 const envIconScriptLink =
@@ -50,6 +51,17 @@ const RootLayout = async ({
             </LoginUserProvider>
           </NextIntlClientProvider>
         </NavigationBlockerProvider>
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              borderRadius: '10px',
+              background: '#333',
+              color: '#fff'
+            }
+          }}
+        />
       </body>
     </html>
   )

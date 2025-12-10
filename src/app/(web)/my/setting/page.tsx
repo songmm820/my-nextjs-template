@@ -14,12 +14,12 @@ import {
   useUpdateUserProfileSwrApi,
   useUserDailyCheckInSwrApi
 } from '~/apis/user-api'
-import { toast } from 'sonner'
 import AvatarSettingModal from './AvatarSettingModal'
 import { useState } from 'react'
 import { useObjectStorageUploadSwrApi } from '~/apis/object-storage-api'
 import { ObjectStorage } from '~/shared/enums/comm'
 import { createObjectStorageForm } from '~/shared/utils/client/file'
+import toast from 'react-hot-toast'
 
 const DynamicPermissionEnumObjInfo = {
   [DynamicPermissionEnum.ALL]: {
@@ -60,7 +60,7 @@ const LevelExp = () => {
 
   const handleCheckIn = async () => {
     if (isTodaySigned) {
-      toast.warning('You have already checked in today,  please come back tomorrow.')
+      toast.error('You have already checked in today')
       return
     }
     const { data, error } = await trigger()

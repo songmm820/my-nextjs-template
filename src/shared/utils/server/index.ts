@@ -1,6 +1,5 @@
 export * from './captcha'
 export * from './cookie'
-export * from './email'
 export * from './http-response'
 export * from './password'
 export * from './jwt'

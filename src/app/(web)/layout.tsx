@@ -5,7 +5,6 @@ import Header from '~/shared/components/Header'
 import Footer from '~/shared/components/Footer'
 import type { NavRouteHrefType } from '~/shared/constants'
 import { usePathname } from 'next/navigation'
-import { Toaster } from 'sonner'
 
 const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
   // 不显示 Header 的 routes
@@ -26,7 +25,6 @@ const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="w-full h-full hidden md:flex flex-col">
-      <Toaster position="top-center" />
       {!hideHeaderRoutes.includes(pathname as NavRouteHrefType) && (
         <>
           <div className="h-16 shrink-0" />
