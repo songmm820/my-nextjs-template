@@ -34,7 +34,7 @@ const Modal = (props: ModalProps) => {
     cancelNode = 'Cancel',
     okNode = 'Ok',
     isShowClose = true,
-    isShowFullScreen = true,
+    isShowFullScreen = false,
     isFullScreen = false,
     onClose,
     onCancle,
