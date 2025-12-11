@@ -37,6 +37,10 @@ export async function redirectSignIn(request: NextRequest) {
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname
+  // 显式放行 images 目录（最关键）
+  if (path.startsWith('/images/')) {
+    return NextResponse.next()
+  }
   // 如果访问 /,则重定向到首页
   if (path === '/') {
     return redirect(request, '/home')
