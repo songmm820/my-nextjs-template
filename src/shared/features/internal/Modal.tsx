@@ -2,7 +2,7 @@
 
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'motion/react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import Icon from '~/shared/components/Icon'
 import clsx from 'clsx'
@@ -14,11 +14,11 @@ export type ModalProps = {
   children: React.ReactNode
   width?: number
   className?: string
-  closeOnBackdrop?: boolean
-  ariaLabel?: string
   cancelNode?: React.ReactNode
   okNode?: React.ReactNode
   isShowClose?: boolean
+  isShowFullScreen?: boolean
+  isFullScreen?: boolean
   onClose?: () => void
   onCancle?: () => void
   onOk?: () => void
@@ -31,21 +31,27 @@ const Modal = (props: ModalProps) => {
     width = 520,
     children,
     className,
-    closeOnBackdrop = true,
-    ariaLabel = 'Modal',
     cancelNode = 'Cancel',
     okNode = 'Ok',
     isShowClose = true,
+    isShowFullScreen = true,
+    isFullScreen = false,
     onClose,
     onCancle,
     onOk
   } = props
   const modalRef = useRef<HTMLDivElement>(null)
+  const [isFullScreenVal, setIsFullScreenVal] = useState<boolean>(isFullScreen)
+
+  const handleClose = () => {
+    onClose?.()
+    setIsFullScreenVal(false)
+  }
 
   useEffect(() => {
     if (!open) return
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose?.()
+      if (e.key === 'Escape') handleClose()
     }
     window.addEventListener('keydown', handleEsc)
     return () => window.removeEventListener('keydown', handleEsc)
@@ -63,15 +69,12 @@ const Modal = (props: ModalProps) => {
     }
   }, [open])
 
-  const handleClose = () => {
-    onClose?.()
-  }
-
   const handleCancel = () => {
     if (!onCancle) {
-      onClose?.()
+      handleClose()
     } else {
       onCancle?.()
+      setIsFullScreenVal(false)
     }
   }
 
@@ -79,11 +82,10 @@ const Modal = (props: ModalProps) => {
     onOk?.()
   }
 
-  useEffect(() => {
-    if (open) {
-      modalRef.current?.focus()
-    }
-  }, [open])
+  // 点击切换全屏
+  const handleFullScreen = () => {
+    setIsFullScreenVal(!isFullScreenVal)
+  }
 
   // 水合期间，返回null
   if (typeof window === 'undefined') {
@@ -99,7 +101,7 @@ const Modal = (props: ModalProps) => {
           className="fixed inset-0 isolate z-100 outline-none"
           role="dialog"
           aria-modal={true}
-          aria-label={ariaLabel}
+          aria-label="Modal"
           tabIndex={-1}
         >
           <motion.div
@@ -107,33 +109,51 @@ const Modal = (props: ModalProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={closeOnBackdrop ? onClose : undefined}
+            onClick={handleClose}
           />
 
           <div className="relative z-20 flex min-h-screen items-center justify-center">
             <motion.div
-              className={twMerge('rounded-lg bg-white shadow-2xl relative pt-4 pb-6', className)}
-              style={{ width: `${width}px` }}
+              className={twMerge('rounded-lg bg-white relative pt-4 pb-6 flex flex-col', className)}
+              style={{
+                width: isFullScreenVal ? '100vw' : `${width}px`,
+                height: isFullScreenVal ? '100vh' : 'auto'
+              }}
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             >
-              {isShowClose && (
-                <div
-                  className={clsx(
-                    'absolute -right-10 top-0 w-8 h-8 rounded-full',
-                    'bg-white flex items-center justify-center',
-                    'cursor-pointer hover:bg-white/90 transition-colors duration-200'
-                  )}
-                  onClick={handleClose}
-                >
-                  <Icon name="close-small" size={22} color="#999999" />
-                </div>
-              )}
+              <div className={clsx('absolute -right-10 top-0.5 flex flex-col gap-2')}>
+                {isShowClose && (
+                  <div
+                    className={clsx(
+                      'w-8 h-8 rounded-lg',
+                      'bg-white flex items-center justify-center',
+                      'cursor-pointer hover:bg-white/90 transition-colors duration-200'
+                    )}
+                    onClick={handleClose}
+                  >
+                    <Icon name="close" size={20} color="#999999" />
+                  </div>
+                )}
+
+                {isShowFullScreen && (
+                  <div
+                    className={clsx(
+                      'w-8 h-8 rounded-lg',
+                      'bg-white flex items-center justify-center',
+                      'cursor-pointer hover:bg-white/90 transition-colors duration-200'
+                    )}
+                    onClick={handleFullScreen}
+                  >
+                    <Icon name="expand-text-input" size={20} color="#999999" />
+                  </div>
+                )}
+              </div>
 
               {title && <header className="mb-3 px-4 font-medium text-333 text-lg">{title}</header>}
-              <main className="px-4 max-h-200 overflow-auto">{children}</main>
+              <main className="flex-1 px-4 max-h-200 overflow-auto">{children}</main>
               {(cancelNode || okNode) && (
                 <footer className="mt-6 px-4 w-full flex items-center justify-center gap-6">
                   {cancelNode && (

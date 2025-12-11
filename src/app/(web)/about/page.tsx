@@ -28,7 +28,7 @@ const AboutPage = () => {
     <div className="h-auto w-120 mx-auto flex flex-col justify-center gap-4">
       <Button onClick={() => setOpenModal(true)}>Open Modal</Button>
       <Modal title="Setting" open={openModal} onClose={() => setOpenModal(false)}>
-        <div className="h-300">123132123</div>
+        <div className="h-20">123132123</div>
       </Modal>
 
       <CheckBox
