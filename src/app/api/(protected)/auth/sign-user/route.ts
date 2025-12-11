@@ -8,10 +8,10 @@ import {
   dbQueryUserConfigById,
   dbQueryUserExpById,
   dbUpdateUserConfigById,
+  dbUserIsCheckInToday,
   redisGetSignUser,
   redisGetUserConfig,
-  redisSetUserConfig,
-  redisUserCheckInTodayCheck
+  redisSetUserConfig
 } from '~/shared/db'
 import { calculateLevelExp } from '~/shared/lib/level'
 
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       redisGetSignUser(userId!),
       redisGetUserConfig(userId!),
       dbQueryUserExpById(userId!),
-      redisUserCheckInTodayCheck(userId!)
+      dbUserIsCheckInToday(userId!)
     ])
     // 计算经验值
     const expInfo = calculateLevelExp(dbExp?.experience ?? 0)

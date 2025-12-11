@@ -226,3 +226,20 @@ export async function dbUserCheckInById(
     return dbLevel
   })
 }
+
+/**
+ * 判断用户今日是否已签到
+ * 
+ * @param id 用户id
+ */
+export async function dbUserIsCheckInToday(id: string): Promise<boolean> {
+  const count = await prisma.systemUserCheckIn.count({
+    where: {
+      userId: id,
+      createdAt: {
+        gte: new Date(new Date().setHours(0, 0, 0, 0))
+      }
+    }
+  })
+  return count > 0
+}
