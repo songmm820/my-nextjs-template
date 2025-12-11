@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { CHECK_IN_EXPERIENCE, COOKIE_AUTHORIZATION } from '~/shared/constants'
-import { dbUpdateUserLavelExperienceById,redisUserCheckIn } from '~/shared/db'
+import { dbUserCheckInById, redisUserCheckIn } from '~/shared/db'
 import { calculateLevelExp } from '~/shared/lib/level'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
 import { type UserExpVO } from '~/types/user-api'
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const payload = await verifyJwtToken(jwtToken!)
     const userId = payload?.userId
     await redisUserCheckIn(userId!)
-    const dbUserExp = await dbUpdateUserLavelExperienceById(userId!, CHECK_IN_EXPERIENCE)
+    const dbUserExp = await dbUserCheckInById(userId!, CHECK_IN_EXPERIENCE)
     const useExoVo: UserExpVO = calculateLevelExp(dbUserExp.experience)
     return NextResponse.json(HttpResponse.success<UserExpVO>(useExoVo))
   } catch (error) {

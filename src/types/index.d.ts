@@ -57,3 +57,8 @@ export type GetRefType<T extends React.ComponentType<any>> = GetProp<T, 'ref'>
 
 /** 获取一个函数的完整类型 */
 export type GetFunctionType<T extends (...args: any[]) => any> = T
+
+/** 将对象类型 T 中的所有属性类型都变为可空类型。 */
+export type NullableKeys<T> = {
+  [K in keyof T]: T[K] | null;
+};

@@ -1,7 +1,12 @@
 import 'server-only'
 
 import { prisma } from '~prisma/prisma'
-import { DynamicPermissionEnum, type Prisma } from '~/generated/prisma/client'
+import {
+  DynamicPermissionEnum,
+  type SystemUser,
+  type SystemUserLevel,
+  type Prisma
+} from '~/generated/prisma/client'
 import { type UserConfigVO, type UserProfileInfoVO } from '~/types/user-api'
 import {
   type UserConfigUpdateDTOSchema,
@@ -13,7 +18,9 @@ import {
  *
  * @param email 邮箱
  */
-export async function dbQueryUserByEmail(email: string) {
+export async function dbQueryUserByEmail(
+  email: string
+): Promise<Pick<SystemUser, 'id' | 'avatar' | 'email' | 'password' | 'name'> | null> {
   return await prisma.systemUser.findUnique({
     where: {
       email: email
@@ -56,7 +63,7 @@ export async function dbQueryUserById(id: string): Promise<UserProfileInfoVO> {
  *
  * @param user 用户信息(可选字段)
  */
-export async function dbCreateUser(user: Prisma.SystemUserCreateInput) {
+export async function dbCreateUser(user: Prisma.SystemUserCreateInput): Promise<SystemUser> {
   // 开启事务
   return await prisma.$transaction(async (prisma) => {
     // 1.创建用户
@@ -187,23 +194,35 @@ export async function dbQueryUserExpById(id: string) {
 }
 
 /**
- * 用户签到修改经验值
+ * 用户签到
  *
  * @param id 用户id
- * @param increment 经验值增量
  */
-export async function dbUpdateUserLavelExperienceById(id: string, increment: number) {
-  return await prisma.systemUserLevel.update({
-    where: {
-      userId: id
-    },
-    select: {
-      experience: true
-    },
-    data: {
-      experience: {
-        increment: increment
+export async function dbUserCheckInById(
+  id: string,
+  increment: number
+): Promise<Pick<SystemUserLevel, 'experience'>> {
+  return await prisma.$transaction(async (prisma) => {
+    // 1.更新用户经验值
+    const dbLevel = await prisma.systemUserLevel.update({
+      where: {
+        userId: id
+      },
+      select: {
+        experience: true
+      },
+      data: {
+        experience: {
+          increment: increment
+        }
       }
-    }
+    })
+    // 2.更新用户签到记录
+    await prisma.systemUserCheckIn.create({
+      data: {
+        userId: id
+      }
+    })
+    return dbLevel
   })
 }
