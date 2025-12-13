@@ -10,7 +10,7 @@ type AvatarProps = {
 const Avatar = (props: AvatarProps) => {
   const { src, size, isSquare = false } = props
 
-  const avatar = src || '/example/v2-example.jpg'
+  const avatar = src || '/images/example/v2-example.jpg'
 
   return (
     <Image
