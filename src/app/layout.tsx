@@ -56,7 +56,7 @@ const RootLayout = async ({
           toastOptions={{
             duration: 3000,
             style: {
-              borderRadius: '10px',
+              borderRadius: '50px',
               background: '#333',
               color: '#fff'
             }

@@ -11,16 +11,18 @@ import Button from './Button'
 export type ModalProps = {
   open?: boolean
   title?: React.ReactNode
-  children: React.ReactNode
+  children?: React.ReactNode
   width?: number
   className?: string
-  cancelNode?: React.ReactNode
-  okNode?: React.ReactNode
+  okText?: string
+  cancelText?: string
   isShowClose?: boolean
   isShowFullScreen?: boolean
   isFullScreen?: boolean
+  container?: HTMLElement
+  duration?: number
   onClose?: () => void
-  onCancle?: () => void
+  onCancel?: () => void
   onOk?: () => void
 }
 
@@ -31,13 +33,15 @@ const Modal = (props: ModalProps) => {
     width = 520,
     children,
     className,
-    cancelNode = 'Cancel',
-    okNode = 'Ok',
+    cancelText = 'Cancel',
+    okText = 'Ok',
     isShowClose = true,
     isShowFullScreen = false,
     isFullScreen = false,
+    container,
+    duration = 300,
     onClose,
-    onCancle,
+    onCancel,
     onOk
   } = props
   const modalRef = useRef<HTMLDivElement>(null)
@@ -70,16 +74,20 @@ const Modal = (props: ModalProps) => {
   }, [open])
 
   const handleCancel = () => {
-    if (!onCancle) {
+    if (!onCancel) {
       handleClose()
     } else {
-      onCancle?.()
+      onCancel?.()
       setIsFullScreenVal(false)
     }
   }
 
   const handleOk = () => {
-    onOk?.()
+    if (!onOk) {
+      handleClose()
+    } else {
+      onOk?.()
+    }
   }
 
   // 点击切换全屏
@@ -119,10 +127,15 @@ const Modal = (props: ModalProps) => {
                 width: isFullScreenVal ? '100vw' : `${width}px`,
                 height: isFullScreenVal ? '100vh' : 'auto'
               }}
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              transition={{
+                type: 'spring',
+                stiffness: duration,
+                damping: 30,
+                mass: 1.2
+              }}
             >
               <div className={clsx('absolute -right-10 top-0.5 flex flex-col gap-2')}>
                 {isShowClose && (
@@ -154,16 +167,16 @@ const Modal = (props: ModalProps) => {
 
               {title && <header className="mb-3 px-4 font-medium text-333 text-lg">{title}</header>}
               <main className="flex-1 px-4 max-h-200 overflow-auto">{children}</main>
-              {(cancelNode || okNode) && (
+              {(cancelText || okText) && (
                 <footer className="mt-6 px-4 w-full flex items-center justify-center gap-6">
-                  {cancelNode && (
+                  {cancelText && (
                     <Button className="w-32 h-10" variant="outline" onClick={handleCancel}>
-                      {cancelNode}
+                      {cancelText}
                     </Button>
                   )}
-                  {okNode && (
+                  {okText && (
                     <Button className="w-32 h-10" variant="primary" onClick={handleOk}>
-                      {okNode}
+                      {okText}
                     </Button>
                   )}
                 </footer>
@@ -173,7 +186,7 @@ const Modal = (props: ModalProps) => {
         </div>
       )}
     </AnimatePresence>,
-    document.body
+    container ?? document.body
   )
 }
 

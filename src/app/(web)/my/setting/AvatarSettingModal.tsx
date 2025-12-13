@@ -35,8 +35,8 @@ const AvatarSettingModal = (props: AvatarSettingModalProps) => {
       title="Avatar Setting"
       open={open}
       onClose={onClose}
-      cancelNode="Select Again"
-      onCancle={handleSelectFile}
+      cancelText="Select Again"
+      onCancel={handleSelectFile}
       onOk={handleOk}
     >
       {fileUrl ? (
