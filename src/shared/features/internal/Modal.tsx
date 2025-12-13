@@ -21,6 +21,7 @@ export type ModalProps = {
   isFullScreen?: boolean
   container?: HTMLElement
   duration?: number
+  customFooter?: React.ReactNode
   onClose?: () => void
   onCancel?: () => void
   onOk?: () => void
@@ -35,6 +36,7 @@ const Modal = (props: ModalProps) => {
     className,
     cancelText = 'Cancel',
     okText = 'Ok',
+    customFooter,
     isShowClose = true,
     isShowFullScreen = false,
     isFullScreen = false,
@@ -167,7 +169,9 @@ const Modal = (props: ModalProps) => {
 
               {title && <header className="mb-3 px-4 font-medium text-333 text-lg">{title}</header>}
               <main className="flex-1 px-4 max-h-200 overflow-auto">{children}</main>
-              {(cancelText || okText) && (
+              {customFooter ? (
+                customFooter
+              ) : (
                 <footer className="mt-6 px-4 w-full flex items-center justify-center gap-6">
                   {cancelText && (
                     <Button className="w-32 h-10" variant="outline" onClick={handleCancel}>

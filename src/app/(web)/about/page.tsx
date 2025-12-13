@@ -22,6 +22,15 @@ const AboutPage = () => {
       </Button>
       <Button onClick={() => ModalManager.success('success')}>Toast</Button>
       <Button onClick={() => ModalManager.error('error')}>Toast</Button>
+      <Button
+        onClick={() =>
+          ModalManager.input({
+            value: 'value 123...'
+          })
+        }
+      >
+        Input
+      </Button>
       <Button onClick={() => setOpenModal(true)}>Open Modal</Button>
       <Modal title="Setting" open={openModal} onClose={() => setOpenModal(false)}>
         <div className="h-20">Open</div>

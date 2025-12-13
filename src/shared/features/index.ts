@@ -6,6 +6,7 @@ import Radio, { type RadioProps, type RadioOptionItemType } from './internal/Rad
 import CheckBox, { type CheckBoxOptionItemType, type CheckBoxProps } from './internal/CheckBox'
 import Modal, { type ModalProps } from './internal/Modal'
 import ModalManager from './internal/ModalManager'
+import InputModal from './internal/InputModal'
 
 export {
   InputProps,
@@ -24,5 +25,6 @@ export {
   ModalProps,
   CheckBoxOptionItemType,
   Modal as Modal,
-  ModalManager as ModalManager
+  ModalManager as ModalManager,
+  InputModal as InputModal
 }
