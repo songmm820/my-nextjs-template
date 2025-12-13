@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import type { ModalProps } from './Modal'
 import Modal from './Modal'
-import InputModal, { type InputModalProps } from './InputModal'
+import InputModal from './InputModal'
 import toast from 'react-hot-toast'
 
 type ModalConfig = Omit<ModalProps, 'open'>
@@ -104,14 +104,6 @@ type InputModalOptions = {
   cancelCallback?: () => void
 }
 const InputValueModal = (options: InputModalOptions) => {
-  const config: InputModalProps = {
-    onOk: (value: string) => {
-      options.okCallback?.(value)
-    },
-    onCancel: () => {
-      options.cancelCallback?.()
-    }
-  }
   if (!document) return
   // 清理之前的实例
   if (currentRoot && currentContainer) {
@@ -140,17 +132,16 @@ const InputValueModal = (options: InputModalOptions) => {
   }
 
   const newConfig = {
-    ...config,
-    onCancel: () => {}
+    container: container,
+    onCancel: () => {
+      options.cancelCallback?.()
+      handleClose()
+    }
   }
 
   root.render(
     <InputModal
-      onCancel={() => {
-        config.onCancel?.()
-        handleClose()
-      }}
-      container={container}
+      {...newConfig}
       open={true}
       value={options?.value ?? ''}
       onClose={handleClose}
