@@ -56,9 +56,9 @@ const RootLayout = async ({
           toastOptions={{
             duration: 3000,
             style: {
-              borderRadius: '50px',
-              background: '#333',
-              color: '#fff'
+              borderRadius: '50px'
+              // background: '#333',
+              // color: '#fff'
             }
           }}
         />
