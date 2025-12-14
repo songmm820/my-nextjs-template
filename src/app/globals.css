@@ -58,6 +58,7 @@ body {
 }
 
 input,
+textarea,
 button:focus-visible {
   outline: none;
 }

@@ -26,7 +26,7 @@ model SystemUser {
   name      String /// 用户名
   email     String    @unique /// 邮箱
   avatar    String? /// 头像
-  password  String   @map("password") /// 密码(hashed)
+  password  String    @map("password") /// 密码(hashed)
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
@@ -90,6 +90,7 @@ enum PostStatusEnum {
 /// 文章表
 model Post {
   id          String                @id @default(cuid())
+  userId      String                @map("user_id") /// 用户ID
   title       String                @map("title") @db.VarChar(200) /// 标题
   summary     String?               @map("summary") @db.VarChar(200) /// 摘要
   content     String                @map("content") @db.Text /// 内容
@@ -128,7 +129,7 @@ model PostUserComment {
   userId    String    @map("user_id") /// 用户ID
   content   String    @map("content") @db.VarChar(200) /// 评论内容
   parentId  String?   @map("parent_id") /// 父评论ID
-  likeCount Int    @default(0) @map("like_count") /// 评论点赞数
+  likeCount Int       @default(0) @map("like_count") /// 评论点赞数
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
@@ -180,7 +181,6 @@ model UserNotification {
   @@index([userId, read, createdAt])
   @@map("user_notification")
 }
-
 
 /// 历史文章浏览记录表
 model PostHistory {

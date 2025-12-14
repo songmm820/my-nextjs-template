@@ -5,40 +5,41 @@ import { useId } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { useFormContext, useFormFieldContext } from '~/shared/features/context/form-context'
 
-export type InputProps = {
+export type TextareaProps = {
   error?: boolean
   className?: string
+  rows?: number
   onChange?: (val: string) => void
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>
+} & Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'>
 
-const BaseInput = (props: InputProps) => {
-  const { id, error, className, onChange, ...rest } = props
+const BaseTextarea = (props: TextareaProps) => {
+  const { id, rows = 5, error, className, onChange, ...rest } = props
   const uId = useId()
   const inputId = id ?? uId
   return (
-    <input
+    <textarea
       id={inputId}
+      rows={rows}
       className={twMerge(
         clsx(
           [
-            'h-11 px-4 rounded-md text-md text-666 ',
-            'transition-colors border border-transparent',
+            'min-h-16 px-4 py-2 rounded-md text-md text-666 overflow-auto',
+            'border border-transparent transition-colors duration-300',
             error
               ? 'border-danger bg-white'
               : 'bg-[#f5f5f5] focus-visible:border-primary focus-visible:bg-white',
-            'transition-all duration-300 placeholder:text-999'
+            'placeholder:text-999'
           ],
           className
         )
       )}
       {...rest}
-      autoComplete="off"
       onChange={(e) => onChange?.(e.target.value)}
     />
   )
 }
 
-const Input = (props: InputProps) => {
+const Textarea = (props: TextareaProps) => {
   const { id, error, ...rest } = props
   const formCtx = useFormContext()
   const formFieldCtx = useFormFieldContext()
@@ -46,18 +47,17 @@ const Input = (props: InputProps) => {
 
   if (!isInForm) {
     const errorStatus = error ?? false
-    return <BaseInput id={id} error={errorStatus} {...rest} autoComplete="off" />
+    return <BaseTextarea id={id} error={errorStatus} {...rest} autoComplete="off" />
   } else {
     const { formInstance } = formCtx
     const { fieldId, name } = formFieldCtx
     const errorStatus = Boolean(error ?? formInstance.formState.errors[name]?.message)
     const value = formInstance.watch(name) ?? ''
     return (
-      <BaseInput
+      <BaseTextarea
         id={id || fieldId}
         error={errorStatus}
         value={value}
-        autoComplete="off"
         {...rest}
         onChange={(val) => formInstance.setValue(name, val, { shouldValidate: true })}
       />
@@ -65,4 +65,4 @@ const Input = (props: InputProps) => {
   }
 }
 
-export default Input
+export default Textarea

@@ -7,6 +7,7 @@ import CheckBox, { type CheckBoxOptionItemType, type CheckBoxProps } from './int
 import Modal, { type ModalProps } from './internal/Modal'
 import ModalManager from './internal/ModalManager'
 import InputModal from './internal/InputModal'
+import Textarea from './internal/Textarea'
 
 export {
   InputProps,
@@ -26,5 +27,6 @@ export {
   CheckBoxOptionItemType,
   Modal as Modal,
   ModalManager as ModalManager,
-  InputModal as InputModal
+  InputModal as InputModal,
+  Textarea as Textarea
 }
