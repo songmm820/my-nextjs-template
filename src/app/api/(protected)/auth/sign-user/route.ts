@@ -25,8 +25,8 @@ export async function GET(request: NextRequest) {
     const payload = await verifyJwtToken(jwtToken!)
     const userId = payload?.userId
 
-    // 先获取Redis缓存中的
-    const [cacheSignInfo, cacheUserConfig, dbExp, cacheCIsheckIn] = await Promise.all([
+    // 先获取Redis缓存中的信息和配置
+    const [cacheSignInfo, cacheUserConfig, dbExp, dbIsCheckInToday] = await Promise.all([
       redisGetSignUser(userId!),
       redisGetUserConfig(userId!),
       dbQueryUserExpById(userId!),
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
           user: cacheSignInfo.user,
           config: cacheUserConfig,
           growthValue: expInfo,
-          isTodaySigned: !cacheCIsheckIn
+          isTodaySigned: dbIsCheckInToday
         })
       )
     }
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
         user: dbSignUser,
         config: dbUserConfig,
         growthValue: expInfo,
-        isTodaySigned: !cacheCIsheckIn
+        isTodaySigned: dbIsCheckInToday
       })
     )
   } catch (error) {

@@ -142,6 +142,7 @@ const InputValueModal = (options: InputModalOptions) => {
   root.render(
     <InputModal
       {...newConfig}
+      title={options?.title}
       open={true}
       value={options?.value ?? ''}
       onClose={handleClose}

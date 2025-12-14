@@ -24,7 +24,7 @@ const ThemeColorPicker = (props: ThemeColorPickerProps) => {
               borderColor: color
             }}
             className={clsx(
-              'w-8 h-8 p-0.5 rounded-full border cursor-pointer transition-all duration-500',
+              'w-8 h-8 rounded-full border cursor-pointer transition-all duration-500',
               !isSelected(color) && 'hover:scale-120 hover:border-none'
             )}
             onClick={() => onChange?.(color)}

@@ -229,17 +229,29 @@ export async function dbUserCheckInById(
 
 /**
  * 判断用户今日是否已签到
- * 
+ *
  * @param id 用户id
  */
 export async function dbUserIsCheckInToday(id: string): Promise<boolean> {
+  // 1. 生成「今日0点」和「明日0点」的时间范围（UTC 时区，避免时区偏差）
+  const today = new Date()
+  // 基于 UTC 截断时间，统一时区（关键修复）
+  const startOfDay = new Date(
+    Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0)
+  )
+  // 明日0点（作为时间范围的结束边界）
+  const endOfDay = new Date(startOfDay)
+  endOfDay.setUTCDate(endOfDay.getUTCDate() + 1)
   const count = await prisma.systemUserCheckIn.count({
     where: {
       userId: id,
       createdAt: {
-        gte: new Date(new Date().setHours(0, 0, 0, 0))
+        // 2. 完整的今日时间范围：[今日0点, 明日0点)
+        gte: startOfDay,
+        lt: endOfDay
       }
     }
   })
+  console.log(count, 'asdasd')
   return count > 0
 }
