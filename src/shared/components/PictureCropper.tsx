@@ -73,7 +73,7 @@ const PictureCropper = (props: PictureCropperProps) => {
 
   return (
     <ReactCropDynamic
-      className={clsx(twMerge('w-full h-full > .ReactCrop__child-wrapper:!h-full'), className)}
+      className={clsx(twMerge('w-full'), className)}
       crop={crop}
       locked={false}
       circularCrop={false}

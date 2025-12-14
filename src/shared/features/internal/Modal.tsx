@@ -14,8 +14,8 @@ export type ModalProps = {
   children?: React.ReactNode
   width?: number
   className?: string
-  okText?: string
-  cancelText?: string
+  okText?: string | null
+  cancelText?: string | null
   isShowClose?: boolean
   isShowFullScreen?: boolean
   isFullScreen?: boolean

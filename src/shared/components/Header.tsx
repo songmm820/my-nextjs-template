@@ -8,6 +8,7 @@ import { CustomLink } from '~/shared/components/CustomLink'
 import { usePathname, useRouter } from 'next/navigation'
 import { Button, Input } from '~/shared/features'
 import { type NavRouteHrefType } from '~/shared/constants'
+import Icon from './Icon'
 
 const NAV_LINKS: Array<NavLinkType> = [
   {
@@ -87,6 +88,7 @@ const CreationCenterButton = () => {
       variant="primary"
       onClick={() => router.push('/my/post/create')}
     >
+      <Icon name="repair" color="#fff" />
       <span className="text-md">Creation Center</span>
     </Button>
   )

@@ -252,6 +252,5 @@ export async function dbUserIsCheckInToday(id: string): Promise<boolean> {
       }
     }
   })
-  console.log(count, 'asdasd')
   return count > 0
 }

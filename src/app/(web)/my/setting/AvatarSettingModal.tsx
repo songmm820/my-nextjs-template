@@ -36,7 +36,7 @@ const AvatarSettingModal = (props: AvatarSettingModalProps) => {
       title="Avatar Setting"
       open={open}
       onClose={onClose}
-      cancelText="Select Again"
+      cancelText={fileUrl ? 'Select Again' : null}
       onCancel={handleSelectFile}
       onOk={handleOk}
     >
@@ -54,7 +54,7 @@ const AvatarSettingModal = (props: AvatarSettingModalProps) => {
           onClick={handleSelectFile}
         >
           {url && (
-            <div className='flex flex-col gap-4 justify-center'>
+            <div className="flex flex-col gap-4 justify-center">
               <Image
                 className="h-4/5 w-auto rounded-lg"
                 src={url}
@@ -62,7 +62,7 @@ const AvatarSettingModal = (props: AvatarSettingModalProps) => {
                 height={120}
                 alt=""
               />
-              <span className='text-999 text-center'>Please click to select your images</span>
+              <span className="text-999 text-center">Please click to select your images</span>
             </div>
           )}
         </div>
