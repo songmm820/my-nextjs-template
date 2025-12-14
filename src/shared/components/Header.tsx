@@ -38,8 +38,11 @@ const Header = () => {
           <GlobalSearchInput />
         </div>
         <CreationCenterButton />
+        <div className='mx-2'>
+          <NoticeBell />
+        </div>
         <div
-          className="ml-4 w-10 h-10 flex justify-center items-center cursor-pointer"
+          className="w-10 h-10 flex justify-center items-center cursor-pointer"
           onClick={() => router.push('/my/setting')}
         >
           {user && <Avatar src={user?.avatar} size={36} />}
@@ -100,6 +103,14 @@ const GlobalSearchInput = () => {
       className="rounded-3xl h-9 w-80 bg-transparent ring ring-primary/30"
       placeholder="Search for articles, topics, and users .."
     />
+  )
+}
+
+const NoticeBell = () => {
+  return (
+    <div className="w-8 h-full flex justify-center items-center cursor-pointer">
+      <Icon name="remind" color="#666" size={22}/>
+    </div>
   )
 }
 

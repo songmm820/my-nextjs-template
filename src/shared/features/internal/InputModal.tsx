@@ -41,7 +41,7 @@ const InputModal = (props: InputModalProps) => {
       width={420}
       customFooter={
         <footer className="mt-4 px-12 w-full flex flex-col gap-3">
-          <Button className="w-full h-10 rounded-full" variant="primary" onClick={handleOk}>
+          <Button className="w-full h-10" variant="primary" onClick={handleOk}>
             {okText}
           </Button>
           <Button className="w-full h-10" variant="link" onClick={handleCancel}>
@@ -52,7 +52,7 @@ const InputModal = (props: InputModalProps) => {
     >
       <div className="w-full px-8 py-4">
         <Input
-          className="w-full rounded-full"
+          className="w-full"
           autoFocus
           value={inputValue ?? ''}
           onChange={(value) => {

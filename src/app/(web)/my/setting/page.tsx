@@ -19,8 +19,8 @@ import { useState } from 'react'
 import { useObjectStorageUploadSwrApi } from '~/apis/object-storage-api'
 import { ObjectStorage } from '~/shared/enums/comm'
 import { createObjectStorageForm } from '~/shared/utils/client/file'
-import toast from 'react-hot-toast'
 import Icon from '~/shared/components/Icon'
+import { useAuthGuard } from '~/context/AuthGuardProvider'
 
 const DynamicPermissionEnumObjInfo = {
   [DynamicPermissionEnum.ALL]: {
@@ -40,7 +40,7 @@ const DynamicPermissionEnumObjInfo = {
 const MySettingPage = () => {
   return (
     <PageContainer>
-      <div className={clsx('w-full flex flex-col items-center py-6 rounded-2xl bg-white')}>
+      <div className={clsx('w-full flex flex-col items-center py-6 rounded-2xl bg-white relative')}>
         <div className="w-160 flex flex-col gap-3">
           <MyProfileSetting />
           <div className="mt-6 flex flex-col gap-6">
@@ -50,8 +50,29 @@ const MySettingPage = () => {
             <MessagePermissionSetting />
           </div>
         </div>
+        <div className="absolute right-6 top-4">
+          <Logout />
+        </div>
       </div>
     </PageContainer>
+  )
+}
+
+const Logout = () => {
+  const { onSignOut } = useAuthGuard()
+
+  const handleLogout = () => {
+    ModalManager.confirm({
+      title: 'Logout',
+      content: 'Are you sure you want to logout?',
+      okCallback: onSignOut
+    })
+  }
+
+  return (
+    <div className="inline-flex justify-center cursor-pointer" onClick={handleLogout}>
+      <Icon name="power" color="#999" size={22} />
+    </div>
   )
 }
 
@@ -61,7 +82,7 @@ const LevelExp = () => {
 
   const handleCheckIn = async () => {
     if (isTodaySigned) {
-      toast.error('You have already checked in today')
+      ModalManager.warning('You have already checked in today')
       return
     }
     const { data, error } = await trigger()
@@ -156,8 +177,8 @@ const MyProfileSetting = () => {
                 <div className="text-666 text-xl flex items-center">
                   <div className="flex items-center gap-1">
                     <span className="font-medium">{user?.name}</span>
-                    <div className='cursor-pointer' onClick={() => handleChangeName(user.name)}>
-                      <Icon name="edit" color='#666'/>
+                    <div className="cursor-pointer" onClick={() => handleChangeName(user.name)}>
+                      <Icon name="edit" color="#666" />
                     </div>
                   </div>
                   <div className="ml-3 bg-primary text-white text-sm rounded-full flex items-center justify-center px-1.5 min-w-5 h-5">

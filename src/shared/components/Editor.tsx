@@ -8,24 +8,16 @@ import 'quill/dist/quill.bubble.css'
 import { type GetFunctionParameterType } from '~/types'
 
 const toolbarOptions = [
-  ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-  ['blockquote', 'code-block'],
-  ['link', 'image', 'video', 'formula'],
-
-  [{ header: 1 }, { header: 2 }], // custom button values
-  [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
-  [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
-  [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-  [{ direction: 'rtl' }], // text direction
-
-  [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
-  [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-  [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-  [{ font: [] }],
+  [{ header: [1, 2, 3, 4, 5, 6, false] }], // 标题
+  ['bold', 'italic', 'underline', 'strike'], // 粗体 斜体 下划线 删除线
+  [{ color: [] }, { background: [] }], // 颜色 背景色
+  [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }], // 有序列表 无序列表 任务列表
+  [{ indent: '-1' }, { indent: '+1' }], // 向左缩进 向右缩进
+  [{ script: 'sub' }, { script: 'super' }], // 下标 上标
+  ['blockquote', 'code-block'], // 引用 代码块
+  ['link', 'image', 'video', 'formula'], // 链接 图片 视频 公式
   [{ align: [] }],
-
-  ['clean'] // remove formatting button
+  ['clean'] // 清除格式
 ]
 
 type EditorProps = {
@@ -58,7 +50,7 @@ const EditorComp = (props: EditorProps, ref: Ref<EditorRef>) => {
     const container = containerRef.current
     const editorContainer = container.appendChild(container.ownerDocument.createElement('div'))
     editorContainer.setAttribute('id', 'my-editor')
-    editorContainer.setAttribute('style', 'height: 100%; width: 100%;')
+    editorContainer.setAttribute('style', 'height: 100%; width: 100%;font-size: 16px;')
     const quill = new Quill(editorContainer, {
       theme: theme,
       modules: { toolbar: toolbarOptions }
@@ -95,7 +87,12 @@ const EditorComp = (props: EditorProps, ref: Ref<EditorRef>) => {
     })
   }, [])
 
-  return <div className={clsx('my-editor-container w-full h-full flex flex-col', className)} ref={containerRef} />
+  return (
+    <div
+      className={clsx('my-editor-container w-full h-full text-base flex flex-col', className)}
+      ref={containerRef}
+    />
+  )
 }
 
 const Editor = forwardRef<EditorRef, EditorProps>(EditorComp)

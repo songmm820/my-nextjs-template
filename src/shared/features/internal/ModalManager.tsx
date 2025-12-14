@@ -164,6 +164,10 @@ const ModalManager = {
   error: (message: string) =>
     toast.error(message, {
       icon: '👎'
+    }),
+  warning: (message: string) =>
+    toast(message, {
+      icon: '⚠️'
     })
 }
 
