@@ -69,13 +69,13 @@ model SystemUserConfig {
 model SystemUserCheckIn {
   id        String    @id @default(cuid())
   userId    String    @map("user_id") /// 用户ID
-  date      DateTime  @default(now()) @map("date") /// 签到日期
+  checkDate      DateTime  @default(now()) @map("check_date") /// 签到日期
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  @@unique([userId, date])
-  @@index([userId, date, deletedAt])
+  @@unique([userId, checkDate])
+  @@index([userId, checkDate, deletedAt])
   @@map("system_user_check_in")
 }
 

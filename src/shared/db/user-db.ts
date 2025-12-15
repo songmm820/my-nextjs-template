@@ -254,3 +254,28 @@ export async function dbUserIsCheckInToday(id: string): Promise<boolean> {
   })
   return count > 0
 }
+
+/**
+ * 查询用户指定月份的签到记录列表
+ *
+ * @param id 用户id
+ * @param month 月份
+ */
+export async function dbQueryUserCheckListInByMonth(
+  id: string,
+  month: number
+): Promise<Array<Date>> {
+  const dbCheckList = await prisma.systemUserCheckIn.findMany({
+    where: {
+      userId: id,
+      createdAt: {
+        gte: new Date(month),
+        lt: new Date(month)
+      }
+    },
+    select: {
+      checkDate: true
+    }
+  })
+  return dbCheckList.map((item) => item.checkDate)
+}
