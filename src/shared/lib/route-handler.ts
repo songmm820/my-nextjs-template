@@ -16,9 +16,7 @@ export function createApiHandler(handler: (request: NextRequest) => Promise<Resp
     } catch (error) {
       // Zod 参数校验错误
       if (error instanceof ZodError) {
-        const errors: Array<{
-          [key: string]: string
-        }> = error.issues.map((issue) => {
+        const errors = error.issues.map((issue) => {
           return {
             [String(issue.path)]: issue.message
           }
