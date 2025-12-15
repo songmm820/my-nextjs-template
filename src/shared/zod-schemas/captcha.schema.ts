@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 
 // 获取验证码
-export const captchaGetInput = z.object({
+export const captchaGetInput = z.strictObject({
   email: z.email('Please enter a valid email address').nonempty({
     message: 'Please enter is required'
   }),

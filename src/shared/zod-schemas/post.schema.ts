@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { DynamicPermissionEnum, PostStatusEnum } from '~/generated/prisma/enums'
 
-export const postCreateInput = z.object({
+export const postCreateInput = z.strictObject({
   title: z
     .string('The title is required')
     .min(1, 'The title is required')
