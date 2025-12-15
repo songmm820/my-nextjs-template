@@ -1,7 +1,6 @@
-import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { type NextRequest, NextResponse } from 'next/server'
-import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
-import { dbCreatePost } from '~/shared/db/post-db'
+import { getAuthUserId } from '~/shared/lib/auth'
+import { HttpResponse } from '~/shared/utils/server'
 import { postCreateInput, type PostCreateInputType } from '~/shared/zod-schemas/post.schema'
 
 // 创建文章信息
@@ -13,11 +12,8 @@ export async function POST(request: NextRequest) {
       const [er] = vr.error.issues
       return NextResponse.json(HttpResponse.error(er.message))
     }
-    const jwtToken = request.cookies.get(COOKIE_AUTHORIZATION)?.value
-    // 这里一定有验证过身份了，如果没有，在proxy.ts中已经被处理过了
-    const payload = await verifyJwtToken(jwtToken!)
-    const userId = payload?.userId
-    // const dbPost = await dbCreatePost(userId!, { ...dto })
+    const userId = await getAuthUserId(request)
+    // const dbPost = await dbCreatePost(userId, { ...dto })
     return NextResponse.json(HttpResponse.success({}))
   } catch (error) {
     return NextResponse.json(HttpResponse.error(`${String(error)}`))

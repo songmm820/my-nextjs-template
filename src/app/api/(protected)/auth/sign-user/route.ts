@@ -1,6 +1,5 @@
-import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { type NextRequest, NextResponse } from 'next/server'
-import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
+import { HttpResponse } from '~/shared/utils/server'
 import {
   dbQueryUserById,
   dbQueryUserConfigById,
@@ -17,23 +16,20 @@ import {
   type UserUpdateConfigInputType
 } from '~/shared/zod-schemas/user.schema'
 import { type CurrentUserOutputType } from '~/types/user-api'
+import { getAuthUserId } from '~/shared/lib/auth'
 
 type RouteApiResponse = CurrentUserOutputType & {}
 
 // 查询当前登录用户信息
 export async function GET(request: NextRequest) {
   try {
-    const jwtToken = request.cookies.get(COOKIE_AUTHORIZATION)?.value
-    // 这里一定有验证过身份了，如果没有，在proxy.ts中已经被处理过了
-    const payload = await verifyJwtToken(jwtToken!)
-    const userId = payload?.userId
-
+    const userId = await getAuthUserId(request)
     // 先获取Redis缓存中的信息和配置
     const [cacheSignInfo, cacheUserConfig, dbExp, dbIsCheckInToday] = await Promise.all([
-      redisGetSignUser(userId!),
-      redisGetUserConfig(userId!),
-      dbQueryUserExpById(userId!),
-      dbUserIsCheckInToday(userId!)
+      redisGetSignUser(userId),
+      redisGetUserConfig(userId),
+      dbQueryUserExpById(userId),
+      dbUserIsCheckInToday(userId)
     ])
     // 计算经验值
     const expInfo = calculateLevelExp(dbExp?.experience ?? 0)
@@ -49,11 +45,11 @@ export async function GET(request: NextRequest) {
     }
     // 缓存中没有，从数据库中获取
     const [dbSignUser, dbUserConfig] = await Promise.all([
-      dbQueryUserById(userId!),
-      dbQueryUserConfigById(userId!)
+      dbQueryUserById(userId),
+      dbQueryUserConfigById(userId)
     ])
     // 更新缓存(不阻塞)
-    redisSetUserConfig(userId!, dbUserConfig).then()
+    redisSetUserConfig(userId, dbUserConfig).then()
     return NextResponse.json(
       HttpResponse.success<RouteApiResponse>({
         user: dbSignUser,
@@ -78,11 +74,8 @@ export async function PUT(request: NextRequest) {
     }
     const { themeColor, profileVisibility, whoCanComment, whoCanMessage, onlineStatusVisibleFlag } =
       vr.data
-    const jwtToken = request.cookies.get(COOKIE_AUTHORIZATION)?.value
-    // 这里一定有验证过身份了，如果没有，在proxy.ts中已经被处理过了
-    const payload = await verifyJwtToken(jwtToken!)
-    const userId = payload?.userId
-    const dbNewConfig = await dbUpdateUserConfigById(userId!, {
+    const userId = await getAuthUserId(request)
+    const dbNewConfig = await dbUpdateUserConfigById(userId, {
       themeColor,
       profileVisibility,
       whoCanComment,
@@ -90,7 +83,7 @@ export async function PUT(request: NextRequest) {
       onlineStatusVisibleFlag
     })
     // 更新缓存(不阻塞)
-    redisSetUserConfig(userId!, dbNewConfig).then()
+    redisSetUserConfig(userId, dbNewConfig).then()
     return NextResponse.json(HttpResponse.success(dbNewConfig))
   } catch (error) {
     return NextResponse.json(HttpResponse.error(`${String(error)}`))
