@@ -1,6 +1,6 @@
-import { type UserExpVO } from '~/types/user-api'
+import { type UserExpOutputType } from '~/types/user-api'
 
-type CalcLevelResultType = UserExpVO & {}
+type CalcLevelResultType = UserExpOutputType & {}
 
 /**
  * 根据经验值计算当前等级，等级从1开始，第一级经验为0-100 ，第二级经验为101-250，每新增一级经所需升级的验值增加150

@@ -1,4 +1,4 @@
-import { type ObjectStorageUploadDTO } from '~/types/object-storage'
+import { type ObjectStorageUploadInputType } from '~/types/object-storage'
 
 /**
  * 点击选取文件
@@ -25,12 +25,12 @@ export function selectFile(accept: string = 'image/*') {
 /**
  * 创建上传文件请求参数
  *
- * @param dto 上传文件请求参数
+ * @param input 上传文件请求参数
  * @returns formData
  */
-export function createObjectStorageForm(dto: ObjectStorageUploadDTO): FormData {
+export function createObjectStorageForm(input: ObjectStorageUploadInputType): FormData {
   const fd = new FormData()
-  fd.append('object', dto.object)
-  fd.append('type', dto.type)
+  fd.append('object', input.object)
+  fd.append('type', input.type)
   return fd as FormData
 }

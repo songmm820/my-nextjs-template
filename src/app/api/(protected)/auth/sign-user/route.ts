@@ -1,7 +1,6 @@
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
-import { type CurrentUserVO } from '~/types/user-api'
 import {
   dbQueryUserById,
   dbQueryUserConfigById,
@@ -17,8 +16,9 @@ import {
   userUpdateConfigInput,
   type UserUpdateConfigInputType
 } from '~/shared/zod-schemas/user.schema'
+import { type CurrentUserOutputType } from '~/types/user-api'
 
-type ApiResponse = CurrentUserVO & {}
+type RouteApiResponse = CurrentUserOutputType & {}
 
 // 查询当前登录用户信息
 export async function GET(request: NextRequest) {
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     const expInfo = calculateLevelExp(dbExp?.experience ?? 0)
     if (cacheSignInfo && cacheUserConfig) {
       return NextResponse.json(
-        HttpResponse.success<ApiResponse>({
+        HttpResponse.success<RouteApiResponse>({
           user: cacheSignInfo.user,
           config: cacheUserConfig,
           growthValue: expInfo,
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
     // 更新缓存(不阻塞)
     redisSetUserConfig(userId!, dbUserConfig).then()
     return NextResponse.json(
-      HttpResponse.success<ApiResponse>({
+      HttpResponse.success<RouteApiResponse>({
         user: dbSignUser,
         config: dbUserConfig,
         growthValue: expInfo,

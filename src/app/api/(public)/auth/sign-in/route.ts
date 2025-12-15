@@ -1,7 +1,6 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
-import { type LoginVO } from '~/types/user-api'
 import { comparePassword, generateJwtToken, HttpResponse } from '~/shared/utils/server'
 import {
   dbQueryUserByEmail,
@@ -12,6 +11,7 @@ import {
   redisSetUserConfig
 } from '~/shared/db'
 import { userSignInput, type UserSignInputType } from '~/shared/zod-schemas/user.schema'
+import { type UserLoginOutputType } from '~/types/user-api'
 
 // 登录
 export async function POST(request: NextRequest) {
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       }),
       dbQueryUserConfigById(dbUser.id)
     ])
-    const signUser: LoginVO = {
+    const signUser: UserLoginOutputType = {
       token: jwtToken,
       user: {
         id: dbUser.id,
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
       user: signUser.user
     }).then()
     redisSetUserConfig(dbUser.id, userConfig).then()
-    return NextResponse.json(HttpResponse.success<LoginVO>(signUser))
+    return NextResponse.json(HttpResponse.success<UserLoginOutputType>(signUser))
   } catch (error) {
     // Handle error
     return NextResponse.json(HttpResponse.error(`Sign up failed:${String(error)}`))

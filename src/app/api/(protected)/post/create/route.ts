@@ -1,15 +1,14 @@
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
-import { userConfigUpdateDTOSchema } from '~/shared/zod-schemas/user.schema'
-import { type PostCreateDTOSchema } from '~/shared/zod-schemas/post.schema'
 import { dbCreatePost } from '~/shared/db/post-db'
+import { postCreateInput, type PostCreateInputType } from '~/shared/zod-schemas/post.schema'
 
 // 创建文章信息
 export async function POST(request: NextRequest) {
   try {
-    const dto = (await request.json()) as PostCreateDTOSchema
-    const vr = userConfigUpdateDTOSchema.safeParse(dto)
+    const params = (await request.json()) as PostCreateInputType
+    const vr = postCreateInput.safeParse(params)
     if (!vr.success) {
       const [er] = vr.error.issues
       return NextResponse.json(HttpResponse.error(er.message))

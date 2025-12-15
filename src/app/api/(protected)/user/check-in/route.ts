@@ -3,7 +3,7 @@ import { CHECK_IN_EXPERIENCE, COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { dbUserCheckInById, dbUserIsCheckInToday } from '~/shared/db'
 import { calculateLevelExp } from '~/shared/lib/level'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
-import { type UserExpVO } from '~/types/user-api'
+import { type UserExpOutputType } from '~/types/user-api'
 
 // 用户签到
 export async function GET(request: NextRequest) {
@@ -17,8 +17,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(HttpResponse.error('You have already checked in today.'))
     }
     const dbUserExp = await dbUserCheckInById(userId!, CHECK_IN_EXPERIENCE)
-    const useExoVo: UserExpVO = calculateLevelExp(dbUserExp.experience)
-    return NextResponse.json(HttpResponse.success<UserExpVO>(useExoVo))
+    const useExoVo: UserExpOutputType = calculateLevelExp(dbUserExp.experience)
+    return NextResponse.json(HttpResponse.success<UserExpOutputType>(useExoVo))
   } catch (error) {
     return NextResponse.json(HttpResponse.error(`${String(error)}`))
   }

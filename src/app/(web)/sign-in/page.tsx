@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react'
 import { Button, Form, FormField, Input } from '~/shared/features'
 import { type FormRef } from '~/shared/features/internal/Form'
-import { authSignDTOSchema, type AuthSignDTOSchema } from '~/shared/zod-schemas/auth.schema'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSignInSwrAPi } from '~/apis/auth-api'
 import { setCookie } from 'cookies-next/client'
@@ -17,6 +16,7 @@ import ImageCaptcha from '~/shared/components/ImageCaptcha'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 import { useTheme } from '~/context/ThemeProvider'
 import { useLoginUser } from '~/context/LoginUserProvider'
+import { userSignInput, type UserSignInputType } from '~/shared/zod-schemas/user.schema'
 
 const SignInPage = () => {
   const router = useRouter()
@@ -24,7 +24,7 @@ const SignInPage = () => {
   const redirect = searchParams.get('redirect') as NavRouteHrefType
   const { setThemeColor } = useTheme()
   const { setUserInfo, setConfig } = useLoginUser()
-  const formRef = useRef<FormRef<AuthSignDTOSchema>>(null)
+  const formRef = useRef<FormRef<UserSignInputType>>(null)
   const { trigger, isMutating } = useSignInSwrAPi()
   const [emailLive, setEmailLive] = useState<string>('')
 
@@ -47,23 +47,23 @@ const SignInPage = () => {
   return (
     <div className="max-full h-full overflow-hidden">
       <div className="mt-26 w-100 mx-auto">
-        <Form<AuthSignDTOSchema>
+        <Form<UserSignInputType>
           ref={formRef}
-          schema={authSignDTOSchema}
+          schema={userSignInput}
           initialValues={{}}
           onChangeValues={(values) => {
             setEmailLive(values.email)
           }}
         >
-          <FormField<AuthSignDTOSchema> name="email" label="Please input your email">
+          <FormField<UserSignInputType> name="email" label="Please input your email">
             <Input type="text" placeholder="Email" autoComplete="on" />
           </FormField>
 
-          <FormField<AuthSignDTOSchema> name="password" label="Please input your password">
+          <FormField<UserSignInputType> name="password" label="Please input your password">
             <Input type="password" placeholder="Password" autoComplete="on" />
           </FormField>
 
-          <FormField<AuthSignDTOSchema> name="captcha" label="Please input captcha">
+          <FormField<UserSignInputType> name="captcha" label="Please input captcha">
             <div className="flex gap-3">
               <Input className="flex-1" placeholder="Captcha" autoComplete="on" />
               <ImageCaptcha

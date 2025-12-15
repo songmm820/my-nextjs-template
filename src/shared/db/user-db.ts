@@ -7,11 +7,11 @@ import {
   type SystemUserLevel,
   type Prisma
 } from '~/generated/prisma/client'
-import { type UserConfigVO, type UserProfileInfoVO } from '~/types/user-api'
 import {
-  type UserConfigUpdateDTOSchema,
-  type UserProfileInfoUpdateDTOSchema
+  type UserUpdateConfigInputType,
+  type UserUpdateInputType
 } from '~/shared/zod-schemas/user.schema'
+import { type UserBaseInfoOutputType, type UserConfigOutputType } from '~/types/user-api'
 
 /**
  * 根据邮箱登录
@@ -40,7 +40,7 @@ export async function dbQueryUserByEmail(
  *
  * @param id 用户id
  */
-export async function dbQueryUserById(id: string): Promise<UserProfileInfoVO> {
+export async function dbQueryUserById(id: string): Promise<UserBaseInfoOutputType> {
   const user = await prisma.systemUser.findUnique({
     where: {
       id: id
@@ -99,8 +99,8 @@ export async function dbCreateUser(user: Prisma.SystemUserCreateInput): Promise<
  */
 export async function dbUpdateUserProfileInfoById(
   id: string,
-  prifile: UserProfileInfoUpdateDTOSchema
-): Promise<UserProfileInfoVO> {
+  prifile: UserUpdateInputType
+): Promise<UserBaseInfoOutputType> {
   return await prisma.systemUser.update({
     where: {
       id: id
@@ -132,7 +132,7 @@ export async function dbUserExistByEmail(email: string): Promise<boolean> {
  *
  * @param id 用户ID
  */
-export async function dbQueryUserConfigById(id: string): Promise<UserConfigVO> {
+export async function dbQueryUserConfigById(id: string): Promise<UserConfigOutputType> {
   const config = await prisma.systemUserConfig.findUnique({
     where: {
       userId: id
@@ -159,8 +159,8 @@ export async function dbQueryUserConfigById(id: string): Promise<UserConfigVO> {
  */
 export async function dbUpdateUserConfigById(
   id: string,
-  config: UserConfigUpdateDTOSchema
-): Promise<UserConfigVO> {
+  config: UserUpdateConfigInputType
+): Promise<UserConfigOutputType> {
   const newConfig = await prisma.systemUserConfig.update({
     where: {
       userId: id

@@ -1,41 +1,44 @@
 'use client'
 
 import { createContext, useContext, useState } from 'react'
-import { type UserExpVO, type UserConfigVO, type UserProfileInfoVO } from '~/types/user-api'
+import {
+  type UserConfigOutputType,
+  type UserExpOutputType,
+  type UserBaseInfoOutputType
+} from '~/types/user-api'
 
 type LoginUserContextType = {
-  user: UserProfileInfoVO | null
-  setUserInfo: (user: UserProfileInfoVO) => void
-  config: UserConfigVO | null
-  setConfig: (config: UserConfigVO) => void
-  growthValue: UserExpVO | null
-  setGrowthValue: (growthValue: UserExpVO) => void
-  isTodaySigned: boolean,
+  user: UserBaseInfoOutputType | null
+  setUserInfo: (user: UserBaseInfoOutputType) => void
+  config: UserConfigOutputType | null
+  setConfig: (config: UserConfigOutputType) => void
+  growthValue: UserExpOutputType | null
+  setGrowthValue: (growthValue: UserExpOutputType) => void
+  isTodaySigned: boolean
   setTodaySigned: (isTodaySigned: boolean) => void
 }
 
 const LoginUserProviderContext = createContext<LoginUserContextType | null>(null)
 
 export const LoginUserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserProfileInfoVO | null>(null)
-  const [config, setConfig] = useState<UserConfigVO | null>(null)
-  const [growthValue, setGrowthValue] = useState<UserExpVO | null>(null)
+  const [user, setUser] = useState<UserBaseInfoOutputType | null>(null)
+  const [config, setConfig] = useState<UserConfigOutputType | null>(null)
+  const [growthValue, setGrowthValue] = useState<UserExpOutputType | null>(null)
   const [isTodaySigned, setIsTodaySigned] = useState<boolean>(false)
 
-
-  const setUserInfo = (user: UserProfileInfoVO | null) => {
+  const setUserInfo = (user: UserBaseInfoOutputType | null) => {
     if (!user) return
     if (Object.keys(user).length === 0) return
     setUser(user)
   }
 
-  const setConfigInfo = (config: UserConfigVO | null) => {
+  const setConfigInfo = (config: UserConfigOutputType | null) => {
     if (!config) return
     if (Object.keys(config).length === 0) return
     setConfig(config)
   }
 
-  const setGrowthValueInfo = (growthValue: UserExpVO | null) => {
+  const setGrowthValueInfo = (growthValue: UserExpOutputType | null) => {
     if (!growthValue) return
     if (Object.keys(growthValue).length === 0) return
     setGrowthValue(growthValue)

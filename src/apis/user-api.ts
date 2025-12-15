@@ -1,38 +1,42 @@
 import { axiosInstance } from '~/shared/config/axios-config'
 import { createSwrMutation } from '~/shared/config/swr'
 import {
-  type UserProfileInfoUpdateDTOSchema,
-  type UserConfigUpdateDTOSchema
+  type UserUpdateConfigInputType,
+  type UserUpdateInputType
 } from '~/shared/zod-schemas/user.schema'
-import { type UserExpVO, type UserConfigVO, type UserProfileInfoVO } from '~/types/user-api'
+import {
+  type UserBaseInfoOutputType,
+  type UserConfigOutputType,
+  type UserExpOutputType
+} from '~/types/user-api'
 
 // 修改用户个人信息
 const updateUserProfileApiUrl = '/api/user/profile'
-const updateUserProfileApi = (p: UserProfileInfoUpdateDTOSchema) => {
-  return axiosInstance.put<UserProfileInfoUpdateDTOSchema, UserProfileInfoVO>(
-    updateUserProfileApiUrl,
-    p
-  )
+const updateUserProfileApi = (p: UserUpdateInputType) => {
+  return axiosInstance.put<UserUpdateInputType, UserBaseInfoOutputType>(updateUserProfileApiUrl, p)
 }
 export const useUpdateUserProfileSwrApi = createSwrMutation<
-  UserProfileInfoUpdateDTOSchema,
-  UserProfileInfoVO
+  UserUpdateInputType,
+  UserBaseInfoOutputType
 >(updateUserProfileApiUrl, updateUserProfileApi)
 
 // 修改用户配置
 const updateUserConfigApiUrl = '/api/user/config'
-const updateUserConfigApi = (p: UserConfigUpdateDTOSchema) => {
-  return axiosInstance.put<UserConfigUpdateDTOSchema, UserConfigVO>(updateUserConfigApiUrl, p)
+const updateUserConfigApi = (p: UserUpdateConfigInputType) => {
+  return axiosInstance.put<UserUpdateConfigInputType, UserConfigOutputType>(
+    updateUserConfigApiUrl,
+    p
+  )
 }
 export const useUpdateUserConfigSwrApi = createSwrMutation<
-  UserConfigUpdateDTOSchema,
-  UserConfigVO
+  UserUpdateConfigInputType,
+  UserConfigOutputType
 >(updateUserConfigApiUrl, updateUserConfigApi)
 
 // 用户每日签到
 const userDailyCheckInApiUrl = '/api/user/check-in'
 const userDailyCheckInApi = () => {
-  return axiosInstance.get<void, UserExpVO>(userDailyCheckInApiUrl)
+  return axiosInstance.get<void, UserExpOutputType>(userDailyCheckInApiUrl)
 }
 export const useUserDailyCheckInSwrApi = createSwrMutation(
   userDailyCheckInApiUrl,

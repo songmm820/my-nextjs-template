@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 import { generateJwtToken, hashPassword, HttpResponse } from '~/shared/utils/server'
-import { type LoginVO } from '~/types/user-api'
+import { type UserLoginOutputType } from '~/types/user-api'
 import {
   redisGetCaptcha,
   redisSetSignUser,
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       }),
       dbQueryUserConfigById(newDbUser.id)
     ])
-    const signUser: LoginVO = {
+    const signUser: UserLoginOutputType = {
       token: jwtToken,
       user: {
         id: newDbUser.id,
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
       user: signUser.user
     }).then()
     redisSetUserConfig(newDbUser.id, userConfig).then()
-    return NextResponse.json(HttpResponse.success<LoginVO>(signUser))
+    return NextResponse.json(HttpResponse.success<UserLoginOutputType>(signUser))
   } catch (error) {
     // Handle error
     return NextResponse.json(HttpResponse.error(`Sign in failed:${String(error)}`))

@@ -1,5 +1,5 @@
 import { redis } from '~/shared/config/redis'
-import { type UserConfigVO } from '~/types/user-api'
+import { type UserConfigOutputType } from '~/types/user-api'
 
 // 用户配置信息过期时间，单位毫秒 （7天）
 const CONFIG_EXPIRE_TIME = 7 * 24 * 60 * 60
@@ -11,7 +11,7 @@ const userConfigRedisKey = (userId: string) => `user:config:${userId}`
  *
  * @param userId 用户id
  */
-export async function redisSetUserConfig(userId: string, config: UserConfigVO) {
+export async function redisSetUserConfig(userId: string, config: UserConfigOutputType) {
   const key = userConfigRedisKey(userId)
   return redis.set(key, JSON.stringify(config), 'EX', CONFIG_EXPIRE_TIME)
 }
@@ -21,8 +21,8 @@ export async function redisSetUserConfig(userId: string, config: UserConfigVO) {
  *
  * @param userId 用户id
  */
-export async function redisGetUserConfig(userId: string): Promise<UserConfigVO | null> {
+export async function redisGetUserConfig(userId: string): Promise<UserConfigOutputType | null> {
   const key = userConfigRedisKey(userId)
   const config = await redis.get(key)
-  return config ? (JSON.parse(config) as UserConfigVO) : null
+  return config ? (JSON.parse(config) as UserConfigOutputType) : null
 }

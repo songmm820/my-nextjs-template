@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react'
 import { Button, Form, FormField, Input } from '~/shared/features'
 import { type FormRef } from '~/shared/features/internal/Form'
-import { authRegisterDTOSchema, type AuthRegisterDTOSchema } from '~/shared/zod-schemas/auth.schema'
 import { useRouter } from 'next/navigation'
 import { CustomLink } from '~/shared/components/CustomLink'
 import { useSignUpSwrAPi } from '~/apis/auth-api'
@@ -11,10 +10,11 @@ import { setCookie } from 'cookies-next/client'
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import ImageCaptcha from '~/shared/components/ImageCaptcha'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
+import { userRegisterInput, type UserRegisterInputType } from '~/shared/zod-schemas/user.schema'
 
 const SignInPage = () => {
   const router = useRouter()
-  const formRef = useRef<FormRef<AuthRegisterDTOSchema>>(null)
+  const formRef = useRef<FormRef<UserRegisterInputType>>(null)
   const { trigger, isMutating } = useSignUpSwrAPi()
   const [emailLive, setEmailLive] = useState<string>('')
 
@@ -38,29 +38,29 @@ const SignInPage = () => {
   return (
     <div className="max-full h-full overflow-hidden">
       <div className="mt-26 w-100 mx-auto">
-        <Form<AuthRegisterDTOSchema>
+        <Form<UserRegisterInputType>
           ref={formRef}
-          schema={authRegisterDTOSchema}
+          schema={userRegisterInput}
           onChangeValues={(values) => {
             setEmailLive(values.email)
           }}
         >
-          <FormField<AuthRegisterDTOSchema> name="email" label="Please input your email">
+          <FormField<UserRegisterInputType> name="email" label="Please input your email">
             <Input type="text" placeholder="Email" autoComplete="on" />
           </FormField>
 
-          <FormField<AuthRegisterDTOSchema> name="password" label="Please input your password">
+          <FormField<UserRegisterInputType> name="password" label="Please input your password">
             <Input type="password" placeholder="Password" autoComplete="on" />
           </FormField>
 
-          <FormField<AuthRegisterDTOSchema>
+          <FormField<UserRegisterInputType>
             name="twoPassword"
             label="Please input your password again"
           >
             <Input type="password" placeholder="Again Password" autoComplete="on" />
           </FormField>
 
-          <FormField<AuthRegisterDTOSchema> name="captcha" label="Please input captcha">
+          <FormField<UserRegisterInputType> name="captcha" label="Please input captcha">
             <div className="flex gap-3">
               <Input placeholder="Captcha" autoComplete="on" />
               <ImageCaptcha

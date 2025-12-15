@@ -7,12 +7,12 @@ import { useCreatePostSwrApi } from '~/apis/post-api'
 import PageContainer from '~/shared/components/PageContainer'
 import { Button, Form, FormField, Input, Textarea } from '~/shared/features'
 import { type FormRef } from '~/shared/features/internal/Form'
-import { postCreateDTOSchema, type PostCreateDTOSchema } from '~/shared/zod-schemas/post.schema'
+import { postCreateInput, type PostCreateInputType } from '~/shared/zod-schemas/post.schema'
 
 const Editor = dynamic(() => import('~/shared/components/Editor'), { ssr: false })
 
 const PostCreatePage = () => {
-  const formRef = useRef<FormRef<PostCreateDTOSchema>>(null)
+  const formRef = useRef<FormRef<PostCreateInputType>>(null)
 
   const { trigger } = useCreatePostSwrApi()
 
@@ -36,14 +36,14 @@ const PostCreatePage = () => {
         )}
       >
         <div className="w-138 flex-1 overflow-auto">
-          <Form<PostCreateDTOSchema> ref={formRef} schema={postCreateDTOSchema}>
-            <FormField<PostCreateDTOSchema> name="title" label="Post Title">
+          <Form<PostCreateInputType> ref={formRef} schema={postCreateInput}>
+            <FormField<PostCreateInputType> name="title" label="Post Title">
               <Input placeholder="Please enter title" />
             </FormField>
-            <FormField<PostCreateDTOSchema> name="summary" label="Summary">
+            <FormField<PostCreateInputType> name="summary" label="Summary">
               <Textarea placeholder="Please enter summary" />
             </FormField>
-            <FormField<PostCreateDTOSchema> name="content" label="Content">
+            <FormField<PostCreateInputType> name="content" label="Content">
               <Textarea placeholder="Please enter content" />
             </FormField>
           </Form>
