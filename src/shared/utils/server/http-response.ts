@@ -8,12 +8,12 @@ export class HttpResponse {
     }
   }
 
-  static error(error: string, code?: number) {
-    const r: { error: string; status_code?: number } = {
+  static error(error: string | Array<string>, code?: number) {
+    const r: { error: string | Array<string>; code?: number } = {
       error: error
     }
     if (code) {
-      r.status_code = code
+      r.code = code
     }
     return r
   }
