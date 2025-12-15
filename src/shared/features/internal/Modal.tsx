@@ -14,8 +14,8 @@ export type ModalProps = {
   children?: React.ReactNode
   width?: number
   className?: string
-  okText?: string
-  cancelText?: string
+  okText?: string | null
+  cancelText?: string | null
   isShowClose?: boolean
   isShowFullScreen?: boolean
   isFullScreen?: boolean
@@ -124,7 +124,7 @@ const Modal = (props: ModalProps) => {
 
           <div className="relative z-20 flex min-h-screen items-center justify-center">
             <motion.div
-              className={twMerge('rounded-lg bg-white relative pt-4 pb-6 flex flex-col', className)}
+              className={twMerge('rounded-3xl bg-white relative pt-4 pb-6 flex flex-col', className)}
               style={{
                 width: isFullScreenVal ? '100vw' : `${width}px`,
                 height: isFullScreenVal ? '100vh' : 'auto'

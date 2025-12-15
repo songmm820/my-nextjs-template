@@ -36,11 +36,11 @@ const InputModal = (props: InputModalProps) => {
     <Modal
       {...rest}
       open={open}
-      title={<div className="text-center text-lg">{title || 'Kind Notice'}</div>}
+      title={<div className="text-center text-lg">{title}</div>}
       isShowClose={false}
       width={420}
       customFooter={
-        <footer className="mt-6 px-12 w-full flex flex-col gap-3">
+        <footer className="mt-4 px-12 w-full flex flex-col gap-3">
           <Button className="w-full h-10" variant="primary" onClick={handleOk}>
             {okText}
           </Button>

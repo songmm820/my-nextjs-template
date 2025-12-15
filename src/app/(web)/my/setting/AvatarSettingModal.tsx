@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import PictureCropper from '~/shared/components/PictureCropper'
 import { Modal } from '~/shared/features'
 import { selectFile } from '~/shared/utils/client/file'
+import Image from 'next/image'
 
 type AvatarSettingModalProps = {
   open: boolean
@@ -12,7 +13,7 @@ type AvatarSettingModalProps = {
 }
 
 const AvatarSettingModal = (props: AvatarSettingModalProps) => {
-  const { open, onClose, onCropComplete } = props
+  const { url, open, onClose, onCropComplete } = props
   const [fileUrl, setFileUrl] = useState<string | null>(null)
   const [cropBlob, setCropBlob] = useState<Blob | null>(null)
 
@@ -35,7 +36,7 @@ const AvatarSettingModal = (props: AvatarSettingModalProps) => {
       title="Avatar Setting"
       open={open}
       onClose={onClose}
-      cancelText="Select Again"
+      cancelText={fileUrl ? 'Select Again' : null}
       onCancel={handleSelectFile}
       onOk={handleOk}
     >
@@ -51,7 +52,20 @@ const AvatarSettingModal = (props: AvatarSettingModalProps) => {
             'border-primary/60 hover:border-primary translation-all duration-300'
           )}
           onClick={handleSelectFile}
-        ></div>
+        >
+          {url && (
+            <div className="flex flex-col gap-4 justify-center">
+              <Image
+                className="h-4/5 w-auto rounded-lg"
+                src={url}
+                width={120}
+                height={120}
+                alt=""
+              />
+              <span className="text-999 text-center">Please click to select your images</span>
+            </div>
+          )}
+        </div>
       )}
     </Modal>
   )

@@ -50,10 +50,7 @@ const SignInPage = () => {
         <Form<AuthSignDTOSchema>
           ref={formRef}
           schema={authSignDTOSchema}
-          initialValues={{
-            email: 'mmsong@yeah.net',
-            password: '12345678'
-          }}
+          initialValues={{}}
           onChangeValues={(values) => {
             setEmailLive(values.email)
           }}

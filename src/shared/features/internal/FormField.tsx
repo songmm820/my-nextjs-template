@@ -35,7 +35,7 @@ export function FormField<T>(props: FormFieldProps<T>) {
     >
       <div className={clsx('w-full', labelPositionClass[labelPosition])}>
         {label && (
-          <label className="py-1.5 text-base text-666">
+          <div className="py-1.5 text-base text-666">
             <div className="inline-flex items-center gap-2">
               <span
                 className={clsx(
@@ -45,7 +45,7 @@ export function FormField<T>(props: FormFieldProps<T>) {
               />
               <span>{label}</span>
             </div>
-          </label>
+          </div>
         )}
         {children}
         {Boolean(errorMessage) && <div className="text-danger text-md">{String(errorMessage)}</div>}

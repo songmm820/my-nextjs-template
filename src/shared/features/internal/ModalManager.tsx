@@ -80,7 +80,7 @@ const ConfirmModal = (options: ConfirmModalOptions) => {
   const config: ModalConfig = {
     isShowClose: false,
     duration: duration,
-    width: 420,
+    width: 380,
     title: <div className="text-center text-lg">{options?.title || 'Kind Notice'}</div>,
     cancelText: options.okText,
     onOk: () => {
@@ -142,6 +142,7 @@ const InputValueModal = (options: InputModalOptions) => {
   root.render(
     <InputModal
       {...newConfig}
+      title={options?.title}
       open={true}
       value={options?.value ?? ''}
       onClose={handleClose}
@@ -163,6 +164,10 @@ const ModalManager = {
   error: (message: string) =>
     toast.error(message, {
       icon: '👎'
+    }),
+  warning: (message: string) =>
+    toast(message, {
+      icon: '⚠️'
     })
 }
 

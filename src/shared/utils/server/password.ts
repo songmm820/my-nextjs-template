@@ -11,9 +11,11 @@ export async function hashPassword(password: string) {
   return await bcrypt.hash(password, PWD_SALT)
 }
 
-
 /**
  * 校验密码
+ *
+ * @param password 密码
+ * @param hashedPassword 加密后的密码
  */
 export async function comparePassword(password: string, hashedPassword: string) {
   return await bcrypt.compare(password, hashedPassword)

@@ -12,7 +12,7 @@ import { Toaster } from 'react-hot-toast'
 
 // 图标库链接
 const envIconScriptLink =
-  'https://lf1-cdn-tos.bytegoofy.com/obj/iconpark/svg_41789_9.95daddb240d2cadeaa7803852092dec8.js'
+  'https://lf1-cdn-tos.bytegoofy.com/obj/iconpark/svg_41789_11.5edaf5658e16fc38cf5920cd61146d7a.js'
 
 export const metadata: Metadata = {
   title: "Nicks's Knack",

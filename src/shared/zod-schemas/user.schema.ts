@@ -5,7 +5,9 @@ import { DynamicPermissionEnum } from '~/generated/prisma/enums'
 export const userSignInput = z
   .object({
     email: z.email('Please enter a valid email address'),
-    password: z.string().min(8, 'Password must be at least 8 characters long'),
+    password: z
+      .string('This password is required')
+      .min(8, 'Password must be at least 8 characters long'),
     captcha: z.string().length(4, 'Captcha must be 4 characters long')
   })
   .strict()
@@ -15,9 +17,13 @@ export type UserSignInputType = z.infer<typeof userSignInput>
 export const userRegisterInput = z
   .object({
     email: z.email('Please enter a valid email address'),
-    password: z.string().min(8, 'Password must be at least 8 characters long'),
-    twoPassword: z.string().min(8, 'Password must be at least 8 characters long'),
-    captcha: z.string().length(4, 'Captcha must be 4 characters long')
+    password: z
+      .string('This password is required')
+      .min(8, 'Password must be at least 8 characters long'),
+    twoPassword: z
+      .string('This password is required')
+      .min(8, 'Password must be at least 8 characters long'),
+    captcha: z.string('This captcha is required').length(4, 'Captcha must be 4 characters long')
   })
   .refine((data) => data.password === data.twoPassword, {
     message: 'Passwords do not match',
@@ -30,11 +36,11 @@ export type UserRegisterInputType = z.infer<typeof userRegisterInput>
 export const userUpdateInput = z
   .object({
     name: z
-      .string()
-      .min(1, 'This name is required.')
-      .max(20, 'The name should be at most 20 characters.')
+      .string('This name is required')
+      .min(1, 'The name should be at least 1 characters')
+      .max(20, 'The name should be at most 20 characters')
       .optional(),
-    avatar: z.url('This avatar url is invalid.').optional()
+    avatar: z.url('This avatar url is invalid').optional()
   })
   .strict()
 export type UserUpdateInputType = z.infer<typeof userUpdateInput>
@@ -43,13 +49,13 @@ export type UserUpdateInputType = z.infer<typeof userUpdateInput>
 export const userUpdateConfigInput = z.object({
   themeColor: z.string().optional(),
   profileVisibility: z
-    .enum(DynamicPermissionEnum, 'Please select a valid visibility level for profile visibility.')
+    .enum(DynamicPermissionEnum, 'Please select a valid visibility level for profile visibility')
     .optional(),
   whoCanComment: z
-    .enum(DynamicPermissionEnum, 'Please select a valid permission level for who can comment.')
+    .enum(DynamicPermissionEnum, 'Please select a valid permission level for who can comment')
     .optional(),
   whoCanMessage: z
-    .enum(DynamicPermissionEnum, 'Please select a valid permission level for who can message.')
+    .enum(DynamicPermissionEnum, 'Please select a valid permission level for who can message')
     .optional(),
   onlineStatusVisibleFlag: z.boolean().optional()
 })
