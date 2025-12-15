@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
-import { comparePassword, generateJwtToken, HttpResponse } from '~/shared/utils/server'
+import {
+  comparePassword,
+  generateJwtToken,
+  HttpApiError,
+  HttpResponse
+} from '~/shared/utils/server'
 import {
   dbQueryUserByEmail,
   dbQueryUserConfigById,
@@ -21,9 +26,7 @@ export const POST = createApiHandler(async (request) => {
   const cacheCaptcha = await redisGetCaptcha(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_IN)
   // 如果没有查询到验证码
   if (!cacheCaptcha) {
-    return NextResponse.json(
-      HttpResponse.error('The captcha may expired. Please try requesting a new one again. ')
-    )
+    throw new HttpApiError('The captcha may expired. Please try requesting a new one again')
   }
   // 如果验证码不匹配
   const isV = await redisVerifyCaptcha(
@@ -33,19 +36,17 @@ export const POST = createApiHandler(async (request) => {
     captcha
   )
   if (!isV) {
-    return NextResponse.json(HttpResponse.error('The captcha may error. '))
+    throw new HttpApiError('The captcha may error')
   }
   // 校验用户
   const dbUser = await dbQueryUserByEmail(email)
   if (!dbUser) {
-    return NextResponse.json(
-      HttpResponse.error('The user associated with this email does not exist.')
-    )
+    throw new HttpApiError('The user associated with this email does not exist')
   }
   // 校验密码
   const isValid = await comparePassword(password, dbUser.password!)
   if (!isValid) {
-    return NextResponse.json(HttpResponse.error('The password is incorrect, please try again.'))
+    throw new HttpApiError('The password is incorrect, please try again')
   }
   // 并行执行
   const [jwtToken, userConfig] = await Promise.all([

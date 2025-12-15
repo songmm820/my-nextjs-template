@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
-import { generateJwtToken, hashPassword, HttpResponse } from '~/shared/utils/server'
+import { generateJwtToken, hashPassword, HttpApiError, HttpResponse } from '~/shared/utils/server'
 import { type UserLoginOutputType } from '~/types/user-api'
 import {
   redisGetCaptcha,
@@ -22,10 +22,8 @@ export const POST = createApiHandler(async (request) => {
   // 查询验证码
   const dbCaptcha = await redisGetCaptcha(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_UP)
   if (!dbCaptcha) {
-    return NextResponse.json(
-      HttpResponse.error(
-        'The captcha may error or expired. Please try requesting a new one again. '
-      )
+    throw new HttpApiError(
+      'The captcha may error or expired. Please try requesting a new one again'
     )
   }
   // 如果验证码不匹配
@@ -36,12 +34,12 @@ export const POST = createApiHandler(async (request) => {
     captcha
   )
   if (!isV) {
-    return NextResponse.json(HttpResponse.error('The captcha may error. '))
+    throw new HttpApiError('The captcha is incorrect. Please try again')
   }
   // 判断用户是否存在
   const isExist = await dbUserExistByEmail(email)
   if (isExist) {
-    return NextResponse.json(HttpResponse.error('This email has been registered.'))
+    throw new HttpApiError('This email has been registered.')
   }
   const hashedPassword = await hashPassword(password)
   // 创建用户

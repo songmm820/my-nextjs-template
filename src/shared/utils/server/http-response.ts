@@ -18,3 +18,10 @@ export class HttpResponse {
     return r
   }
 }
+
+export class HttpApiError extends Error {
+  constructor(public readonly message: string) {
+    super(message)
+    this.name = 'HttpApiError'
+  }
+}

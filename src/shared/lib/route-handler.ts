@@ -2,7 +2,7 @@ import 'server-only'
 
 import { type NextRequest, NextResponse } from 'next/server'
 import { ZodError } from 'zod'
-import { HttpResponse } from '~/shared/utils/server'
+import { HttpApiError, HttpResponse } from '~/shared/utils/server'
 
 /**
  * Create a handler for API routes
@@ -23,7 +23,10 @@ export function createApiHandler(handler: (request: NextRequest) => Promise<Resp
         })
         return NextResponse.json(HttpResponse.error(errors))
       }
-      // @TODO 自定义业务异常
+      // Api 业务异常
+      if (error instanceof HttpApiError) {
+        return NextResponse.json(HttpResponse.error(error.message))
+      }
       // Handle error
       return NextResponse.json(HttpResponse.error(`${String(error)}`))
     }
