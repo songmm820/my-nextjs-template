@@ -8,8 +8,8 @@ export class HttpResponse {
     }
   }
 
-  static error(error: string | Array<string>, code?: number) {
-    const r: { error: string | Array<string>; code?: number } = {
+  static error(error: string | unknown, code?: number) {
+    const r: { error: string | unknown; code?: number } = {
       error: error
     }
     if (code) {
