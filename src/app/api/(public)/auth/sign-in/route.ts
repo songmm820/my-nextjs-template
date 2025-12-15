@@ -1,6 +1,5 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { authSignDTOSchema } from '~/shared/zod-schemas/auth.schema'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 import { type LoginVO } from '~/types/user-api'
 import { comparePassword, generateJwtToken, HttpResponse } from '~/shared/utils/server'
@@ -12,16 +11,18 @@ import {
   redisVerifyCaptcha,
   redisSetUserConfig
 } from '~/shared/db'
+import { userSignInput, type UserSignInputType } from '~/shared/zod-schemas/user.schema'
 
 // 登录
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, captcha } = await request.json()
-    const vr = authSignDTOSchema.safeParse({ email, password, captcha })
+    const params = (await request.json()) as UserSignInputType
+    const vr = userSignInput.safeParse(params)
     if (!vr.success) {
       const [er] = vr.error.issues
       return NextResponse.json(HttpResponse.error(er.message))
     }
+    const { email, captcha, password } = vr.data
     // 校验验证码 邮箱 | 验证码 | 用途 | 类型 | 过期时间是否匹配
     const cacheCaptcha = await redisGetCaptcha(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_IN)
     // 如果没有查询到验证码

@@ -1,8 +1,33 @@
 import { z } from 'zod'
 import { DynamicPermissionEnum } from '~/generated/prisma/enums'
 
+// 登录
+export const userSignInput = z
+  .object({
+    email: z.email('Please enter a valid email address'),
+    password: z.string().min(8, 'Password must be at least 8 characters long'),
+    captcha: z.string().length(4, 'Captcha must be 4 characters long')
+  })
+  .strict()
+export type UserSignInputType = z.infer<typeof userSignInput>
+
+// 注册
+export const userRegisterInput = z
+  .object({
+    email: z.email('Please enter a valid email address'),
+    password: z.string().min(8, 'Password must be at least 8 characters long'),
+    twoPassword: z.string().min(8, 'Password must be at least 8 characters long'),
+    captcha: z.string().length(4, 'Captcha must be 4 characters long')
+  })
+  .refine((data) => data.password === data.twoPassword, {
+    message: 'Passwords do not match',
+    path: ['twoPassword']
+  })
+  .strict()
+export type UserRegisterInputType = z.infer<typeof userRegisterInput>
+
 // 修改用户信息
-export const userProfileInfoUpdateDTOSchema = z
+export const userUpdateInput = z
   .object({
     name: z
       .string()
@@ -12,10 +37,10 @@ export const userProfileInfoUpdateDTOSchema = z
     avatar: z.url('This avatar url is invalid.').optional()
   })
   .strict()
-export type UserProfileInfoUpdateDTOSchema = z.infer<typeof userProfileInfoUpdateDTOSchema>
+export type UserUpdateInputType = z.infer<typeof userUpdateInput>
 
 // 修改用户配置
-export const userConfigUpdateDTOSchema = z.object({
+export const userUpdateConfigInput = z.object({
   themeColor: z.string().optional(),
   profileVisibility: z
     .enum(DynamicPermissionEnum, 'Please select a valid visibility level for profile visibility.')
@@ -28,4 +53,4 @@ export const userConfigUpdateDTOSchema = z.object({
     .optional(),
   onlineStatusVisibleFlag: z.boolean().optional()
 })
-export type UserConfigUpdateDTOSchema = z.infer<typeof userConfigUpdateDTOSchema>
+export type UserUpdateConfigInputType = z.infer<typeof userUpdateConfigInput>

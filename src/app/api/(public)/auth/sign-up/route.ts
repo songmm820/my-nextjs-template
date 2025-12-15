@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { authRegisterDTOSchema } from '~/shared/zod-schemas/auth.schema'
 import type { NextRequest } from 'next/server'
 import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 import { generateJwtToken, hashPassword, HttpResponse } from '~/shared/utils/server'
@@ -13,16 +12,18 @@ import {
   dbUserExistByEmail,
   redisSetUserConfig
 } from '~/shared/db'
+import { userSignInput, type UserRegisterInputType } from '~/shared/zod-schemas/user.schema'
 
 // 注册
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, captcha } = await request.json()
-    const vr = authRegisterDTOSchema.safeParse({ email, password, captcha, twoPassword: password })
+    const params = (await request.json()) as UserRegisterInputType
+    const vr = userSignInput.safeParse(params)
     if (!vr.success) {
       const [er] = vr.error.issues
       return NextResponse.json(HttpResponse.error(er.message))
     }
+    const { email, password, captcha } = vr.data
     // 查询验证码
     const dbCaptcha = await redisGetCaptcha(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_UP)
     if (!dbCaptcha) {

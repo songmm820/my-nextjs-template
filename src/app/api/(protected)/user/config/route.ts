@@ -1,23 +1,19 @@
 import { COOKIE_AUTHORIZATION } from '~/shared/constants'
 import { type NextRequest, NextResponse } from 'next/server'
 import { HttpResponse, verifyJwtToken } from '~/shared/utils/server'
-import { userConfigUpdateDTOSchema } from '~/shared/zod-schemas/user.schema'
 import { dbUpdateUserConfigById, redisSetUserConfig } from '~/shared/db'
+import { userUpdateConfigInput, type UserUpdateInputType } from '~/shared/zod-schemas/user.schema'
 
 // 更新当前登录用户配置信息
 export async function PUT(request: NextRequest) {
   try {
-    const { themeColor, profileVisibility, whoCanComment, whoCanMessage } = await request.json()
-    const vr = userConfigUpdateDTOSchema.safeParse({
-      themeColor,
-      profileVisibility,
-      whoCanComment,
-      whoCanMessage
-    })
+    const params = await request.json() as UserUpdateInputType
+    const vr = userUpdateConfigInput.safeParse(params)
     if (!vr.success) {
       const [er] = vr.error.issues
       return NextResponse.json(HttpResponse.error(er.message))
     }
+    const { themeColor, profileVisibility, whoCanComment, whoCanMessage } = vr.data
     const jwtToken = request.cookies.get(COOKIE_AUTHORIZATION)?.value
     // 这里一定有验证过身份了，如果没有，在proxy.ts中已经被处理过了
     const payload = await verifyJwtToken(jwtToken!)
