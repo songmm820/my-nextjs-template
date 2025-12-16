@@ -3,16 +3,14 @@
 import clsx from 'clsx'
 import { useId } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { useFormContext, useFormFieldContext } from '~/shared/features/context/form-context'
 
 export type InputProps = {
-  error?: boolean
   className?: string
   onChange?: (val: string) => void
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>
 
 const BaseInput = (props: InputProps) => {
-  const { id, error, className, onChange, ...rest } = props
+  const { id, className, value, onChange, ...rest } = props
   const uId = useId()
   const inputId = id ?? uId
   return (
@@ -21,16 +19,15 @@ const BaseInput = (props: InputProps) => {
       className={twMerge(
         clsx(
           [
-            'h-11 px-4 rounded-md text-md text-666 ',
+            'w-full h-11 px-4 rounded-md text-md text-666 ',
             'transition-colors border border-transparent',
-            error
-              ? 'border-danger bg-white'
-              : 'bg-[#f5f5f5] focus-visible:border-primary focus-visible:bg-white',
+            'bg-[#f5f5f5] focus-visible:border-primary focus-visible:bg-white',
             'transition-all duration-300 placeholder:text-999'
           ],
           className
         )
       )}
+      value={value ?? ''}
       {...rest}
       autoComplete="off"
       onChange={(e) => onChange?.(e.target.value)}
@@ -39,30 +36,7 @@ const BaseInput = (props: InputProps) => {
 }
 
 const Input = (props: InputProps) => {
-  const { id, error, ...rest } = props
-  const formCtx = useFormContext()
-  const formFieldCtx = useFormFieldContext()
-  const isInForm = formCtx && formFieldCtx
-
-  if (!isInForm) {
-    const errorStatus = error ?? false
-    return <BaseInput id={id} error={errorStatus} {...rest} autoComplete="off" />
-  } else {
-    const { formInstance } = formCtx
-    const { fieldId, name } = formFieldCtx
-    const errorStatus = Boolean(error ?? formInstance.formState.errors[name]?.message)
-    const value = formInstance.watch(name) ?? ''
-    return (
-      <BaseInput
-        id={id || fieldId}
-        error={errorStatus}
-        value={value}
-        autoComplete="off"
-        {...rest}
-        onChange={(val) => formInstance.setValue(name, val, { shouldValidate: true })}
-      />
-    )
-  }
+  return <BaseInput {...props} />
 }
 
 export default Input

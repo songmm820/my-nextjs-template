@@ -3,7 +3,6 @@
 import clsx from 'clsx'
 import { useId } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { useFormContext, useFormFieldContext } from '~/shared/features/context/form-context'
 
 export type CheckBoxOptionItemType = {
   label: string | React.ReactNode
@@ -82,26 +81,7 @@ const BaseCheckBox = (props: CheckBoxProps) => {
 }
 
 const CheckBox = (props: CheckBoxProps) => {
-  const { id, ...rest } = props
-  const formCtx = useFormContext()
-  const formFieldCtx = useFormFieldContext()
-  const isInForm = formCtx && formFieldCtx
-
-  if (!isInForm) {
-    return <BaseCheckBox id={id} {...rest} />
-  } else {
-    const { formInstance } = formCtx
-    const { fieldId, name } = formFieldCtx
-    const value = formInstance.watch(name)
-    return (
-      <BaseCheckBox
-        id={id || fieldId}
-        value={value}
-        {...rest}
-        onChange={(val) => formInstance.setValue(name, val, { shouldValidate: true })}
-      />
-    )
-  }
+  return <BaseCheckBox {...props} />
 }
 
 export default CheckBox

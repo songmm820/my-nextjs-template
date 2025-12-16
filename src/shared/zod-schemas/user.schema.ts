@@ -7,7 +7,7 @@ export const userSignInput = z.strictObject({
   password: z
     .string('This password is required')
     .min(8, 'Password must be at least 8 characters long'),
-  captcha: z.string().length(4, 'Captcha must be 4 characters long')
+  captcha: z.string('This captcha is required').length(4, 'Captcha must be 4 characters long')
 })
 export type UserSignInputType = z.infer<typeof userSignInput>
 
@@ -55,4 +55,3 @@ export const userUpdateConfigInput = z.strictObject({
   onlineStatusVisibleFlag: z.boolean().optional()
 })
 export type UserUpdateConfigInputType = z.infer<typeof userUpdateConfigInput>
-

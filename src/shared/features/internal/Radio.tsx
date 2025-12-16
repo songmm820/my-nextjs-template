@@ -3,7 +3,6 @@
 import clsx from 'clsx'
 import { useId } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { useFormContext, useFormFieldContext } from '~/shared/features/context/form-context'
 
 export type RadioOptionItemType = {
   label: string | React.ReactNode
@@ -72,26 +71,7 @@ const BaseRadio = (props: RadioProps) => {
 }
 
 const Radio = (props: RadioProps) => {
-  const { id, ...rest } = props
-  const formCtx = useFormContext()
-  const formFieldCtx = useFormFieldContext()
-  const isInForm = formCtx && formFieldCtx
-
-  if (!isInForm) {
-    return <BaseRadio id={id} {...rest} />
-  } else {
-    const { formInstance } = formCtx
-    const { fieldId, name } = formFieldCtx
-    const value = formInstance.watch(name)
-    return (
-      <BaseRadio
-        id={id || fieldId}
-        value={value}
-        {...rest}
-        onChange={(val) => formInstance.setValue(name, val, { shouldValidate: true })}
-      />
-    )
-  }
+  return <BaseRadio {...props} />
 }
 
 export default Radio

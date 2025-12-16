@@ -55,24 +55,28 @@ const SignInPage = () => {
             setEmailLive(values.email)
           }}
         >
-          <FormField<UserSignInputType> name="email" label="Please input your email">
-            <Input type="text" placeholder="Email" autoComplete="on" />
+          <FormField<UserSignInputType> name="email" label="Email">
+            <Input type="text" autoComplete="on" />
           </FormField>
 
-          <FormField<UserSignInputType> name="password" label="Please input your password">
-            <Input type="password" placeholder="Password" autoComplete="on" />
+          <FormField<UserSignInputType> name="password" label="Password">
+            <Input type="password" autoComplete="on" />
           </FormField>
 
-          <FormField<UserSignInputType> name="captcha" label="Please input captcha">
-            <div className="flex gap-3">
-              <Input className="flex-1" placeholder="Captcha" autoComplete="on" />
-              <ImageCaptcha
-                link={emailLive}
-                type={CaptchaTypeEnum.IMAGE}
-                use={CaptchaUseEnum.SIGN_IN}
-              />
-            </div>
-          </FormField>
+          <FormField<UserSignInputType>
+            name="captcha"
+            label="Captcha"
+            customValueRender={(field) => (
+              <div className="flex gap-3">
+                <Input {...field} className="flex-1" autoComplete="on" />
+                <ImageCaptcha
+                  link={emailLive}
+                  type={CaptchaTypeEnum.IMAGE}
+                  use={CaptchaUseEnum.SIGN_IN}
+                />
+              </div>
+            )}
+          />
         </Form>
 
         <Button loading={isMutating} className="mt-6" variant="primary" block onClick={onSubmit}>
