@@ -31,11 +31,11 @@ const Modal = (props: ModalProps) => {
   const {
     open = false,
     title,
-    width = 520,
+    width = 400,
     children,
     className,
     cancelText = 'Cancel',
-    okText = 'Ok',
+    okText = 'Confirm',
     customFooter,
     isShowClose = true,
     isShowFullScreen = false,
@@ -124,7 +124,10 @@ const Modal = (props: ModalProps) => {
 
           <div className="relative z-20 flex min-h-screen items-center justify-center">
             <motion.div
-              className={twMerge('rounded-3xl bg-white relative pt-4 pb-6 flex flex-col', className)}
+              className={twMerge(
+                'rounded-3xl bg-white relative pt-4 pb-6 flex flex-col px-8',
+                className
+              )}
               style={{
                 width: isFullScreenVal ? '100vw' : `${width}px`,
                 height: isFullScreenVal ? '100vh' : 'auto'
@@ -139,17 +142,17 @@ const Modal = (props: ModalProps) => {
                 mass: 1.2
               }}
             >
-              <div className={clsx('absolute -right-10 top-0.5 flex flex-col gap-2')}>
+              <div className={clsx('absolute right-2 top-1 flex flex-col gap-2')}>
                 {isShowClose && (
                   <div
                     className={clsx(
                       'w-8 h-8 rounded-lg',
-                      'bg-white flex items-center justify-center',
+                      'bg-white/10 flex items-center justify-center',
                       'cursor-pointer hover:bg-white/90 transition-colors duration-200'
                     )}
                     onClick={handleClose}
                   >
-                    <Icon name="close" size={20} color="#999999" />
+                    <Icon name="close" size={18} color="#999999" />
                   </div>
                 )}
 
@@ -167,20 +170,20 @@ const Modal = (props: ModalProps) => {
                 )}
               </div>
 
-              {title && <header className="mb-3 px-4 font-medium text-333 text-lg">{title}</header>}
-              <main className="flex-1 px-4 max-h-200 overflow-auto">{children}</main>
+              {title && <header className="mb-3 font-medium text-333 text-lg">{title}</header>}
+              <main className="mt-3 flex-1 max-h-200 overflow-auto">{children}</main>
               {customFooter ? (
                 customFooter
               ) : (
-                <footer className="mt-6 px-4 w-full flex items-center justify-center gap-6">
-                  {cancelText && (
-                    <Button className="w-32 h-10" variant="outline" onClick={handleCancel}>
-                      {cancelText}
+                <footer className="mt-6 w-full flex flex-col items-center justify-center gap-3">
+                  {okText && (
+                    <Button className="w-full h-10" variant="primary" onClick={handleOk}>
+                      {okText}
                     </Button>
                   )}
-                  {okText && (
-                    <Button className="w-32 h-10" variant="primary" onClick={handleOk}>
-                      {okText}
+                  {cancelText && (
+                    <Button className="w-full h-10" variant="outline" onClick={handleCancel}>
+                      {cancelText}
                     </Button>
                   )}
                 </footer>

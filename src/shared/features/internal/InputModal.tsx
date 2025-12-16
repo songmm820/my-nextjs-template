@@ -16,7 +16,7 @@ const InputModal = (props: InputModalProps) => {
     title,
     open,
     value,
-    okText = 'Ok',
+    okText = 'Confirm',
     onOk,
     cancelText = 'Cancel',
     onCancel,
@@ -38,9 +38,9 @@ const InputModal = (props: InputModalProps) => {
       open={open}
       title={<div className="text-center text-lg">{title}</div>}
       isShowClose={false}
-      width={420}
+      width={348}
       customFooter={
-        <footer className="mt-4 px-12 w-full flex flex-col gap-3">
+        <footer className="mt-4 w-full flex flex-col gap-3">
           <Button className="w-full h-10" variant="primary" onClick={handleOk}>
             {okText}
           </Button>
@@ -50,7 +50,7 @@ const InputModal = (props: InputModalProps) => {
         </footer>
       }
     >
-      <div className="w-full px-8 py-4">
+      <div className="w-full py-4">
         <Input
           className="w-full"
           autoFocus

@@ -80,7 +80,7 @@ const ConfirmModal = (options: ConfirmModalOptions) => {
   const config: ModalConfig = {
     isShowClose: false,
     duration: duration,
-    width: 380,
+    width: 348,
     title: <div className="text-center text-lg">{options?.title || 'Kind Notice'}</div>,
     cancelText: options.okText,
     onOk: () => {
