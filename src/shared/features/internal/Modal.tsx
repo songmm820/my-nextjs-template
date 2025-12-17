@@ -142,7 +142,7 @@ const Modal = (props: ModalProps) => {
                 mass: 1.2
               }}
             >
-              <div className={clsx('absolute right-2 top-1 flex flex-col gap-2')}>
+              <div className={clsx('absolute right-1 top-1 flex flex-col gap-2')}>
                 {isShowClose && (
                   <div
                     className={clsx(
@@ -171,7 +171,7 @@ const Modal = (props: ModalProps) => {
               </div>
 
               {title && <header className="mb-3 font-medium text-333 text-lg">{title}</header>}
-              <main className="mt-3 flex-1 max-h-200 overflow-auto">{children}</main>
+              <main className="mt-3 flex-1 max-h-200">{children}</main>
               {customFooter ? (
                 customFooter
               ) : (

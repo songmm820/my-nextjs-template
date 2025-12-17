@@ -34,6 +34,7 @@ const AvatarSettingModal = (props: AvatarSettingModalProps) => {
   return (
     <Modal
       title="Avatar Setting"
+      width={520}
       open={open}
       onClose={onClose}
       cancelText={fileUrl ? 'Select Again' : null}

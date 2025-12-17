@@ -32,10 +32,10 @@ const PostCreatePage = () => {
     <PageContainer autoHeight={false}>
       <div
         className={clsx(
-          'w-full h-full flex flex-col items-center py-6 rounded-2xl bg-white relative'
+          'w-full h-full flex flex-col items-center py-6 rounded-2xl bg-white relative overflow-auto'
         )}
       >
-        <div className="w-138 flex-1 overflow-auto">
+        <div className="w-138 flex-1">
           <Form<PostCreateInputType> ref={formRef} schema={postCreateInput}>
             <FormField<PostCreateInputType> name="title" label="Post Title">
               <Input placeholder="Please enter title" />
@@ -46,10 +46,16 @@ const PostCreatePage = () => {
             <FormField<PostCreateInputType> name="content" label="Content">
               <Textarea placeholder="Please enter content" />
             </FormField>
+            <FormField<PostCreateInputType> name="content" label="Content">
+              <Textarea placeholder="Please enter content" />
+            </FormField>
+            <FormField<PostCreateInputType> name="content" label="Content">
+              <Textarea placeholder="Please enter content" />
+            </FormField>
           </Form>
         </div>
 
-        <div className="w-full h-18 px-8 border-t border-dashed border-e7">
+        <div className="mt-6 w-full py-4 shrink-0 px-8">
           <PostCreateActionButtonsArea onReset={handleReset} onSave={handleSave} />
         </div>
       </div>

@@ -22,7 +22,7 @@ import { createApiHandler } from '~/shared/lib/route-handler'
 type RouteApiResponse = CurrentUserOutputType & {}
 
 // 查询当前登录用户信息
-export const POST = createApiHandler(async (request) => {
+export const GET = createApiHandler(async (request) => {
   const userId = await getAuthUserId(request)
   // 先获取Redis缓存中的信息和配置
   const [cacheSignInfo, cacheUserConfig, dbExp, dbIsCheckInToday] = await Promise.all([
