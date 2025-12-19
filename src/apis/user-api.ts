@@ -42,3 +42,13 @@ export const useUserDailyCheckInSwrApi = createSwrMutation(
   userDailyCheckInApiUrl,
   userDailyCheckInApi
 )
+
+// 获取用户某年月签到记录
+const userCheckInRecordApiUrl = '/api/user/check-record'
+const userCheckInRecordApi = (p: { month: string }) => {
+  return axiosInstance.get<{ month: string }, Array<Date>>(userCheckInRecordApiUrl, p)
+}
+export const useUserCheckInRecordSwrApi = createSwrMutation(
+  userCheckInRecordApiUrl,
+  userCheckInRecordApi
+)

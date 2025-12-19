@@ -8,6 +8,7 @@ import Modal, { type ModalProps } from './internal/Modal'
 import ModalManager from './internal/ModalManager'
 import InputModal from './internal/InputModal'
 import Textarea from './internal/Textarea'
+import Calendar,{type CalendarProps} from './internal/Calendar'
 
 export {
   InputProps,
@@ -28,5 +29,7 @@ export {
   Modal as Modal,
   ModalManager as ModalManager,
   InputModal as InputModal,
-  Textarea as Textarea
+  Textarea as Textarea,
+  CalendarProps,
+  Calendar as Calendar
 }
