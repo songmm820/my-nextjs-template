@@ -234,11 +234,9 @@ export async function dbUserCheckInById(
  */
 export async function dbUserIsCheckInToday(id: string): Promise<boolean> {
   // 1. 生成「今日0点」和「明日0点」的时间范围（UTC 时区，避免时区偏差）
-  const today = new Date()
+  const now = new Date()
   // 基于 UTC 截断时间，统一时区（关键修复）
-  const startOfDay = new Date(
-    Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0)
-  )
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)
   // 明日0点（作为时间范围的结束边界）
   const endOfDay = new Date(startOfDay)
   endOfDay.setUTCDate(endOfDay.getUTCDate() + 1)
