@@ -1,14 +1,14 @@
 import { PostStatusEnum } from '~/generated/prisma/enums'
 import { prisma } from '~prisma/prisma'
-import { type PostCreateInput } from '~/generated/prisma/models'
 import { type Post } from '~/generated/prisma/client'
+import { type PostCreateInputType } from '~/shared/zod-schemas/post.schema'
 
 /**
  * 新增文章
  *
  * @param userId 用户ID
  */
-export async function dbCreatePost(userId: string, post: PostCreateInput): Promise<Post> {
+export async function dbCreatePost(userId: string, post: PostCreateInputType): Promise<Post> {
   return await prisma.$transaction(async (prisma) => {
     // 创建文章
     const dbCreatePost = await prisma.post.create({

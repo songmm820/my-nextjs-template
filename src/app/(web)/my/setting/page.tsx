@@ -246,7 +246,11 @@ const ProfileVisibilitySetting = () => {
   return (
     <div className="flex flex-col gap-3">
       <div className="text-xl font-medium">Profile Visibility</div>
-      <Radio value={current} options={options} onChange={handleChange} />
+      <Radio
+        value={current}
+        options={options}
+        onChange={(value) => handleChange(value as string)}
+      />
     </div>
   )
 }
@@ -274,7 +278,11 @@ const CommentPermissionSetting = () => {
   return (
     <div className=" flex flex-col gap-3">
       <div className="text-xl font-medium">Who Can Comment</div>
-      <Radio value={current} options={options} onChange={handleChange} />
+      <Radio
+        value={current}
+        options={options}
+        onChange={(value) => handleChange(value as string)}
+      />
     </div>
   )
 }
@@ -302,7 +310,11 @@ const MessagePermissionSetting = () => {
   return (
     <div className=" flex flex-col gap-3">
       <div className="text-xl font-medium">Who Can Message</div>
-      <Radio value={current} options={options} onChange={handleChange} />
+      <Radio
+        value={current}
+        options={options}
+        onChange={(value) => handleChange(value as string)}
+      />
     </div>
   )
 }

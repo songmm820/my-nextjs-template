@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge'
 
 export type RadioOptionItemType = {
   label: string | React.ReactNode
-  value: string
+  value: string | number | boolean
   description?: string | React.ReactNode
 }
 

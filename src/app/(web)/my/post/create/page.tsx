@@ -4,24 +4,71 @@ import clsx from 'clsx'
 import dynamic from 'next/dynamic'
 import { useRef } from 'react'
 import { useCreatePostSwrApi } from '~/apis/post-api'
+import { DynamicPermissionEnum } from '~/generated/prisma/enums'
 import PageContainer from '~/shared/components/PageContainer'
-import { Button, Form, FormField, Input, Textarea } from '~/shared/features'
+import {
+  Button,
+  Form,
+  FormField,
+  Input,
+  ModalManager,
+  Radio,
+  type RadioOptionItemType,
+  Textarea
+} from '~/shared/features'
 import { type FormRef } from '~/shared/features/internal/Form'
 import { postCreateInput, type PostCreateInputType } from '~/shared/zod-schemas/post.schema'
 
 const Editor = dynamic(() => import('~/shared/components/Editor'), { ssr: false })
 
+// 动态权限枚举
+const DynamicPermissionEnumObjInfo = {
+  [DynamicPermissionEnum.ALL]: {
+    label: 'All',
+    description: 'Anyone One'
+  },
+  [DynamicPermissionEnum.FOLLOWERS]: {
+    label: 'Followers',
+    description: 'Only Your Followers'
+  },
+  [DynamicPermissionEnum.SELF]: {
+    label: 'Self',
+    description: 'Only You'
+  }
+}
+
+const options: Array<RadioOptionItemType> = Object.entries(DynamicPermissionEnumObjInfo).map(
+  ([key, value]) => ({
+    label: value.label,
+    description: value.description,
+    value: key as DynamicPermissionEnum
+  })
+)
+
 const PostCreatePage = () => {
   const formRef = useRef<FormRef<PostCreateInputType>>(null)
 
-  const { trigger } = useCreatePostSwrApi()
+  const { trigger, isMutating } = useCreatePostSwrApi()
 
   const handleSave = async () => {
+    if (isMutating) {
+      ModalManager.warning('Please wait for a minute ...')
+      return
+    }
     const isV = await formRef.current?.validate()
     if (!isV) return
-    const formData = formRef.current?.getFormValues()
-    if (!formData) return
-    trigger(formData)
+    ModalManager.confirm({
+      title: 'Confirm',
+      content: 'Are you sure to create this post?',
+      okCallback: async () => {
+        const formData = formRef.current?.getFormValues()
+        if (!formData) return
+        const { error } = await trigger(formData)
+        if (!error) {
+          ModalManager.success('Post created successfully')
+        }
+      }
+    })
   }
 
   const handleReset = () => {
@@ -36,9 +83,23 @@ const PostCreatePage = () => {
         )}
       >
         <div className="w-138 flex-1">
-          <Form<PostCreateInputType> ref={formRef} schema={postCreateInput}>
+          <Form<PostCreateInputType>
+            initialValues={{
+              title: '测试title',
+              tag: '#测试tag',
+              summary: '测试summary',
+              content: '测试content',
+              visibility: DynamicPermissionEnum.ALL,
+              isPinned: true
+            }}
+            ref={formRef}
+            schema={postCreateInput}
+          >
             <FormField<PostCreateInputType> name="title" label="Post Title">
               <Input placeholder="Please enter title" />
+            </FormField>
+            <FormField<PostCreateInputType> name="tag" label="Tag">
+              <Textarea placeholder="Please enter tag" />
             </FormField>
             <FormField<PostCreateInputType> name="summary" label="Summary">
               <Textarea placeholder="Please enter summary" />
@@ -46,11 +107,22 @@ const PostCreatePage = () => {
             <FormField<PostCreateInputType> name="content" label="Content">
               <Textarea placeholder="Please enter content" />
             </FormField>
-            <FormField<PostCreateInputType> name="content" label="Content">
-              <Textarea placeholder="Please enter content" />
+            <FormField<PostCreateInputType> name="visibility" label="Visibility">
+              <Radio options={options} />
             </FormField>
-            <FormField<PostCreateInputType> name="content" label="Content">
-              <Textarea placeholder="Please enter content" />
+            <FormField<PostCreateInputType> name="isPinned" label="Content">
+              <Radio
+                options={[
+                  {
+                    label: 'Pinned',
+                    value: true
+                  },
+                  {
+                    label: 'Not Pinned',
+                    value: false
+                  }
+                ]}
+              />
             </FormField>
           </Form>
         </div>
