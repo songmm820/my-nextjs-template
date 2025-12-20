@@ -14,9 +14,7 @@ export const POST = createApiHandler(async (request) => {
     const dbCaptcha = await redisGetCaptcha(email, type, use)
     // 先查找是否有未失效的验证码
     if (dbCaptcha) {
-      throw new HttpApiError(
-        'The email has been sent, please wait for a while before sending again'
-      )
+      throw new HttpApiError('请勿重复获取验证码')
     }
   }
   // 生成验证码

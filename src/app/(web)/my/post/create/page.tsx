@@ -24,16 +24,16 @@ const Editor = dynamic(() => import('~/shared/components/Editor'), { ssr: false 
 // 动态权限枚举
 const DynamicPermissionEnumObjInfo = {
   [DynamicPermissionEnum.ALL]: {
-    label: 'All',
-    description: 'Anyone One'
+    label: '全部',
+    description: '任何人可见'
   },
   [DynamicPermissionEnum.FOLLOWERS]: {
-    label: 'Followers',
-    description: 'Only Your Followers'
+    label: '仅关注',
+    description: '仅关注者可见'
   },
   [DynamicPermissionEnum.SELF]: {
-    label: 'Self',
-    description: 'Only You'
+    label: '尽自己',
+    description: '仅自己可见'
   }
 }
 
@@ -52,20 +52,20 @@ const PostCreatePage = () => {
 
   const handleSave = async () => {
     if (isMutating) {
-      ModalManager.warning('Please wait for a minute ...')
+      ModalManager.warning('请稍后再试...')
       return
     }
     const isV = await formRef.current?.validate()
     if (!isV) return
     ModalManager.confirm({
-      title: 'Confirm',
-      content: 'Are you sure to create this post?',
+      title: '创建文章',
+      content: '确定要创建这篇文章吗？',
       okCallback: async () => {
         const formData = formRef.current?.getFormValues()
         if (!formData) return
         const { error } = await trigger(formData)
         if (!error) {
-          ModalManager.success('Post created successfully')
+          ModalManager.success('文章创建成功')
         }
       }
     })
@@ -95,30 +95,30 @@ const PostCreatePage = () => {
             ref={formRef}
             schema={postCreateInput}
           >
-            <FormField<PostCreateInputType> name="title" label="Post Title">
-              <Input placeholder="Please enter title" />
+            <FormField<PostCreateInputType> name="title" label="文章标题">
+              <Input />
             </FormField>
-            <FormField<PostCreateInputType> name="tag" label="Tag">
-              <Textarea placeholder="Please enter tag" />
+            <FormField<PostCreateInputType> name="tag" label="文章标签">
+              <Textarea />
             </FormField>
-            <FormField<PostCreateInputType> name="summary" label="Summary">
-              <Textarea placeholder="Please enter summary" />
+            <FormField<PostCreateInputType> name="summary" label="文章摘要">
+              <Textarea />
             </FormField>
-            <FormField<PostCreateInputType> name="content" label="Content">
-              <Textarea placeholder="Please enter content" />
+            <FormField<PostCreateInputType> name="content" label="文章内容">
+              <Textarea />
             </FormField>
-            <FormField<PostCreateInputType> name="visibility" label="Visibility">
+            <FormField<PostCreateInputType> name="visibility" label="文章权限">
               <Radio options={options} />
             </FormField>
-            <FormField<PostCreateInputType> name="isPinned" label="Content">
+            <FormField<PostCreateInputType> name="isPinned" label="是否置顶">
               <Radio
                 options={[
                   {
-                    label: 'Pinned',
+                    label: '是',
                     value: true
                   },
                   {
-                    label: 'Not Pinned',
+                    label: '否',
                     value: false
                   }
                 ]}
@@ -137,22 +137,19 @@ const PostCreatePage = () => {
 
 type PostCreateActionButtonsAreaProps = {
   onReset?: () => void
-  onSaveDraft?: () => void
   onSave?: () => void
 }
 
 const PostCreateActionButtonsArea = (props: PostCreateActionButtonsAreaProps) => {
-  const { onReset, onSaveDraft, onSave } = props
+  const { onReset, onSave } = props
   return (
     <div className="w-full h-full flex items-center justify-center gap-4">
-      <Button className="h-9" variant="default" onClick={onReset}>
-        Reset
+      <Button variant="default" onClick={onReset}>
+        重置
       </Button>
-      <Button className="h-9" variant="outline" onClick={onSaveDraft}>
-        Save Draft
-      </Button>
-      <Button className="h-9" variant="primary" onClick={onSave}>
-        Save
+
+      <Button variant="primary" onClick={onSave}>
+        发布
       </Button>
     </div>
   )

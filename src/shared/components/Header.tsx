@@ -1,23 +1,23 @@
 'use client'
 
 import { useEffect } from 'react'
+import { type Route } from 'next'
 import clsx from 'clsx'
 import { useLoginUser } from '~/context/LoginUserProvider'
 import Avatar from '~/shared/components/Avatar'
 import { CustomLink } from '~/shared/components/CustomLink'
 import { usePathname, useRouter } from 'next/navigation'
 import { Button, Input } from '~/shared/features'
-import { type NavRouteHrefType } from '~/shared/constants'
 import Icon from './Icon'
 
 const NAV_LINKS: Array<NavLinkType> = [
   {
     link: '/home',
-    label: 'Home'
+    label: '首页'
   },
   {
     link: '/about',
-    label: 'My Posts'
+    label: '关于'
   }
 ]
 
@@ -53,13 +53,13 @@ const Header = () => {
 }
 
 type NavLinkType = {
-  link: NavRouteHrefType
+  link: Route
   label: string
 }
 
 type NavLinksProps = {
   links: Array<NavLinkType>
-  activeLink: NavRouteHrefType | string
+  activeLink: Route | string
 }
 
 const NavLinks = (props: NavLinksProps) => {
@@ -92,7 +92,7 @@ const CreationCenterButton = () => {
       onClick={() => router.push('/my/post/create')}
     >
       <Icon name="repair" color="#fff" />
-      <span className="text-md">Creation Center</span>
+      <span className="text-md">创作中心</span>
     </Button>
   )
 }
@@ -101,7 +101,7 @@ const GlobalSearchInput = () => {
   return (
     <Input
       className="rounded-3xl h-9 w-80 bg-transparent ring ring-primary/30"
-      placeholder="Search for articles, topics, and users .."
+      placeholder='搜索文章、话题、用户 ...'
     />
   )
 }

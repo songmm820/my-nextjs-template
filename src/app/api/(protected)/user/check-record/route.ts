@@ -12,7 +12,7 @@ export const GET = createApiHandler(async (request) => {
   // 获取年月
   const [year, month] = monthQuery?.split('-') ?? []
   if (!year || !month) {
-    throw new HttpApiError('The month parameter is error')
+    throw new HttpApiError('查询月份参数错误')
   }
   const userId = await getAuthUserId(request)
   const daysList = await dbQueryUserCheckListInByMonth(userId, Number(year), Number(month))

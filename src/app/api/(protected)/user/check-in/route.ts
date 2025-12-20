@@ -12,7 +12,7 @@ export const GET = createApiHandler(async (request) => {
   const userId = await getAuthUserId(request)
   const dbIsCheckIn = await dbUserIsCheckInToday(userId)
   if (dbIsCheckIn) {
-    throw new HttpApiError('You have already checked in today')
+    throw new HttpApiError('您今天已经签到过了，请勿重复签到')
   }
   const dbUserExp = await dbUserCheckInById(userId, CHECK_IN_EXPERIENCE)
   const useExoVo: UserExpOutputType = calculateLevelExp(dbUserExp.experience)

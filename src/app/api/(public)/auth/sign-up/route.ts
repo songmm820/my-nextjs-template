@@ -22,9 +22,7 @@ export const POST = createApiHandler(async (request) => {
   // 查询验证码
   const dbCaptcha = await redisGetCaptcha(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_UP)
   if (!dbCaptcha) {
-    throw new HttpApiError(
-      'The captcha may error or expired. Please try requesting a new one again'
-    )
+    throw new HttpApiError('验证码可能已过期，请重新获取验证码')
   }
   // 如果验证码不匹配
   const isV = await redisVerifyCaptcha(
@@ -34,12 +32,12 @@ export const POST = createApiHandler(async (request) => {
     captcha
   )
   if (!isV) {
-    throw new HttpApiError('The captcha is incorrect. Please try again')
+    throw new HttpApiError('验证码可能错误，请重新获取验证码')
   }
   // 判断用户是否存在
   const isExist = await dbUserExistByEmail(email)
   if (isExist) {
-    throw new HttpApiError('This email has been registered.')
+    throw new HttpApiError('该邮箱已被注册')
   }
   const hashedPassword = await hashPassword(password)
   // 创建用户

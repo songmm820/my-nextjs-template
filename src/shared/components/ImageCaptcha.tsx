@@ -38,7 +38,7 @@ const ImageCaptchaRef = forwardRef<ImageCaptchaRef, ImageCaptchaProps>((props, r
   if (!captchaUrl)
     return (
       <Button variant="link" disabled={!link} onClick={onGetImageCaptcha}>
-        Get Captcha
+        获取验证码
       </Button>
     )
   return (

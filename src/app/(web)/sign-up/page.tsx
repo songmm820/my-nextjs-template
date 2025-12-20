@@ -45,21 +45,21 @@ const SignInPage = () => {
             setEmailLive(values.email)
           }}
         >
-          <FormField<UserRegisterInputType> name="email" label="Email">
+          <FormField<UserRegisterInputType> name="email" label="邮箱">
             <Input type="text" autoComplete="on" />
           </FormField>
 
-          <FormField<UserRegisterInputType> name="password" label="Password">
+          <FormField<UserRegisterInputType> name="password" label="密码">
             <Input type="password" autoComplete="on" />
           </FormField>
 
-          <FormField<UserRegisterInputType> name="twoPassword" label="Again Password">
+          <FormField<UserRegisterInputType> name="twoPassword" label="确认密码">
             <Input type="password" autoComplete="on" />
           </FormField>
 
           <FormField<UserRegisterInputType>
             name="captcha"
-            label="Captcha"
+            label="验证码"
             customValueRender={(field) => (
               <div className="flex gap-3">
                 <Input {...field} className="flex-1" autoComplete="on" />
@@ -74,12 +74,12 @@ const SignInPage = () => {
         </Form>
 
         <Button loading={isMutating} className="mt-6" variant="primary" block onClick={onSubmit}>
-          Sign Up
+         注册
         </Button>
 
         <div className="mt-4 flex justify-end">
-          <span className="text-666">Already have an account ?</span>
-          <CustomLink href="/sign-in">Sign In</CustomLink>
+          <span className="text-666">已经有账号？</span>
+          <CustomLink href="/sign-in">登录</CustomLink>
         </div>
       </div>
     </div>

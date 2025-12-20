@@ -3,28 +3,28 @@ import { DynamicPermissionEnum } from '~/generated/prisma/enums'
 
 // 登录
 export const userSignInput = z.strictObject({
-  email: z.email('Please enter a valid email address'),
+  email: z.email('请输入邮箱'),
   password: z
-    .string('This password is required')
-    .min(8, 'Password must be at least 8 characters long'),
-  captcha: z.string('This captcha is required').length(4, 'Captcha must be 4 characters long')
+    .string('请输入密码')
+    .min(8, '密码至少8位字符'),
+  captcha: z.string('请输入验证码').length(4, '验证码必须为4位字符')
 })
 export type UserSignInputType = z.infer<typeof userSignInput>
 
 // 注册
 export const userRegisterInput = z
   .strictObject({
-    email: z.email('Please enter a valid email address'),
+    email: z.email('请输入邮箱'),
     password: z
-      .string('This password is required')
-      .min(8, 'Password must be at least 8 characters long'),
+      .string('请输入密码')
+      .min(8, '密码至少8位字符'),
     twoPassword: z
-      .string('This password is required')
-      .min(8, 'Password must be at least 8 characters long'),
-    captcha: z.string('This captcha is required').length(4, 'Captcha must be 4 characters long')
+      .string('请输入密码')
+      .min(8, '密码至少8位字符'),
+    captcha: z.string('请输入验证码').length(4, '验证码必须为4位字符')
   })
   .refine((data) => data.password === data.twoPassword, {
-    message: 'Passwords do not match',
+    message: '两次输入的密码不一致',
     path: ['twoPassword']
   })
 export type UserRegisterInputType = z.infer<typeof userRegisterInput>
@@ -32,11 +32,11 @@ export type UserRegisterInputType = z.infer<typeof userRegisterInput>
 // 修改用户信息
 export const userUpdateInput = z.strictObject({
   name: z
-    .string('This name is required')
-    .min(1, 'The name should be at least 1 characters')
-    .max(20, 'The name should be at most 20 characters')
+    .string('请输入用户昵称')
+    .min(1, '用户昵称至少1位字符')
+    .max(20, '用户昵称最多20位字符')
     .optional(),
-  avatar: z.url('This avatar url is invalid').optional()
+  avatar: z.url('请请选择用户头像').optional()
 })
 export type UserUpdateInputType = z.infer<typeof userUpdateInput>
 
@@ -44,13 +44,13 @@ export type UserUpdateInputType = z.infer<typeof userUpdateInput>
 export const userUpdateConfigInput = z.strictObject({
   themeColor: z.string().optional(),
   profileVisibility: z
-    .enum(DynamicPermissionEnum, 'Please select a valid visibility level for profile visibility')
+    .enum(DynamicPermissionEnum, '请选择一个有效的权限级别')
     .optional(),
   whoCanComment: z
-    .enum(DynamicPermissionEnum, 'Please select a valid permission level for who can comment')
+    .enum(DynamicPermissionEnum, '请选择一个有效的权限级别')
     .optional(),
   whoCanMessage: z
-    .enum(DynamicPermissionEnum, 'Please select a valid permission level for who can message')
+    .enum(DynamicPermissionEnum, '请选择一个有效的权限级别')
     .optional(),
   onlineStatusVisibleFlag: z.boolean().optional()
 })

@@ -1,5 +1,6 @@
 'use client'
 
+import { type Route } from 'next'
 import { useRef, useState } from 'react'
 import { Button, Form, FormField, Input } from '~/shared/features'
 import { type FormRef } from '~/shared/features/internal/Form'
@@ -8,7 +9,6 @@ import { useSignInSwrAPi } from '~/apis/auth-api'
 import { setCookie } from 'cookies-next/client'
 import {
   COOKIE_AUTHORIZATION,
-  type NavRouteHrefType,
   type ThemeColorType
 } from '~/shared/constants'
 import { CustomLink } from '~/shared/components/CustomLink'
@@ -21,7 +21,7 @@ import { userSignInput, type UserSignInputType } from '~/shared/zod-schemas/user
 const SignInPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const redirect = searchParams.get('redirect') as NavRouteHrefType
+  const redirect = searchParams.get('redirect') as Route
   const { setThemeColor } = useTheme()
   const { setUserInfo, setConfig } = useLoginUser()
   const formRef = useRef<FormRef<UserSignInputType>>(null)
@@ -55,17 +55,17 @@ const SignInPage = () => {
             setEmailLive(values.email)
           }}
         >
-          <FormField<UserSignInputType> name="email" label="Email">
+          <FormField<UserSignInputType> name="email" label="邮箱">
             <Input type="text" autoComplete="on" />
           </FormField>
 
-          <FormField<UserSignInputType> name="password" label="Password">
+          <FormField<UserSignInputType> name="password" label="密码">
             <Input type="password" autoComplete="on" />
           </FormField>
 
           <FormField<UserSignInputType>
             name="captcha"
-            label="Captcha"
+            label="验证码"
             customValueRender={(field) => (
               <div className="flex gap-3">
                 <Input {...field} className="flex-1" autoComplete="on" />
@@ -80,12 +80,12 @@ const SignInPage = () => {
         </Form>
 
         <Button loading={isMutating} className="mt-6" variant="primary" block onClick={onSubmit}>
-          Sign In
+          登录
         </Button>
 
         <div className="mt-4 flex justify-end">
-          <span className="text-666">Dont have an account ?</span>
-          <CustomLink href="/sign-up">Sign Up</CustomLink>
+          <span className="text-666">还没有账号？</span>
+          <CustomLink href="/sign-up">注册</CustomLink>
         </div>
       </div>
     </div>

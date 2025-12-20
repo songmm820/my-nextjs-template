@@ -3,14 +3,14 @@
 import { useEffect } from 'react'
 import Header from '~/shared/components/Header'
 import Footer from '~/shared/components/Footer'
-import type { NavRouteHrefType } from '~/shared/constants'
+import type { Route } from '~/shared/constants'
 import { usePathname } from 'next/navigation'
 
 const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
   // 不显示 Header 的 routes
-  const hideHeaderRoutes: Array<NavRouteHrefType> = ['/sign-in', '/sign-up']
+  const hideHeaderRoutes: Array<Route> = ['/sign-in', '/sign-up']
   // 不显示 Footer 的 routes
-  const hideFooterRoutes: Array<NavRouteHrefType> = ['/sign-in', '/sign-up']
+  const hideFooterRoutes: Array<Route> = ['/sign-in', '/sign-up']
   const pathname = usePathname()
 
   // 屏蔽全局右键
@@ -25,7 +25,7 @@ const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="w-full h-full hidden md:flex flex-col">
-      {!hideHeaderRoutes.includes(pathname as NavRouteHrefType) && (
+      {!hideHeaderRoutes.includes(pathname as Route) && (
         <>
           <div className="h-16 shrink-0" />
           <div className="fixed top-0 left-0 w-full z-99">
@@ -36,7 +36,7 @@ const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
 
       <main className='flex-1 overflow-auto'>{children}</main>
 
-      {!hideFooterRoutes.includes(pathname as NavRouteHrefType) && false && <Footer />}
+      {!hideFooterRoutes.includes(pathname as Route) && false && <Footer />}
     </div>
   )
 }

@@ -34,7 +34,8 @@ const requestInterceptorsError = (error: any) => {
  */
 const responseInterceptorsConfig = (response: AxiosResponse<any>) => {
   if (response?.data?.error) {
-    toast.error(response.data.error)
+    // toast.error(response.data.error)
+    console.error(response.data.error)
   }
   return response.data
 }

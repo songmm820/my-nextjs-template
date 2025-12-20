@@ -26,7 +26,7 @@ export const POST = createApiHandler(async (request) => {
   const cacheCaptcha = await redisGetCaptcha(email, CaptchaTypeEnum.IMAGE, CaptchaUseEnum.SIGN_IN)
   // 如果没有查询到验证码
   if (!cacheCaptcha) {
-    throw new HttpApiError('The captcha may expired. Please try requesting a new one again')
+    throw new HttpApiError('验证码可能已过期，请重新获取')
   }
   // 如果验证码不匹配
   const isV = await redisVerifyCaptcha(
@@ -36,17 +36,17 @@ export const POST = createApiHandler(async (request) => {
     captcha
   )
   if (!isV) {
-    throw new HttpApiError('The captcha may error')
+    throw new HttpApiError('T验证码错误，请重新输入')
   }
   // 校验用户
   const dbUser = await dbQueryUserByEmail(email)
   if (!dbUser) {
-    throw new HttpApiError('The user associated with this email does not exist')
+    throw new HttpApiError('该邮箱未注册，请先注册')
   }
   // 校验密码
   const isValid = await comparePassword(password, dbUser.password!)
   if (!isValid) {
-    throw new HttpApiError('The password is incorrect, please try again')
+    throw new HttpApiError('密码错误，请重新输入')
   }
   // 并行执行
   const [jwtToken, userConfig] = await Promise.all([

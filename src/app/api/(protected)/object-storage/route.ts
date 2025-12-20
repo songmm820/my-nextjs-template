@@ -10,10 +10,10 @@ export const POST = createApiHandler(async (request) => {
   const file = formData.get('object') as File
   const type = formData.get('type') as ObjectStorageEnum
   if (!type) {
-    throw new HttpApiError('The file type is required')
+    throw new HttpApiError('对象存储类型不能为空')
   }
   if (!ObjectStorageList.includes(type)) {
-    throw new HttpApiError('The file type is erro')
+    throw new HttpApiError('对象存储类型错误')
   }
   const url = await tencentCosUploadFile(type, file)
   return NextResponse.json(

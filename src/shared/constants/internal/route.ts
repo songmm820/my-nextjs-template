@@ -16,5 +16,3 @@ export const navItems: Array<NavItem<Route>> = [
   { href: '/sign-in', label: 'Sign In' },
   { href: '/about', label: 'About' }
 ]
-
-export type NavRouteHrefType = (typeof navItems)[number]['href']

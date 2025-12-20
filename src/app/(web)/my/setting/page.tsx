@@ -110,7 +110,7 @@ const LevelExp = () => {
         )}
       </div>
       <Button className="h-8 mt-4" block variant="outline" onClick={handleCheckIn}>
-        {isTodaySigned ? '已签到' : '签到'}
+        {isTodaySigned ? '已签到' : '立即签到'}
       </Button>
 
       <CheckInDetailModal open={isShowModal} onClose={() => setIsShowModal(false)} />

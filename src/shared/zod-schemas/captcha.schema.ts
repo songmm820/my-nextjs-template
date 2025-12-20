@@ -3,10 +3,10 @@ import { CaptchaTypeEnum, CaptchaUseEnum } from '~/shared/enums/comm'
 
 // 获取验证码
 export const captchaGetInput = z.strictObject({
-  email: z.email('Please enter a valid email address').nonempty({
-    message: 'Please enter is required'
+  email: z.email('请输入邮箱').nonempty({
+    message: '邮箱不能为空'
   }),
-  type: z.enum(CaptchaTypeEnum, 'Please enter a valid captcha type'),
-  use: z.enum(CaptchaUseEnum, 'Please enter a valid captcha use')
+  type: z.enum(CaptchaTypeEnum, '请输入有效的验证码类型'),
+  use: z.enum(CaptchaUseEnum, '请输入有效的验证码用途')
 })
 export type CaptchaGetInputType = z.infer<typeof captchaGetInput>
