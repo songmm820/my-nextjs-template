@@ -16,9 +16,9 @@ const InputModal = (props: InputModalProps) => {
     title,
     open,
     value,
-    okText = 'Confirm',
+    okText = '确定',
     onOk,
-    cancelText = 'Cancel',
+    cancelText = '取消',
     onCancel,
     ...rest
   } = props
@@ -50,7 +50,7 @@ const InputModal = (props: InputModalProps) => {
         </footer>
       }
     >
-      <div className="w-full py-4">
+      <div className="w-full pt-3 pb-2">
         <Input
           className="w-full"
           autoFocus

@@ -34,8 +34,8 @@ const Modal = (props: ModalProps) => {
     width = 400,
     children,
     className,
-    cancelText = 'Cancel',
-    okText = 'Confirm',
+    cancelText = '取消',
+    okText = '确定',
     customFooter,
     isShowClose = true,
     isShowFullScreen = false,
@@ -125,7 +125,7 @@ const Modal = (props: ModalProps) => {
           <div className="relative z-20 flex min-h-screen items-center justify-center">
             <motion.div
               className={twMerge(
-                'rounded-3xl bg-white relative pt-4 pb-6 flex flex-col px-8',
+                'rounded-3xl bg-white relative pt-4 pb-8 flex flex-col px-8',
                 className
               )}
               style={{
@@ -142,7 +142,7 @@ const Modal = (props: ModalProps) => {
                 mass: 1.2
               }}
             >
-              <div className={clsx('absolute right-1 top-1 flex flex-col gap-2')}>
+              <div className={clsx('absolute right-2 top-1.5 flex flex-col gap-2')}>
                 {isShowClose && (
                   <div
                     className={clsx(
@@ -171,7 +171,7 @@ const Modal = (props: ModalProps) => {
               </div>
 
               {title && <header className="mb-3 font-medium text-333 text-lg">{title}</header>}
-              <main className="mt-3 flex-1 max-h-200">{children}</main>
+              <main className="my-3 flex-1 max-h-200">{children}</main>
               {customFooter ? (
                 customFooter
               ) : (

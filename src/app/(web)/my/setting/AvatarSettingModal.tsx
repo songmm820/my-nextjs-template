@@ -33,11 +33,11 @@ const AvatarSettingModal = (props: AvatarSettingModalProps) => {
 
   return (
     <Modal
-      title="Avatar Setting"
+      title="设置头像"
       width={520}
       open={open}
       onClose={onClose}
-      cancelText={fileUrl ? 'Select Again' : null}
+      cancelText={fileUrl ? '重新选择' : null}
       onCancel={handleSelectFile}
       onOk={handleOk}
     >
@@ -63,7 +63,7 @@ const AvatarSettingModal = (props: AvatarSettingModalProps) => {
                 height={120}
                 alt=""
               />
-              <span className="text-999 text-center">Please click to select your images</span>
+              <span className="text-999 text-center">请点击选择你的图片</span>
             </div>
           )}
         </div>

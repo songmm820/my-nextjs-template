@@ -31,7 +31,7 @@ const Calendar = ({ year, month, footer, remark, values = new Set() }: CalendarP
         <span className="text-lg font-semibold">
           {year} 年 {month + 1} 月
         </span>
-        <div className="text-xs text-gray-500">{remark}</div>
+        <div className="text-md text-gray-500">{remark}</div>
       </div>
 
       {/* 星期 */}

@@ -21,19 +21,17 @@ import { ObjectStorage } from '~/shared/enums/comm'
 import { createObjectStorageForm } from '~/shared/utils/client/file'
 import Icon from '~/shared/components/Icon'
 import { useAuthGuard } from '~/context/AuthGuardProvider'
+import CheckInDetailModal from './CheckInDetailModal'
 
 const DynamicPermissionEnumObjInfo = {
   [DynamicPermissionEnum.ALL]: {
-    label: 'All',
-    description: 'Anyone One'
+    label: '全部'
   },
   [DynamicPermissionEnum.FOLLOWERS]: {
-    label: 'Followers',
-    description: 'Only Your Followers'
+    label: '仅关注'
   },
   [DynamicPermissionEnum.SELF]: {
-    label: 'Self',
-    description: 'Only You'
+    label: '仅自己'
   }
 }
 
@@ -63,8 +61,8 @@ const Logout = () => {
 
   const handleLogout = () => {
     ModalManager.confirm({
-      title: 'Logout',
-      content: 'Are you sure you want to logout?',
+      title: '退出登录',
+      content: '你确定要退出登录吗？',
       okCallback: onSignOut
     })
   }
@@ -79,10 +77,11 @@ const Logout = () => {
 const LevelExp = () => {
   const { growthValue, isTodaySigned, setGrowthValue, setTodaySigned } = useLoginUser()
   const { trigger } = useUserDailyCheckInSwrApi()
+  const [isShowModal, setIsShowModal] = useState<boolean>(false)
 
   const handleCheckIn = async () => {
     if (isTodaySigned) {
-      ModalManager.warning('You have already checked in today')
+      ModalManager.warning('你今天已经签到过了，明天再来吧！')
       return
     }
     const { data, error } = await trigger()
@@ -96,9 +95,10 @@ const LevelExp = () => {
     <div className="w-52 bg-primary/2 px-4 pt-2 pb-3 rounded-md">
       <div className="flex items-center justify-between">
         <div className="text-999 text-md">
-          <span>
-            {growthValue?.exp} / {growthValue?.maxExp}
-          </span>
+          {growthValue?.exp} / {growthValue?.maxExp}
+        </div>
+        <div className="text-sm text-primary cursor-pointer" onClick={() => setIsShowModal(true)}>
+          查看详情
         </div>
       </div>
       <div className="mt-2 w-full h-1.5 rounded-full bg-[#ededed]">
@@ -110,8 +110,10 @@ const LevelExp = () => {
         )}
       </div>
       <Button className="h-8 mt-4" block variant="outline" onClick={handleCheckIn}>
-        {isTodaySigned ? 'Checked In' : 'Check In'}
+        {isTodaySigned ? '已签到' : '签到'}
       </Button>
+
+      <CheckInDetailModal open={isShowModal} onClose={() => setIsShowModal(false)} />
     </div>
   )
 }
@@ -140,7 +142,7 @@ const MyProfileSetting = () => {
         avatar: url
       })
       if (!error) {
-        ModalManager.success('Update Success!')
+        ModalManager.success('修改成功！')
         setUserInfo(data)
         setIsShowModalSetting(false)
       }
@@ -149,14 +151,14 @@ const MyProfileSetting = () => {
 
   const handleChangeName = async (name: string) => {
     ModalManager.input({
-      title: 'Change Name',
+      title: '修改昵称',
       value: name,
       okCallback: async (value: string) => {
         const { data, error } = await updateProfileTrigger({
           name: value
         })
         if (!error) {
-          ModalManager.success('Update Success!')
+          ModalManager.success('修改成功！')
           setUserInfo(data)
         }
       }
@@ -166,7 +168,7 @@ const MyProfileSetting = () => {
   return (
     <>
       <div className="flex flex-col gap-3">
-        <div className="text-xl font-medium">My Profile</div>
+        <div className="text-xl font-medium">个人信息</div>
         <div className="w-full flex items-center gap-6 h-40">
           <div className="w-[150px] h-[150px] cursor-pointer" onClick={handleAvatarChange}>
             {user && <Avatar isSquare src={user?.avatar} size={150} />}
@@ -217,7 +219,7 @@ const ThemeColorSetting = () => {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="text-xl font-medium">Theme Color</div>
+      <div className="text-xl font-medium">主题颜色</div>
       <ThemeColorPicker color={themeColor} onChange={handleThemeColorChange} />
     </div>
   )
@@ -231,7 +233,6 @@ const ProfileVisibilitySetting = () => {
   const options: Array<RadioOptionItemType> = Object.entries(DynamicPermissionEnumObjInfo).map(
     ([key, value]) => ({
       label: value.label,
-      description: value.description,
       value: key as DynamicPermissionEnum
     })
   )
@@ -245,7 +246,7 @@ const ProfileVisibilitySetting = () => {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="text-xl font-medium">Profile Visibility</div>
+      <div className="text-xl font-medium">个人权限</div>
       <Radio
         value={current}
         options={options}
@@ -263,7 +264,6 @@ const CommentPermissionSetting = () => {
   const options: Array<RadioOptionItemType> = Object.entries(DynamicPermissionEnumObjInfo).map(
     ([key, value]) => ({
       label: value.label,
-      description: value.description,
       value: key as DynamicPermissionEnum
     })
   )
@@ -277,7 +277,7 @@ const CommentPermissionSetting = () => {
 
   return (
     <div className=" flex flex-col gap-3">
-      <div className="text-xl font-medium">Who Can Comment</div>
+      <div className="text-xl font-medium">评论权限</div>
       <Radio
         value={current}
         options={options}
@@ -295,7 +295,6 @@ const MessagePermissionSetting = () => {
   const options: Array<RadioOptionItemType> = Object.entries(DynamicPermissionEnumObjInfo).map(
     ([key, value]) => ({
       label: value.label,
-      description: value.description,
       value: key as DynamicPermissionEnum
     })
   )
@@ -309,7 +308,7 @@ const MessagePermissionSetting = () => {
 
   return (
     <div className=" flex flex-col gap-3">
-      <div className="text-xl font-medium">Who Can Message</div>
+      <div className="text-xl font-medium">私信权限</div>
       <Radio
         value={current}
         options={options}
