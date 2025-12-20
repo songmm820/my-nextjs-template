@@ -1,6 +1,7 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import type { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 import toast from 'react-hot-toast'
+import { ErrorCode } from '~/shared/constants'
 
 export type AxiosResponseType<R> = {
   data: R
@@ -34,8 +35,19 @@ const requestInterceptorsError = (error: any) => {
  */
 const responseInterceptorsConfig = (response: AxiosResponse<any>) => {
   if (response?.data?.error) {
-    // toast.error(response.data.error)
-    console.error(response.data.error)
+    // 处理参数错误，error 是一个错误数组
+    if (response.data?.code === ErrorCode.PARAMS_ERROR) {
+      const errorMessage = response.data.error
+        .map((item: { field: string; message: string }) => `${item.field}: ${item.message}`)
+        .join('\n')
+      toast.error(errorMessage, {
+        icon: '👎'
+      })
+    } else {
+      toast.error(response.data.error, {
+        icon: '👎'
+      })
+    }
   }
   return response.data
 }

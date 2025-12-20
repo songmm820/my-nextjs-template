@@ -154,6 +154,10 @@ const MyProfileSetting = () => {
       title: '修改昵称',
       value: name,
       okCallback: async (value: string) => {
+        if (!value) {
+          ModalManager.error('昵称不能为空！')
+          return
+        }
         const { data, error } = await updateProfileTrigger({
           name: value
         })

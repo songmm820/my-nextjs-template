@@ -3,8 +3,8 @@
 import { useEffect } from 'react'
 import Header from '~/shared/components/Header'
 import Footer from '~/shared/components/Footer'
-import type { Route } from '~/shared/constants'
 import { usePathname } from 'next/navigation'
+import { type Route } from 'next'
 
 const ConfigLayout = ({ children }: { children: React.ReactNode }) => {
   // 不显示 Header 的 routes
