@@ -37,8 +37,8 @@ const DynamicPermissionEnumObjInfo = {
 
 const MySettingPage = () => {
   return (
-    <PageContainer>
-      <div className={clsx('w-full flex flex-col items-center py-6 rounded-2xl bg-white relative')}>
+    <PageContainer autoHeight={false}>
+      <div className={clsx('w-full h-full flex flex-col items-center py-6 rounded-2xl bg-white relative overflow-auto')}>
         <div className="w-160 flex flex-col gap-3">
           <MyProfileSetting />
           <div className="mt-6 flex flex-col gap-6">
