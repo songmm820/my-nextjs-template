@@ -81,7 +81,13 @@ const ConfirmModal = (options: ConfirmModalOptions) => {
     isShowClose: false,
     duration: duration,
     width: 348,
-    title: <div className="text-center text-lg">{options?.title || 'Kind Notice'}</div>,
+    title: (
+      <div className="text-center text-lg flex items-center justify-between gap-2">
+        <div className="mx-2 h-0.5 rounded-full flex-1 bg-primary"></div>
+        {options?.title || '温馨提示'}
+        <div className="mx-2 h-0.5 rounded-full flex-1 bg-primary"></div>
+      </div>
+    ),
     cancelText: options.okText,
     onOk: () => {
       options.okCallback?.()
@@ -142,7 +148,13 @@ const InputValueModal = (options: InputModalOptions) => {
   root.render(
     <InputModal
       {...newConfig}
-      title={options?.title}
+      title={
+        <div className="text-center text-lg flex items-center justify-between gap-2">
+          <div className="mx-2 h-0.5 rounded-full flex-1 bg-primary"></div>
+          {options?.title || '温馨提示'}
+          <div className="mx-2 h-0.5 rounded-full flex-1 bg-primary"></div>
+        </div>
+      }
       open={true}
       value={options?.value ?? ''}
       onClose={handleClose}

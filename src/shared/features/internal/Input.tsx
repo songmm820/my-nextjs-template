@@ -22,7 +22,8 @@ const BaseInput = (props: InputProps) => {
             'w-full h-11 px-4 rounded-md text-md text-666 ',
             'transition-colors border border-transparent',
             'bg-[#f5f5f5] focus-visible:border-primary focus-visible:bg-white',
-            'transition-all duration-300 placeholder:text-999'
+            'transition-all duration-300 placeholder:text-999',
+            'caret-primary'
           ],
           className
         )
