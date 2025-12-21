@@ -8,7 +8,7 @@ import Avatar from '~/shared/components/Avatar'
 import { CustomLink } from '~/shared/components/CustomLink'
 import { usePathname, useRouter } from 'next/navigation'
 import { Button, Input } from '~/shared/features'
-import Icon from './Icon'
+import Icon from '~/shared/components/Icon'
 
 const NAV_LINKS: Array<NavLinkType> = [
   {
@@ -38,7 +38,7 @@ const Header = () => {
           <GlobalSearchInput />
         </div>
         <CreationCenterButton />
-        <div className='mx-2'>
+        <div className="mx-2">
           <NoticeBell />
         </div>
         <div
@@ -101,7 +101,7 @@ const GlobalSearchInput = () => {
   return (
     <Input
       className="rounded-3xl h-9 w-80 bg-transparent ring ring-primary/30"
-      placeholder='搜索文章、话题、用户 ...'
+      placeholder="搜索文章、话题、用户 ..."
     />
   )
 }
@@ -109,7 +109,7 @@ const GlobalSearchInput = () => {
 const NoticeBell = () => {
   return (
     <div className="w-8 h-full flex justify-center items-center cursor-pointer">
-      <Icon name="remind" color="#666" size={22}/>
+      <Icon name="remind" color="#666" size={22} />
     </div>
   )
 }
